@@ -111,7 +111,7 @@ export async function catalogThemeChain(
 const PREFERRED_FALLBACK = 71;
 
 /** The set number as printed on the box: `10294-1` becomes `10294`. */
-export const boxNumber = (setNum: string) => setNum.replace(/-\d+$/, '');
+export const boxNumber = (setNum: string) => setNum.replace(/-\d{1,2}$/, '');
 
 const PART = /^[A-Za-z0-9][A-Za-z0-9_.-]{0,80}$/;
 
