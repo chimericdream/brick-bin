@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark">
+<title>Wishlist · Brick Bin</title><link rel="stylesheet" href="style.css"></head>
+<body><div id="app"></div>
+<script src="data.js"></script><script src="art.js"></script><script src="ui.js"></script>
+<script>
+/* ?who=Wren|Milo|Dana|Theo (adult view, default Wren)   ?role=kid (Wren's own list)   ?dialog=got|add */
+const who = KID ? 'Wren' : (Q.get('who') || 'Wren');
+const items = WISH[who] || [];
+const own = KID || ME.n === who;
+const cover = (w) => `<a class="cover" href="#">${boxArt({ ...w, name: w.t })}</a>`;
+const bought = (w) => w.bought ? `<div class="you">${I('check')}You bought this on ${w.bought}<button class="btn ghost sm" style="margin-left:6px;height:28px;padding:0 8px">${I('undo')}Undo</button></div>` : '';
+function row(w) {
+  if (KID) return `<div class="wrow"><div>${cover(w)}</div><div><h3>${w.t}</h3><div class="meta">${w.brand} · ${w.num}</div>${w.note ? `<p class="sm" style="margin-top:6px">${w.note}</p>` : ''}</div>
+  <div class="acts"><button class="btn">${I('edit')}Edit</button><button class="btn ghost danger">${I('trash')}Remove</button></div></div>`;
+  return `<div class="wrow"><div>${cover(w)}</div><div><h3>${w.t}</h3><div class="meta">${w.brand} · ${w.num}</div>
+  <div class="row" style="margin-top:6px;gap:14px;flex-wrap:wrap"><span class="pricechip">${USD(w.price)}</span><span class="sm muted">price seen at ${w.seen}</span><a class="sm" style="color:var(--app-accent-ink);text-decoration:underline" href="#">${I('link')} Link</a></div>
+  ${w.note ? `<p class="sm" style="margin-top:6px"><span class="muted">Hint for gift-givers:</span> ${w.note}</p>` : ''}${w.bought ? `<div style="margin-top:10px">${bought(w)}</div>` : ''}</div>
+  <div class="acts">${own ? `<button class="btn">${I('edit')}Edit</button>` : (w.bought ? '' : `<button class="btn soft">${I('bag')}I bought this</button>`)}<button class="btn" onclick="">${I('gift')}We got it</button></div></div>`;
+}
+const people = ['Wren', 'Milo', 'Dana', 'Theo'];
+const tabs = KID ? '' : `<div class="tabs" role="tablist" aria-label="Whose list">${people.map((p) => `<a href="${href('wishlist.html?who=' + p)}" role="tab" aria-selected="${p === who}" ${p === who ? 'aria-current="true"' : ''}>${avatar(p, 24)}${p}${p === ME.n ? ' (you)' : ''}<span class="b plain" style="margin-left:2px">${(WISH[p] || []).length}</span></a>`).join('')}</div>`;
+const removed = !KID && who === 'Wren' ? `<section style="margin-top:30px"><div class="cardhead"><h2>Removed from the list</h2><span class="sp"></span><span class="sm muted">Only you can see this</span></div>
+${WISH.Wren_removed.map((w) => `<div class="card pad row" style="gap:16px;flex-wrap:wrap"><div style="width:112px;flex:none" class="cover">${boxArt({ ...w, name: w.t })}</div><div class="sp" style="min-width:220px"><div style="font-weight:700">${w.t}</div><div class="sm muted">${w.brand} · ${w.num}</div><p class="sm" style="margin-top:6px">Wren removed this on ${w.removedOn}. You had marked it as bought on ${w.markedOn}, so check you can return it or give it to someone else.</p></div><button class="btn">Dismiss</button></div>`).join('')}</section>` : '';
+const sub = KID ? 'Things you would like. Grown-ups can see this list, so add a note if it helps them choose.' : own ? 'Your own list. Gift-givers see your notes, and nobody sees who bought what.' : `${items.length} wishes. Only you see which ones you have bought.`;
+const acts = KID ? `<button class="btn pri">${I('plus')}Add a wish</button>` : `<button class="btn pri">${I('plus')}Add to ${own ? 'my list' : who + "'s list"}</button>`;
+const empty = !items.length ? `<div class="empty"><h3>Nothing on the list</h3>Add a set you would like.</div>` : '';
+let after = '';
+function modal(t, b, f) {
+  return PH ? `<div class="scrim"></div><div class="sheet" role="dialog" aria-label="${t}"><div class="grab"></div><div class="sh"><h2>${t}</h2></div><div class="sb">${b}</div><div class="sf">${f}</div></div>`
+    : `<div class="scrim"></div><div class="dialog" role="dialog" aria-label="${t}"><h2>${t}</h2>${b}<div class="df">${f}</div></div>`;
+}
+if (Q.get('dialog') === 'got') {
+  const w = WISH.Wren[1];
+  after = modal('We got it: ' + w.t, `<p class="muted" style="margin-bottom:16px">This adds the set and a copy to the collection, filled in from the wishlist item.</p>
+  <div class="row" style="gap:14px;margin-bottom:16px"><div class="cover" style="width:110px;flex:none">${boxArt({ ...w, name: w.t })}</div><div><b>${w.t}</b><div class="sm muted">${w.brand} ${w.num}</div></div></div>
+  <div class="grid2" style="gap:12px"><div class="field"><label>Owner</label><span class="sel" style="width:100%">Wren</span></div><div class="field"><label>Build state</label><span class="sel" style="width:100%">Sealed</span></div></div>
+  <div class="grid2" style="gap:12px"><div class="field"><label>Location</label><span class="sel" style="width:100%">Attic › Shelf 3</span></div><div class="field"><label>Price paid</label><input class="in" value="$44.99"></div></div>
+  <label class="cb on" style="align-items:flex-start;margin-bottom:12px"><i style="margin-top:2px"><svg viewBox="0 0 24 24"><path d="M5 12.500l4.500 4.500L19 7.500"/></svg></i><span><b>Hide from kid profiles</b><br><span class="sm muted">Use it for a present that has not been given yet. You can show it later in the set's settings.</span></span></label>
+  <div class="notice">${I('warn')}<span>Everyone else will now see this set in the collection. The wish is removed from Wren's list and any purchase marks on it are deleted.</span></div>`,
+  `<button class="btn">Cancel</button><button class="btn pri">${I('check')}Add to collection</button>`);
+}
+const priv = KID ? mock('This is the whole view. There is no mark, count, hint or empty slot that could reveal a purchase, and no prices anywhere.') : '';
+shell({ page: 'wishlist', title: KID ? 'My wishlist' : 'Wishlist', html: `${head(KID ? 'My wishlist' : 'Wishlist', sub, acts)}${tabs}${items.length ? `<div class="card pad" style="padding-top:4px;padding-bottom:4px">${items.map(row).join('')}</div>` : empty}${removed}${priv}`, after });
+</script></body></html>

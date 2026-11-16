@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark">
+<title>Add set · Brick Bin</title><link rel="stylesheet" href="style.css">
+<style>.scanner{aspect-ratio:4/3;background:#0b0f14;border-radius:12px;position:relative;overflow:hidden;display:grid;place-items:center}
+.scanner .fr{width:72%;height:34%;border:3px solid #fff;border-radius:10px;position:relative}.scanner .ln{position:absolute;left:4%;right:4%;top:50%;height:3px;background:#6fa9ea}
+.scanner .bars{display:flex;gap:3px;height:60%;align-items:stretch;position:absolute;inset:20% 12%;opacity:.9}.scanner .bars i{background:#cfd8e2;flex:var(--w)}
+.scanner .cap{position:absolute;left:12px;bottom:10px;color:#e8edf3;font-size:13px}
+.res{display:grid;grid-template-columns:120px minmax(0,1fr) auto;gap:14px;align-items:center;padding:12px;border-radius:10px;border:1px solid transparent}
+.res.on{background:var(--app-tint);border-color:var(--app-accent)}
+.res .cover{border-radius:6px}
+@media (max-width:899px){.res{grid-template-columns:96px minmax(0,1fr)}.res .b{grid-column:2}}</style></head>
+<body><div id="app"></div>
+<script src="data.js"></script><script src="art.js"></script><script src="ui.js"></script>
+<script>
+/* ?step=search|scan|manual */
+const step = Q.get('step') || 'search';
+const tab = (k, l, ic) => `<a href="${href('add.html?step=' + k)}" role="tab" aria-selected="${step === k}" ${step === k ? 'aria-current="true"' : ''}>${I(ic)}${l}</a>`;
+const tabs = `<div class="tabs" role="tablist">${tab('search', 'Search catalog', 'search')}${tab('scan', 'Scan barcode', 'scan')}${tab('manual', 'Enter by hand', 'edit')}</div>`;
+const result = (r, on) => `<div class="res ${on ? 'on' : ''}"><div class="cover">${boxArt(r)}</div><div><div style="font-weight:700;font-size:16px">${r.name}</div><div class="sm muted">LEGO ${r.num} · ${r.theme} · ${r.year} · ${NUM(r.pcs)} pieces</div></div>
+ ${r.wish ? `<span class="b wish">${I('heart')}On ${r.wish}'s wishlist</span>` : r.own ? `<span class="b plain">${I('copy')}You have this set</span>` : ''}</div>`;
+const form = (r) => `<div class="card pad"><h2 style="margin-bottom:2px">Add ${r.name}</h2><p class="muted sm" style="margin-bottom:16px">LEGO ${r.num} · cover and facts come from the catalog.</p>
+${r.own ? `<div class="notice" style="margin-bottom:16px">${I('warn')}<span class="sp"><b>You already have this set: add another copy?</b><br>It is in the library as Seaside Cottage 3-in-1 (1 copy). Another copy keeps one set page and adds a second box.</span></div>` : ''}
+${r.wish ? `<div class="notice info" style="margin-bottom:16px">${I('heart')}<span>${r.wish} has this on a wishlist. Use “We got it” there to keep the list tidy, or add it here and remove it later.</span></div>` : ''}
+<div class="grid2" style="gap:16px"><div class="field"><label>How many?</label><div class="step"><button aria-label="Fewer">−</button><span>1</span><button aria-label="More">+</button></div><span class="hint">Each box becomes its own copy.</span></div><div class="field"><label>Build state</label><span class="sel" style="width:100%">Sealed</span></div></div>
+<div class="grid2" style="gap:16px"><div class="field"><label>Owner</label><span class="sel" style="width:100%">Ours</span></div><div class="field"><label>Location</label><span class="sel" style="width:100%">Attic › Shelf 3</span></div></div>
+<div class="grid2" style="gap:16px"><div class="field"><label>Price paid</label><input class="in" value="$89.99"></div><div class="field"><label>Acquired on</label><input class="in" value="16 Nov 2026"></div></div>
+<div class="row" style="justify-content:flex-end;gap:10px;flex-wrap:wrap"><button class="btn">Cancel</button><button class="btn pri">${I('plus')}${r.own ? 'Add another copy' : 'Add set'}</button></div></div>`;
+
+let body;
+if (step === 'search') {
+  const sel = LOOKUP[0];
+  body = `<div class="searchbox" style="margin-bottom:12px">${I('search')}<input class="in" type="search" value="3121" aria-label="Search the catalog by number or name"></div>
+  <div class="hint" style="margin-bottom:10px">4 matches. Numbers first, then names.</div>
+  <div class="${PH ? '' : 'grid2'}" style="${PH ? '' : 'grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);align-items:start;gap:28px'}"><div class="card" style="padding:6px">${LOOKUP.map((r, i) => result(r, i === 0)).join('')}<div style="padding:10px 12px">${attrib}</div></div><div>${PH ? '' : form(sel)}</div></div>${PH ? `<div style="margin-top:16px">${form(sel)}</div>` : ''}`;
+} else if (step === 'scan') {
+  const bars = [3, 1, 2, 1, 4, 1, 1, 3, 2, 1, 2, 4, 1, 3, 1, 1, 2, 3, 1, 2, 1, 4, 2, 1, 3].map((w) => `<i style="--w:${w}"></i>`).join('');
+  body = `<div class="${PH ? '' : 'grid2'}" style="${PH ? '' : 'align-items:start;gap:28px'}"><div><div class="scanner"><div class="bars">${bars}</div><div class="fr"><div class="ln"></div></div><div class="cap">Point the camera at the barcode on the box</div></div>
+  <div class="row" style="margin-top:12px;flex-wrap:wrap"><button class="btn">${I('x')}Stop camera</button><span class="muted sm">Your browser shows this only while it is open.</span></div></div>
+  <div><div class="notice info" style="margin-bottom:14px">${I('check')}<span><b>Barcode read: 5 702016 000000</b><br>Title found: “Treehouse Cabin Building Kit 31215”. Set number 31215 matched in the catalog.</span></div>
+  <div class="card" style="padding:6px">${result(LOOKUP[0], true)}<div class="row" style="padding:6px 12px 10px;flex-wrap:wrap"><button class="btn pri">Use this set</button><button class="btn">Not this one</button></div></div>
+  <div class="card pad" style="margin-top:14px"><b>No match in the catalog?</b><p class="sm muted" style="margin:4px 0 10px">The decoded title fills in the name so you only add the rest.</p><button class="btn">${I('edit')}Enter by hand with “Treehouse Cabin Building Kit”</button></div><div style="margin-top:12px">${attrib}</div></div></div>`;
+} else {
+  body = `<div class="${PH ? '' : 'grid2'}" style="${PH ? '' : 'align-items:start;gap:28px'}"><div class="card pad"><h2 style="margin-bottom:14px">Set details</h2>
+  <div class="field"><label>Brand</label><span class="sel" style="width:100%">Mould King</span><div class="row" style="gap:8px"><button class="btn sm ghost" style="padding-left:0;color:var(--app-accent-ink)">${I('plus')}New brand</button><span class="hint">Mould King, CaDA, COBI, BlueBrixx, Lumibricks</span></div></div>
+  <div class="grid2" style="gap:16px"><div class="field"><label>Set number</label><input class="in" value="13190"></div><div class="field"><label>Year</label><input class="in" value="2022"></div></div>
+  <div class="notice" style="margin-bottom:16px">${I('warn')}<span class="sp"><b>You already have this set: add another copy?</b><br>Steam Locomotive 2-8-0 (Mould King 13190) is in the library with 1 copy.<div class="row" style="margin-top:10px;flex-wrap:wrap"><button class="btn sm pri">Add another copy</button><button class="btn sm">Make a separate set</button></div></span></div>
+  <div class="field"><label>Name</label><input class="in" value="Steam Locomotive 2-8-0"></div>
+  <div class="grid2" style="gap:16px"><div class="field"><label>Theme</label><span class="sel" style="width:100%">Trains</span></div><div class="field"><label>Pieces</label><input class="in" value="1,258"></div></div>
+  <div class="field"><label>Cover image</label><div class="row"><button class="btn">${I('up2')}Choose image</button><span class="hint">Optional. Landscape works best.</span></div></div></div>
+  <div class="card pad"><h2 style="margin-bottom:14px">First copy</h2><div class="field"><label>How many?</label><div class="step"><button aria-label="Fewer">−</button><span>2</span><button aria-label="More">+</button></div><span class="hint">Two identical boxes: each is its own copy with its own build state.</span></div>
+  <div class="grid2" style="gap:16px"><div class="field"><label>Build state</label><span class="sel" style="width:100%">Sealed</span></div><div class="field"><label>Owner</label><span class="sel" style="width:100%">Ours</span></div></div>
+  <div class="field"><label>Location</label><span class="sel" style="width:100%">Attic › Shelf 1</span></div><div class="grid2" style="gap:16px"><div class="field"><label>Price paid (each)</label><input class="in" value="$94.99"></div><div class="field"><label>Estimated value (each)</label><input class="in" placeholder="$0.00"></div></div>
+  <div class="row" style="justify-content:flex-end;flex-wrap:wrap"><button class="btn">Cancel</button><button class="btn pri">${I('plus')}Add 2 copies</button></div></div></div>
+  <div class="hint" style="margin-top:12px">Off-brand sets are not in the catalog, so their pieces are picked from the general parts catalog. ${attrib}</div>`;
+}
+shell({ page: 'add', title: 'Add set', back: href('library.html'), html: `${head('Add a set', 'Search the catalog, scan a barcode, or enter an off-brand set by hand.')}${tabs}${body}` });
+</script></body></html>
