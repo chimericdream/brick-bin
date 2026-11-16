@@ -15,7 +15,10 @@ sets (LEGO and off-brand). Hosted on a Proxmox server, reachable over Tailscale.
 - Next.js (App Router) + TypeScript, strict
 - **Mantine** for UI. **Do not add Tailwind** (or any utility-CSS framework). Use Mantine components,
   style props, and CSS modules with `postcss-preset-mantine`.
-- Colours are `--app-*` CSS variables so light and dark both work. Fonts and assets are
+- **Design system "Brick Bin"**: tokens in `src/theme.ts` (`--app-*` CSS variables, light and dark), reference
+  mockups in `docs/design/brick-bin/` (README, tokens.md). Bricolage Grotesque (titles) and Atkinson
+  Hyperlegible Next (body) are in `src/fonts/`. Use `--app-*` variables in CSS modules, not hard-coded
+  colours. Fonts and assets are
   **self-hosted**; never load anything from a CDN at runtime.
 - PostgreSQL 17 + Drizzle ORM (migrations via drizzle-kit). Until v1 is deployed, migrations can be
   reset freely. After that, never regenerate `drizzle/`.
