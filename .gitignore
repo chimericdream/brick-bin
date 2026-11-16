@@ -1,0 +1,15 @@
+node_modules
+.next
+next-env.d.ts
+.env
+.env.local
+*.tsbuildinfo
+.idea/
+/.dev-db/
+/data/
+/e2e/.tmp/
+/playwright-report/
+/test-results/
+/screenshots/
+/.taste-skill/
+/.mempalace-host
