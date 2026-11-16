@@ -17,3 +17,74 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm test --passWithNoTests
       - run: pnpm build
+
+  e2e:
+    name: e2e
+    needs: e2e-shards
+    # Always reports, so the required "e2e" check on main never waits forever, and fails
+    # unless every shard succeeded. Shard count can change without touching branch protection.
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - run: test "${{ needs.e2e-shards.result }}" = "success"
+
+  e2e-shards:
+    name: e2e (shard ${{ matrix.shard }}/4)
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    # Each shard gets its own Postgres service, app instance and database, so the specs stay
+    # isolated from each other without any test changes.
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: bricks
+          POSTGRES_PASSWORD: bricks
+          POSTGRES_DB: bricks
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U bricks"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: jdx/mise-action@v2
+      - run: pnpm install --frozen-lockfile
+      - uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+      - run: pnpm exec playwright install chromium
+      # Only go to apt when a system library is actually missing, so an Ubuntu mirror outage
+      # does not fail the build when the runner image already has what the browser needs.
+      - name: Install browser system dependencies if missing
+        run: |
+          missing=0
+          for bin in $(find ~/.cache/ms-playwright -type f \( -name chrome -o -name chrome-headless-shell \)); do
+            if ldd "$bin" | grep -q 'not found'; then
+              echo "Missing libraries for $bin:"; ldd "$bin" | grep 'not found'
+              missing=1
+            fi
+          done
+          if [ "$missing" = 1 ]; then pnpm exec playwright install-deps chromium; fi
+      - uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: next-cache-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ hashFiles('src/**') }}
+          restore-keys: |
+            next-cache-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
+      - run: pnpm e2e --shard=${{ matrix.shard }}/4
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report-shard-${{ matrix.shard }}
+          path: |
+            e2e/.tmp/report
+            e2e/.tmp/test-results
+          retention-days: 7

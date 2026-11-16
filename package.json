@@ -18,7 +18,8 @@
     "e2e": "playwright test",
     "e2e:smoke": "playwright test --grep @smoke",
     "e2e:ui": "playwright test --ui",
-    "e2e:report": "playwright show-report e2e/.tmp/report"
+    "e2e:report": "playwright show-report e2e/.tmp/report",
+    "shots": "node e2e/screenshots/run.mjs"
   },
   "dependencies": {
     "@mantine/core": "^9.8.0",
