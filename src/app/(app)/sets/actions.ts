@@ -36,6 +36,9 @@ const text = (fd: FormData, key: string) => {
   return typeof v === 'string' && v.trim() !== '' ? v.trim() : null;
 };
 
+/** A whole-number field. Mantine's NumberInput submits what it displays ("9,090"), so drop separators. */
+const whole = (fd: FormData, key: string) => text(fd, key)?.replaceAll(',', '') ?? null;
+
 /** A money field in dollars. Returns `undefined` for junk so the caller can report it. */
 function money(fd: FormData, key: string): number | null | undefined {
   return parseMoney(text(fd, key));
@@ -86,10 +89,10 @@ export async function saveSetAction(
       setNumber: text(fd, 'setNumber'),
       name: text(fd, 'name') ?? '',
       themeId: text(fd, 'themeId'),
-      year: text(fd, 'year'),
-      pieceCount: text(fd, 'pieceCount'),
-      minifigCount: text(fd, 'minifigCount'),
-      minAge: text(fd, 'minAge'),
+      year: whole(fd, 'year'),
+      pieceCount: whole(fd, 'pieceCount'),
+      minifigCount: whole(fd, 'minifigCount'),
+      minAge: whole(fd, 'minAge'),
       description: text(fd, 'description'),
       retailPriceCents: retail,
       designer: text(fd, 'designer'),
