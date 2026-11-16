@@ -7,20 +7,20 @@ its stack, architecture rules and deployment. The repo is `brick-bin`.
 
 Decisions so far (2026-11-15):
 
-| Topic             | Decision                                                                                                                                                       |
-| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Name              | **Brick Bin**, domain `brick-bin.app`                                                                                                                          |
-| Depth             | Sets and copies with **build state**, condition and location. **Missing pieces are real catalog parts** (part + colour + quantity), with a shopping list across sets. No bulk-brick inventory. |
-| Codebase          | **New repo** that copies the proven parts of `game-inventory` and adapts them. No shared packages, no shared login.                                             |
-| v1 features       | **Kid (restricted) profiles**, **instructions**, **value tracking**, **wishlist**, **missing-parts shopping list**                                                |
-| Kid profiles      | Read-only, except they can add, edit and remove items on **their own wishlist**                                                                                 |
-| Wishlist purchase | Marking an item purchased is **visible only to the person who marked it**: not the requester, not other members, not admins, not the activity log                |
+| Topic             | Decision                                                                                                                                                                                                                                                                                      |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Name              | **Brick Bin**, domain `brick-bin.app`                                                                                                                                                                                                                                                         |
+| Depth             | Sets and copies with **build state**, condition and location. **Missing pieces are real catalog parts** (part + colour + quantity), with a shopping list across sets. No bulk-brick inventory.                                                                                                |
+| Codebase          | **New repo** that copies the proven parts of `game-inventory` and adapts them. No shared packages, no shared login.                                                                                                                                                                           |
+| v1 features       | **Kid (restricted) profiles**, **instructions**, **value tracking**, **wishlist**, **missing-parts shopping list**                                                                                                                                                                            |
+| Kid profiles      | Read-only, except they can add, edit and remove items on **their own wishlist**                                                                                                                                                                                                               |
+| Wishlist purchase | Marking an item purchased is **visible only to the person who marked it**: not the requester, not other members, not admins, not the activity log                                                                                                                                             |
 | Catalog data      | Rebrickable bulk downloads, fetched **only when an admin presses a button**, at most once every **48 hours** after the last successful run. Never scheduled. Until Rebrickable says reading their downloads page is fine, the admin **pastes the page's HTML** instead of the app fetching it |
-| Duplicates        | Several copies of the same set are normal: one row per physical box, each with its own build state and missing pieces                                          |
-| Instructions      | PDFs for sets we own are **stored and served by the app**, either uploaded or saved from a link                                                                 |
-| Currency          | **USD** only in v1; configurable later                                                                                                                          |
-| Brands            | **LEGO** seeded at first run; others added as needed                                                                                                            |
-| Not in v1         | Guest share links, minifigures as owned entities, build log, loans, ratings. See [Later](#15-later-not-in-v1).                                                  |
+| Duplicates        | Several copies of the same set are normal: one row per physical box, each with its own build state and missing pieces                                                                                                                                                                         |
+| Instructions      | PDFs for sets we own are **stored and served by the app**, either uploaded or saved from a link                                                                                                                                                                                               |
+| Currency          | **USD** only in v1; configurable later                                                                                                                                                                                                                                                        |
+| Brands            | **LEGO** seeded at first run; others added as needed                                                                                                                                                                                                                                          |
+| Not in v1         | Guest share links, minifigures as owned entities, build log, loans, ratings. See [Later](#15-later-not-in-v1).                                                                                                                                                                                |
 
 ---
 
@@ -87,28 +87,28 @@ Decisions so far (2026-11-15):
 Copy these files, then rename "game" to "set" and remove what v1 does not use. Each copied module
 keeps its tests, which are adapted alongside it.
 
-| From game-inventory                                                                           | Use in Brick Bin                                                                                          |
-| --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| `mise.toml`, `.oxlintrc.json`, `.oxfmtrc.json`, `tsconfig.json`, `postcss.config.cjs`         | As is                                                                                                     |
-| `vitest.config.ts`, `src/server/db/test-db.ts`                                                | As is (PGlite + real migrations)                                                                          |
-| `playwright.config.ts`, `e2e/start-app.mjs`, `e2e/support/`, `e2e/fixtures/`                  | Adapt fixtures to sets                                                                                    |
-| `e2e/mocks/external-server.ts`                                                                | Replace BGG mocks with a mock Rebrickable (downloads page, archives, images) and UPC                      |
-| `e2e/screenshots/run.mjs` (`pnpm shots`)                                                      | Adapt routes                                                                                              |
-| `src/server/auth/*` (accounts, password, sessions, current)                                   | As is: first-run creates household + admin, hashed session tokens, roles `admin` / `member` / `restricted` |
-| `src/server/db/client.ts`, `migrate.ts`                                                       | As is (auto-migrate on start, `AUTO_MIGRATE=false` to skip)                                                |
-| `src/server/data/context.ts`, `ids.ts`, `audit.ts`, `trash.ts`, `visibility.ts`               | Adapt entity kinds                                                                                        |
-| `src/server/data/locations*` logic (nested places, delete guards, counts)                     | As is                                                                                                     |
-| `src/server/data/wishlist.ts`                                                                 | Adapt fields, add restricted writes and private purchase marks (section 6.5)                              |
-| `src/server/import/csv.ts` (column mapping, failed-rows CSV download)                         | Adapt columns, add Rebrickable/Brickset collection formats                                                |
-| `src/server/lookup/upc.ts`                                                                    | As is, plus set-number extraction                                                                         |
-| `src/server/storage.ts`                                                                       | Cover images as is; new **streaming** functions for PDFs and catalog files                                |
+| From game-inventory                                                                           | Use in Brick Bin                                                                                                 |
+| --------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `mise.toml`, `.oxlintrc.json`, `.oxfmtrc.json`, `tsconfig.json`, `postcss.config.cjs`         | As is                                                                                                            |
+| `vitest.config.ts`, `src/server/db/test-db.ts`                                                | As is (PGlite + real migrations)                                                                                 |
+| `playwright.config.ts`, `e2e/start-app.mjs`, `e2e/support/`, `e2e/fixtures/`                  | Adapt fixtures to sets                                                                                           |
+| `e2e/mocks/external-server.ts`                                                                | Replace BGG mocks with a mock Rebrickable (downloads page, archives, images) and UPC                             |
+| `e2e/screenshots/run.mjs` (`pnpm shots`)                                                      | Adapt routes                                                                                                     |
+| `src/server/auth/*` (accounts, password, sessions, current)                                   | As is: first-run creates household + admin, hashed session tokens, roles `admin` / `member` / `restricted`       |
+| `src/server/db/client.ts`, `migrate.ts`                                                       | As is (auto-migrate on start, `AUTO_MIGRATE=false` to skip)                                                      |
+| `src/server/data/context.ts`, `ids.ts`, `audit.ts`, `trash.ts`, `visibility.ts`               | Adapt entity kinds                                                                                               |
+| `src/server/data/locations*` logic (nested places, delete guards, counts)                     | As is                                                                                                            |
+| `src/server/data/wishlist.ts`                                                                 | Adapt fields, add restricted writes and private purchase marks (section 6.5)                                     |
+| `src/server/import/csv.ts` (column mapping, failed-rows CSV download)                         | Adapt columns, add Rebrickable/Brickset collection formats                                                       |
+| `src/server/lookup/upc.ts`                                                                    | As is, plus set-number extraction                                                                                |
+| `src/server/storage.ts`                                                                       | Cover images as is; new **streaming** functions for PDFs and catalog files                                       |
 | `src/server/trash-schedule.ts`, `src/instrumentation.ts`                                      | Trash purge only (it is local, so it is allowed to be scheduled). Also marks interrupted imports failed on start |
-| `src/app/(auth)/`, `src/app/(app)/Shell.tsx`, `settings/` (people, places, activity)          | Adapt; drop the guest-link and players tabs                                                               |
-| `src/components/ConfirmDelete.tsx`, `ThemeToggle.tsx`, `Links.tsx`, not-found page            | As is                                                                                                     |
-| `src/components/shelf/*`                                                                      | Starting point only: box tiles need a landscape aspect (section 9)                                        |
-| `Dockerfile`, `docker-compose.yml`, `docker-compose.prod.yml`, `deploy/`, `scripts/backup.sh` | Rename containers and volumes; backups change for PDFs and catalog files (section 11)                     |
-| `.github/workflows/ci.yml`                                                                    | As is (check job, 4 e2e shards + gate job, GHCR publish on `main`)                                        |
-| `docs/E2E_TEST_PLAN.md`                                                                       | Template for the new test plan                                                                            |
+| `src/app/(auth)/`, `src/app/(app)/Shell.tsx`, `settings/` (people, places, activity)          | Adapt; drop the guest-link and players tabs                                                                      |
+| `src/components/ConfirmDelete.tsx`, `ThemeToggle.tsx`, `Links.tsx`, not-found page            | As is                                                                                                            |
+| `src/components/shelf/*`                                                                      | Starting point only: box tiles need a landscape aspect (section 9)                                               |
+| `Dockerfile`, `docker-compose.yml`, `docker-compose.prod.yml`, `deploy/`, `scripts/backup.sh` | Rename containers and volumes; backups change for PDFs and catalog files (section 11)                            |
+| `.github/workflows/ci.yml`                                                                    | As is (check job, 4 e2e shards + gate job, GHCR publish on `main`)                                               |
+| `docs/E2E_TEST_PLAN.md`                                                                       | Template for the new test plan                                                                                   |
 
 Do **not** copy: players, plays, ratings, loans, share links, guest pages (`/g/`), BGG lookup,
 expansions, accessories, the marketing site (`site/`), the game-specific detail tables, or the
@@ -129,23 +129,23 @@ referencing `households` with `on delete cascade`. Money is stored as integer ce
 One table per Rebrickable CSV, named `rb_<file>` with the CSV's columns as they are. They are
 loaded by the import job and never edited by the app.
 
-| Table                    | Used for                                                                                |
-| ------------------------ | --------------------------------------------------------------------------------------- |
-| `rb_themes`              | Theme tree for LEGO sets                                                                |
-| `rb_colors`              | Colour names, RGB swatches, transparency; the colour picker for missing parts           |
-| `rb_part_categories`     | Filter in the part picker                                                               |
-| `rb_parts`               | Part search (number, name, category)                                                    |
-| `rb_part_relationships`  | "Any of these molds/alternates will do" hints on the shopping list                      |
-| `rb_elements`            | LEGO element ids (part + colour), for Pick a Brick-style shopping                       |
-| `rb_sets`                | Set lookup when adding a set; covers                                                    |
-| `rb_minifigs`            | Missing minifigures from a set                                                          |
-| `rb_inventories`         | A set's inventory versions                                                              |
-| `rb_inventory_parts`     | The parts in a set (the missing-part picker); largest table, over a million rows        |
-| `rb_inventory_minifigs`  | Minifigures in a set                                                                    |
-| `rb_inventory_sets`      | Sub-sets inside a set (bundles)                                                         |
-| `rb_color_mappings`      | Rebrickable colour id to BrickLink/BrickOwl/LEGO/LDraw ids (BrickLink export)           |
-| `rb_part_mappings`       | Rebrickable part number to external ids (BrickLink export)                              |
-| `rb_set_mappings`        | Rebrickable set/minifig number to external ids                                          |
+| Table                   | Used for                                                                         |
+| ----------------------- | -------------------------------------------------------------------------------- |
+| `rb_themes`             | Theme tree for LEGO sets                                                         |
+| `rb_colors`             | Colour names, RGB swatches, transparency; the colour picker for missing parts    |
+| `rb_part_categories`    | Filter in the part picker                                                        |
+| `rb_parts`              | Part search (number, name, category)                                             |
+| `rb_part_relationships` | "Any of these molds/alternates will do" hints on the shopping list               |
+| `rb_elements`           | LEGO element ids (part + colour), for Pick a Brick-style shopping                |
+| `rb_sets`               | Set lookup when adding a set; covers                                             |
+| `rb_minifigs`           | Missing minifigures from a set                                                   |
+| `rb_inventories`        | A set's inventory versions                                                       |
+| `rb_inventory_parts`    | The parts in a set (the missing-part picker); largest table, over a million rows |
+| `rb_inventory_minifigs` | Minifigures in a set                                                             |
+| `rb_inventory_sets`     | Sub-sets inside a set (bundles)                                                  |
+| `rb_color_mappings`     | Rebrickable colour id to BrickLink/BrickOwl/LEGO/LDraw ids (BrickLink export)    |
+| `rb_part_mappings`      | Rebrickable part number to external ids (BrickLink export)                       |
+| `rb_set_mappings`       | Rebrickable set/minifig number to external ids                                   |
 
 Indexes are only what the picker and search need (lower(`name`) and prefix indexes on numbers,
 `rb_inventory_parts (inventory_id)`, `rb_elements (part_num, color_id)`). Columns come from the
@@ -179,22 +179,22 @@ by `rb_theme_id`), so only themes you own sets in show up as filters.
 
 **`sets`** (the design):
 
-| Column                          | Notes                                                                                                     |
-| ------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| `brand_id`                      | required                                                                                                  |
-| `set_number`                    | text, as printed on the box (`10294`, `10294-1`, `31211`, `C61042W`). Optional for unnumbered kits        |
-| `name`                          | required                                                                                                  |
-| `theme_id`                      | nullable                                                                                                  |
-| `year`, `piece_count`, `minifig_count`, `min_age` | ints                                                                                    |
-| `description`                   | text, keeps line breaks                                                                                   |
-| `retail_price_cents`            | original RRP, manual                                                                                      |
-| `cover_image`                   | relative path under `DATA_DIR`                                                                            |
-| `rb_set_num`                    | Rebrickable id when linked (`10294-1`). Drives re-sync and the set's part inventory                       |
-| `rb_inventory_version`          | which inventory version the picker uses (default: the highest)                                            |
-| `designer`                      | optional text, e.g. the MOC designer an off-brand kit is licensed from                                    |
-| `hidden_from_restricted`        | boolean, default false (section 7)                                                                        |
-| `notes`                         | text                                                                                                      |
-| trashable, authorship, stamps   |                                                                                                           |
+| Column                                            | Notes                                                                                              |
+| ------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `brand_id`                                        | required                                                                                           |
+| `set_number`                                      | text, as printed on the box (`10294`, `10294-1`, `31211`, `C61042W`). Optional for unnumbered kits |
+| `name`                                            | required                                                                                           |
+| `theme_id`                                        | nullable                                                                                           |
+| `year`, `piece_count`, `minifig_count`, `min_age` | ints                                                                                               |
+| `description`                                     | text, keeps line breaks                                                                            |
+| `retail_price_cents`                              | original RRP, manual                                                                               |
+| `cover_image`                                     | relative path under `DATA_DIR`                                                                     |
+| `rb_set_num`                                      | Rebrickable id when linked (`10294-1`). Drives re-sync and the set's part inventory                |
+| `rb_inventory_version`                            | which inventory version the picker uses (default: the highest)                                     |
+| `designer`                                        | optional text, e.g. the MOC designer an off-brand kit is licensed from                             |
+| `hidden_from_restricted`                          | boolean, default false (section 7)                                                                 |
+| `notes`                                           | text                                                                                               |
+| trashable, authorship, stamps                     |                                                                                                    |
 
 Partial unique index: (`household_id`, `brand_id`, lower(`set_number`)) where `deleted_at is null`
 and `set_number is not null`. The form shows "You already have this set: add another copy?"
@@ -202,21 +202,21 @@ instead of failing on the constraint.
 
 **`copies`** (a box you own):
 
-| Column                          | Notes                                                                                                                                       |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| `set_id`                        | required                                                                                                                                    |
-| `owner_user_id`                 | nullable ("Ours")                                                                                                                           |
-| `location_id`                   | nullable                                                                                                                                    |
-| `build_state`                   | enum `sealed`, `opened` (opened, not built), `in_progress`, `built`, `disassembled` (taken apart, kept together), `mixed` (parted into bulk bins) |
-| `pieces_checked_on`             | date of the last full piece check; null means never checked                                                                                 |
-| `has_box`, `has_instructions`   | booleans for the physical box and paper booklets (default true)                                                                             |
-| `condition_notes`               | free text (box dents, yellowed bricks, stickers applied crooked)                                                                            |
-| `acquired_on`                   | date                                                                                                                                        |
-| `price_paid_cents`              | what you paid                                                                                                                               |
-| `estimated_value_cents`         | manual current value                                                                                                                        |
-| `valued_on`                     | date the estimate was last set, shown as "valued 8 months ago"                                                                              |
-| `notes`                         |                                                                                                                                             |
-| trashable, authorship, stamps   |                                                                                                                                             |
+| Column                        | Notes                                                                                                                                             |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `set_id`                      | required                                                                                                                                          |
+| `owner_user_id`               | nullable ("Ours")                                                                                                                                 |
+| `location_id`                 | nullable                                                                                                                                          |
+| `build_state`                 | enum `sealed`, `opened` (opened, not built), `in_progress`, `built`, `disassembled` (taken apart, kept together), `mixed` (parted into bulk bins) |
+| `pieces_checked_on`           | date of the last full piece check; null means never checked                                                                                       |
+| `has_box`, `has_instructions` | booleans for the physical box and paper booklets (default true)                                                                                   |
+| `condition_notes`             | free text (box dents, yellowed bricks, stickers applied crooked)                                                                                  |
+| `acquired_on`                 | date                                                                                                                                              |
+| `price_paid_cents`            | what you paid                                                                                                                                     |
+| `estimated_value_cents`       | manual current value                                                                                                                              |
+| `valued_on`                   | date the estimate was last set, shown as "valued 8 months ago"                                                                                    |
+| `notes`                       |                                                                                                                                                   |
+| trashable, authorship, stamps |                                                                                                                                                   |
 
 **Completeness is derived**, not stored:
 
@@ -234,19 +234,19 @@ one action.
 
 **`copy_missing_items`** (replaces the free-text missing notes):
 
-| Column                        | Notes                                                                                                                   |
-| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `copy_id`                     | required                                                                                                                |
-| `kind`                        | enum `part`, `minifig`, `other`                                                                                         |
-| `rb_part_num`, `rb_color_id`  | for `part`                                                                                                              |
-| `rb_fig_num`                  | for `minifig`                                                                                                           |
-| `quantity`                    | missing count, at least 1                                                                                               |
+| Column                                                   | Notes                                                                                                      |
+| -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `copy_id`                                                | required                                                                                                   |
+| `kind`                                                   | enum `part`, `minifig`, `other`                                                                            |
+| `rb_part_num`, `rb_color_id`                             | for `part`                                                                                                 |
+| `rb_fig_num`                                             | for `minifig`                                                                                              |
+| `quantity`                                               | missing count, at least 1                                                                                  |
 | `snapshot_name`, `snapshot_color_name`, `snapshot_image` | copied from the catalog when added, so the row still reads well if Rebrickable renumbers or drops the part |
-| `description`                 | for `other`: a non-catalog off-brand piece, a sticker sheet, a printed tile you cannot find                             |
-| `from_inventory`              | true when picked from the set's own inventory (false = picked from the whole catalog)                                   |
-| `resolved_at`, `resolved_by_user_id`, `resolution` | enum `found`, `bought`, `substituted`. Null while still missing                                    |
-| `notes`                       | e.g. "the one with the dent is fine"                                                                                    |
-| authorship, stamps            |                                                                                                                         |
+| `description`                                            | for `other`: a non-catalog off-brand piece, a sticker sheet, a printed tile you cannot find                |
+| `from_inventory`                                         | true when picked from the set's own inventory (false = picked from the whole catalog)                      |
+| `resolved_at`, `resolved_by_user_id`, `resolution`       | enum `found`, `bought`, `substituted`. Null while still missing                                            |
+| `notes`                                                  | e.g. "the one with the dent is fine"                                                                       |
+| authorship, stamps                                       |                                                                                                            |
 
 Unique (`copy_id`, `kind`, `rb_part_num`, `rb_color_id`, `rb_fig_num`) among unresolved rows, so
 adding the same part again raises the quantity instead of making a second row. Partly found
@@ -320,11 +320,11 @@ is found changes; the rest of the import stays the same.
 
 From the downloads page (saved copy, 2026-11-15):
 
-| File                                                                         | Notes                                                                                                                      |
-| ---------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `https://cdn.rebrickable.com/media/downloads/all_downloads.zip?<timestamp>`  | Every CSV in one archive ("Download the complete catalog"), with a "Last updated" date on the page. Downloaded every run |
-| `https://rebrickable.com/static/img/diagrams/downloads_schema_v4.svg`        | "How the files fit together" diagram (the `<img>` with alt "Public CSV schema showing the LEGO data files and the identifiers used to join them."). Downloaded every run |
-| `https://cdn.rebrickable.com/media/downloads/ldraw/parts_<colorId>.zip`      | "LDraw images by color": **196 ZIPs, about 5.9 GB in all** (Black 220 MB, Light Bluish Gray 174 MB, White 157 MB, many under 5 MB). Each has a date. Downloaded only when its date is newer than ours |
+| File                                                                        | Notes                                                                                                                                                                                                 |
+| --------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `https://cdn.rebrickable.com/media/downloads/all_downloads.zip?<timestamp>` | Every CSV in one archive ("Download the complete catalog"), with a "Last updated" date on the page. Downloaded every run                                                                              |
+| `https://rebrickable.com/static/img/diagrams/downloads_schema_v4.svg`       | "How the files fit together" diagram (the `<img>` with alt "Public CSV schema showing the LEGO data files and the identifiers used to join them."). Downloaded every run                              |
+| `https://cdn.rebrickable.com/media/downloads/ldraw/parts_<colorId>.zip`     | "LDraw images by color": **196 ZIPs, about 5.9 GB in all** (Black 220 MB, Light Bluish Gray 174 MB, White 157 MB, many under 5 MB). Each has a date. Downloaded only when its date is newer than ours |
 
 The individual per-CSV `.zip` and `.gz` links contain the same data as `all_downloads.zip`, so the
 import skips them. Any ZIP the page lists that is not one of the kinds above (a new section, for
@@ -710,20 +710,20 @@ Mutations are server actions that call the data layer, except the PDF upload.
 
 ## 10. Environment variables
 
-| Variable                     | Purpose                                                             |
-| ---------------------------- | ------------------------------------------------------------------- |
-| `DATABASE_URL`               | Postgres connection (required)                                      |
-| `DATA_DIR`                   | Covers, instruction PDFs, catalog images (default `./data`)          |
-| `COOKIE_SECURE`              | `true` behind HTTPS                                                 |
-| `AUTO_MIGRATE`               | `false` to skip migrations on start                                 |
-| `TRASH_RETENTION_DAYS`       | Default 30, `0` = keep until an admin deletes                       |
-| `REBRICKABLE_PAGE_FETCH`     | `true` lets the import fetch the downloads page itself; default `false` (paste the HTML instead) until Rebrickable confirms it is OK |
-| `INSTRUCTIONS_MAX_MB`        | Upload cap per PDF (default 200)                                    |
-| `REBRICKABLE_DOWNLOADS_PAGE` | Downloads page URL (default `https://rebrickable.com/downloads/`; e2e points it at the mock) |
-| `REBRICKABLE_ALLOWED_ORIGINS`| Origins the import may download from (default `https://rebrickable.com,https://cdn.rebrickable.com`) |
-| `CATALOG_IMAGE_ORIGIN`       | Allowed origin for set cover downloads                              |
-| `UPC_BASE_URL`               | Barcode lookup base (tests)                                         |
-| `E2E_DATABASE_URL`           | e2e only                                                            |
+| Variable                      | Purpose                                                                                                                              |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `DATABASE_URL`                | Postgres connection (required)                                                                                                       |
+| `DATA_DIR`                    | Covers, instruction PDFs, catalog images (default `./data`)                                                                          |
+| `COOKIE_SECURE`               | `true` behind HTTPS                                                                                                                  |
+| `AUTO_MIGRATE`                | `false` to skip migrations on start                                                                                                  |
+| `TRASH_RETENTION_DAYS`        | Default 30, `0` = keep until an admin deletes                                                                                        |
+| `REBRICKABLE_PAGE_FETCH`      | `true` lets the import fetch the downloads page itself; default `false` (paste the HTML instead) until Rebrickable confirms it is OK |
+| `INSTRUCTIONS_MAX_MB`         | Upload cap per PDF (default 200)                                                                                                     |
+| `REBRICKABLE_DOWNLOADS_PAGE`  | Downloads page URL (default `https://rebrickable.com/downloads/`; e2e points it at the mock)                                         |
+| `REBRICKABLE_ALLOWED_ORIGINS` | Origins the import may download from (default `https://rebrickable.com,https://cdn.rebrickable.com`)                                 |
+| `CATALOG_IMAGE_ORIGIN`        | Allowed origin for set cover downloads                                                                                               |
+| `UPC_BASE_URL`                | Barcode lookup base (tests)                                                                                                          |
+| `E2E_DATABASE_URL`            | e2e only                                                                                                                             |
 
 The 48-hour lock and the 24-hour per-URL limit are constants in code, not settings, so a
 self-hoster cannot accidentally break Rebrickable's terms. Tests use an injected clock.
@@ -808,9 +808,10 @@ phone filter sheet. E2E plan written and the first specs passing; CI e2e shards 
 first: inspect a real `all_downloads.zip` (file list, headers) and the schema SVG (mapping-file
 columns). The LDraw ZIP layout is already confirmed (5.3, step 6). Then: `rb_*` tables, `catalog_runs` / `catalog_files`, page
 parser, the run with staging swap and only-changed ZIPs, the 48-hour and 24-hour rules, Settings
+
 > Catalog (last imported, progress, history, diagram), part-image route, set typeahead, cover
-download on save, re-sync with diff, barcode scan, theme find-or-create, attribution. Mock
-Rebrickable in e2e.
+> download on save, re-sync with diff, barcode scan, theme find-or-create, attribution. Mock
+> Rebrickable in e2e.
 
 **Phase 6: Instructions.** Streaming upload route, storage, streamed + Range serving, link
 instructions, "Find on LEGO.com", save from a link with the SSRF guard, sort order, trash and
