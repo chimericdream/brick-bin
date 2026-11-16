@@ -280,3 +280,31 @@ export async function listBrandSets(ctx: DataContext, brandId: string) {
     .where(and(setVisibilityCondition(ctx), eq(sets.brandId, brandId)))
     .orderBy(asc(sets.name));
 }
+
+export interface SetSummary {
+  id: string;
+  name: string;
+  setNumber: string | null;
+  year: number | null;
+  brandName: string;
+  hasCover: boolean;
+}
+
+/** A plain list of visible sets, newest first. Phase 4 replaces this with the paged library query. */
+export async function listSetSummaries(ctx: DataContext, limit = 200): Promise<SetSummary[]> {
+  const rows = await ctx.db
+    .select({
+      id: sets.id,
+      name: sets.name,
+      setNumber: sets.setNumber,
+      year: sets.year,
+      brandName: brands.name,
+      coverImage: sets.coverImage,
+    })
+    .from(sets)
+    .innerJoin(brands, eq(brands.id, sets.brandId))
+    .where(setVisibilityCondition(ctx))
+    .orderBy(sql`${sets.createdAt} desc`, asc(sets.name))
+    .limit(limit);
+  return rows.map(({ coverImage, ...r }) => ({ ...r, hasCover: coverImage !== null }));
+}

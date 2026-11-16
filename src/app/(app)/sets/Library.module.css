@@ -1,0 +1,25 @@
+.list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+  margin: 20px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px;
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius-card);
+  background: var(--app-surface);
+  color: var(--app-ink);
+  text-decoration: none;
+
+  & span {
+    color: var(--app-muted);
+    font-size: 13px;
+  }
+}

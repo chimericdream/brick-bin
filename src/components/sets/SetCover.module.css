@@ -1,0 +1,23 @@
+.frame {
+  aspect-ratio: 3 / 2;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius-tile);
+  background: var(--app-sunk);
+}
+
+.img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.placeholder {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  color: var(--app-muted);
+}
