@@ -1,5 +1,5 @@
 {
-  "id": "25498f3e-0512-4492-8c09-163c7d694f8c",
+  "id": "89730958-213d-4b86-bc26-c0131d94c220",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -496,7 +496,24 @@
           "default": "'[]'::jsonb"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "catalog_runs_one_running": {
+          "name": "catalog_runs_one_running",
+          "columns": [
+            {
+              "expression": "status",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "\"catalog_runs\".\"status\" = 'running'",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "catalog_runs_started_by_user_id_users_id_fk": {
           "name": "catalog_runs_started_by_user_id_users_id_fk",

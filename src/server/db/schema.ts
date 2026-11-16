@@ -460,26 +460,37 @@ export const rbSetMappings = pgTable(
 
 export const catalogRunStatus = pgEnum('catalog_run_status', ['running', 'succeeded', 'failed']);
 
-export const catalogRuns = pgTable('catalog_runs', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  startedAt: timestamp('started_at', { withTimezone: true }).notNull().defaultNow(),
-  finishedAt: timestamp('finished_at', { withTimezone: true }),
-  status: catalogRunStatus('status').notNull().default('running'),
-  startedByUserId: uuid('started_by_user_id').references(() => users.id, { onDelete: 'set null' }),
-  /** Where the file list came from: the app fetched the page, or an admin pasted it. */
-  source: text('source').notNull().default('pasted'),
-  error: text('error'),
-  /** Current step and progress, shown while running. */
-  step: text('step'),
-  filesDone: integer('files_done').notNull().default(0),
-  filesTotal: integer('files_total').notNull().default(0),
-  bytesDownloaded: bigint('bytes_downloaded', { mode: 'number' }).notNull().default(0),
-  filesDownloaded: integer('files_downloaded').notNull().default(0),
-  filesSkipped: integer('files_skipped').notNull().default(0),
-  rowsLoaded: bigint('rows_loaded', { mode: 'number' }).notNull().default(0),
-  /** Notes for the run summary (dropped links, colour name mismatches, and so on). */
-  notes: jsonb('notes').$type<string[]>().notNull().default([]),
-});
+export const catalogRuns = pgTable(
+  'catalog_runs',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    startedAt: timestamp('started_at', { withTimezone: true }).notNull().defaultNow(),
+    finishedAt: timestamp('finished_at', { withTimezone: true }),
+    status: catalogRunStatus('status').notNull().default('running'),
+    startedByUserId: uuid('started_by_user_id').references(() => users.id, {
+      onDelete: 'set null',
+    }),
+    /** Where the file list came from: the app fetched the page, or an admin pasted it. */
+    source: text('source').notNull().default('pasted'),
+    error: text('error'),
+    /** Current step and progress, shown while running. */
+    step: text('step'),
+    filesDone: integer('files_done').notNull().default(0),
+    filesTotal: integer('files_total').notNull().default(0),
+    bytesDownloaded: bigint('bytes_downloaded', { mode: 'number' }).notNull().default(0),
+    filesDownloaded: integer('files_downloaded').notNull().default(0),
+    filesSkipped: integer('files_skipped').notNull().default(0),
+    rowsLoaded: bigint('rows_loaded', { mode: 'number' }).notNull().default(0),
+    /** Notes for the run summary (dropped links, colour name mismatches, and so on). */
+    notes: jsonb('notes').$type<string[]>().notNull().default([]),
+  },
+  // At most one import runs at a time: a second insert with status 'running' fails.
+  (t) => [
+    uniqueIndex('catalog_runs_one_running')
+      .on(t.status)
+      .where(sql`${t.status} = 'running'`),
+  ],
+);
 
 export const catalogFileKind = pgEnum('catalog_file_kind', [
   'csv_archive',

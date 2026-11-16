@@ -327,6 +327,7 @@ CREATE INDEX "audit_entity_idx" ON "audit_log" USING btree ("household_id","enti
 CREATE INDEX "audit_household_at_idx" ON "audit_log" USING btree ("household_id","at");--> statement-breakpoint
 CREATE INDEX "brands_household_idx" ON "brands" USING btree ("household_id");--> statement-breakpoint
 CREATE UNIQUE INDEX "brands_name_unique" ON "brands" USING btree ("household_id",lower("name"));--> statement-breakpoint
+CREATE UNIQUE INDEX "catalog_runs_one_running" ON "catalog_runs" USING btree ("status") WHERE "catalog_runs"."status" = 'running';--> statement-breakpoint
 CREATE INDEX "copies_household_idx" ON "copies" USING btree ("household_id");--> statement-breakpoint
 CREATE INDEX "copies_set_idx" ON "copies" USING btree ("set_id");--> statement-breakpoint
 CREATE INDEX "copies_location_idx" ON "copies" USING btree ("location_id");--> statement-breakpoint
