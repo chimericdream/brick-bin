@@ -1,5 +1,7 @@
 import { parse, type HTMLElement, type Node } from 'node-html-parser';
 
+import { isAllowedUrl } from './origins';
+
 /**
  * Reads Rebrickable's downloads page (HTML in, file list out). The page is parsed only: never
  * rendered, never stored as HTML. Every URL it names must be https and on an allowed origin, so a
@@ -46,7 +48,7 @@ function safeUrl(raw: string, opts: ParseOptions): { url: string } | { dropped: 
   } catch {
     return { dropped: raw.slice(0, 200) };
   }
-  if (u.protocol !== 'https:' || !opts.allowedOrigins.includes(u.origin)) {
+  if (!isAllowedUrl(u, opts.allowedOrigins)) {
     return { dropped: u.toString().slice(0, 200) };
   }
   // Credentials in a URL are never legitimate here.

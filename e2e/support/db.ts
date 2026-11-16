@@ -1,6 +1,6 @@
 // Direct SQL access to the e2e database. Used to seed data quickly and to do things the UI
 // cannot (create a second household, inspect stored rows).
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 
 import postgres from 'postgres';
@@ -63,6 +63,9 @@ export async function resetCatalog(): Promise<void> {
   await sql`truncate sets, tags, themes, locations restart identity cascade`;
   await sql`delete from brands where household_id = ${hh} and is_lego = false`;
   await sql`truncate audit_log`;
+  // The reference catalog and the import history are global, so they reset too.
+  await sql`truncate catalog_runs, catalog_files, catalog_part_images, rb_themes, rb_colors, rb_part_categories, rb_parts, rb_part_relationships, rb_elements, rb_sets, rb_minifigs, rb_inventories, rb_inventory_parts, rb_inventory_minifigs, rb_inventory_sets, rb_color_mappings, rb_part_mappings, rb_set_mappings`;
+  rmSync(path.join(DATA_DIR, 'catalog'), { recursive: true, force: true });
 }
 
 export async function brandId(name: string, hhId?: string): Promise<string> {

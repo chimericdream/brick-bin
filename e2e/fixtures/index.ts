@@ -8,6 +8,7 @@ import {
 
 import * as db from '../support/db';
 import { BASE_URL } from '../support/env';
+import { RebrickableMock } from '../support/rebrickable-mock';
 import { ADMIN, KID, MEMBER } from '../support/roles';
 
 type Issues = string[];
@@ -27,6 +28,10 @@ function attachGuard(page: Page, issues: Issues) {
   });
 }
 
+interface WorkerFixtures {
+  rebrickable: RebrickableMock;
+}
+
 interface Fixtures {
   db: typeof db;
   /** Admin is the default `page`; these open other identities in their own contexts. */
@@ -40,7 +45,19 @@ interface Fixtures {
   consoleGuard: void;
 }
 
-export const test = base.extend<Fixtures>({
+export const test = base.extend<Fixtures, WorkerFixtures>({
+  // One mock Rebrickable per worker, reset before every test.
+  rebrickable: [
+    // oxlint-disable-next-line no-empty-pattern
+    async ({}, use) => {
+      const mock = new RebrickableMock();
+      await mock.start();
+      await use(mock);
+      await mock.stop();
+    },
+    { scope: 'worker' },
+  ],
+
   // Playwright fixtures need the destructuring pattern even when they use no other fixture.
   // oxlint-disable-next-line no-empty-pattern
   db: async ({}, use) => {
@@ -55,7 +72,8 @@ export const test = base.extend<Fixtures>({
   // Every test starts from an empty catalog but keeps the role accounts.
   resetData: [
     // oxlint-disable-next-line no-empty-pattern
-    async ({}, use) => {
+    async ({ rebrickable }, use) => {
+      rebrickable.reset();
       await db.resetCatalog();
       await use();
     },

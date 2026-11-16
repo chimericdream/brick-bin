@@ -4,6 +4,8 @@ import path from 'node:path';
 import { Readable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
 
+import { isAllowedUrl } from './origins';
+
 export type FetchLike = (url: string, init?: RequestInit) => Promise<Response>;
 
 /** Thrown when Rebrickable pushes back (429 or a server error). The run stops and is marked failed. */
@@ -38,7 +40,7 @@ const MAX_REDIRECTS = 3;
 /** The origin check applies to the first request and to every redirect hop. */
 function assertAllowed(url: string, allowed: string[]): URL {
   const u = new URL(url);
-  if (u.protocol !== 'https:' || !allowed.includes(u.origin)) {
+  if (!isAllowedUrl(u, allowed)) {
     throw new Error(`Refusing to download from ${u.origin}: it is not an allowed origin.`);
   }
   return u;

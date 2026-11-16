@@ -13,7 +13,7 @@ export default async function SettingsLayout({ children }: { children: React.Rea
   return (
     <>
       <h1>Settings</h1>
-      <SettingsTabs />
+      <SettingsTabs admin={ctx.viewer.role === 'admin'} />
       {children}
     </>
   );

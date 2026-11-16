@@ -1,6 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 
-import { APP_PORT, BASE_URL, DATA_DIR, DATABASE_URL } from './e2e/support/env';
+import { APP_PORT, BASE_URL, DATA_DIR, DATABASE_URL, MOCK_URL } from './e2e/support/env';
 import { ADMIN } from './e2e/support/roles';
 
 const ci = !!process.env.CI;
@@ -68,6 +68,10 @@ export default defineConfig({
         DATA_DIR,
         COOKIE_SECURE: 'false',
         NODE_ENV: 'production',
+        // The import talks to a mock on loopback; no test ever contacts rebrickable.com.
+        REBRICKABLE_ALLOWED_ORIGINS: MOCK_URL,
+        REBRICKABLE_DOWNLOADS_PAGE: `${MOCK_URL}/downloads/`,
+        CATALOG_IMAGE_ORIGIN: MOCK_URL,
         ...(process.env.E2E_SKIP_BUILD ? { E2E_SKIP_BUILD: process.env.E2E_SKIP_BUILD } : {}),
       },
     },
