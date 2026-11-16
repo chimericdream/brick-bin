@@ -72,18 +72,20 @@ const money = (c) => KID ? '' : USD(c);
 
 /* ---------- tiles, planks ---------- */
 function tile(s, o) {
-  o = o || {}; const sum = setSummary(s);
-  const copies = s.copies.length > 1 ? `<span class="copies" title="${s.copies.length} copies">${I('copy')}${s.copies.length}</span>` : '';
+  o = o || {};
+  const multi = s.copies.length > 1;
+  const rows = s.copies.slice(0, 3).map((c, i) => `<div class="crow">${multi ? `<span class="cn" aria-label="Copy ${i + 1}">${i + 1}</span>` : ''}${stateBadge(c.state)}${compBadge(completeness(c))}</div>`).join('')
+    + (s.copies.length > 3 ? `<div class="crow"><span class="b plain">+${s.copies.length - 3} more ${s.copies.length - 3 === 1 ? 'copy' : 'copies'}</span></div>` : '');
+  const copies = '';
   const tick = o.select ? `<span class="tick${o.on ? ' on' : ''}">${o.on ? '<svg viewBox="0 0 24 24"><path d="M5 12.500l4.500 4.500L19 7.500"/></svg>' : ''}</span>` : '';
   const priv = s.hidden && !KID ? `<span class="b plain priv" title="Hidden from kid profiles">${I('eyeoff')}Hidden from kids</span>` : '';
-  const stbadge = sum.states.length > 1 ? sum.states.map((x) => stateBadge(x)).join('') : stateBadge(sum.state);
   return `<a class="tile" href="set.html?id=${s.id}${KID ? '&role=kid' : ''}${Q.get('theme') ? '&theme=' + Q.get('theme') : ''}">
     <div class="frame">${boxArt(s)}${copies}${tick}${priv}</div>
     <div class="body"><h3>${s.name}</h3><div class="meta">${s.brand} · ${s.num} · ${s.year}</div>
-    <div class="badges">${stbadge}${compBadge(sum.comp)}</div></div></a>`;
+    <div class="badges" aria-label="${s.copies.length} ${s.copies.length === 1 ? 'copy' : 'copies'}">${rows}</div></div></a>`;
 }
 function planks(items, cols) {
-  cols = cols || (PH ? 2 : 3); let out = '';
+  cols = cols || (innerWidth <= 359 ? 1 : PH ? 2 : 3); let out = '';
   for (let i = 0; i < items.length; i += cols) out += `<div class="plank" style="--cols:${cols}">${items.slice(i, i + cols).join('')}</div>`;
   return out;
 }
@@ -100,7 +102,7 @@ function shell(o) {
   const shop = `<a href="${href('shopping.html')}"${cur('shopping')}>${I('list')}Shopping list<span class="sub">${OPEN} pieces</span></a>`;
   const wish = `<a href="${href('wishlist.html')}"${cur('wishlist')}>${I('heart')}Wishlist</a>`;
   const settings = (k, ic, l, extra) => `<a href="${href(k + '.html')}"${cur(k)}>${I(ic)}${l}${extra || ''}</a>`;
-  const nav = KID ? `${lib}${shop}${wish}` : `${lib}${shop}${wish}<a href="${href('collection.html')}"${cur('collection')}>${I('chart')}Collection</a>
+  const nav = KID ? `${lib}${wish}` : `${lib}${shop}${wish}<a href="${href('collection.html')}"${cur('collection')}>${I('chart')}Collection</a>
     <div class="navgrp">Household</div>
     <a href="${href('people.html')}"${['people', 'places', 'catalog', 'trash', 'brands', 'activity'].includes(o.page) ? ' aria-current="page"' : ''}>${I('gear')}Settings</a>`;
   const side = `<aside class="side"><a class="brand" href="${href('library.html')}">${MARK}Brick Bin</a>
@@ -113,7 +115,7 @@ function shell(o) {
   const top = `<header class="topbar">${back}${o.back || o.title ? `<span class="tt">${o.title || ''}</span>` : `<a class="brand" href="library.html">${MARK}Brick Bin</a>`}<span class="sp"></span>${o.topAct || ''}</header>`;
   const tc = (k, ic, l, h, extra) => `<a href="${href(h)}"${cur(k)}>${I(ic)}${l}${extra || ''}</a>`;
   const tabs = KID
-    ? `<nav class="tabbar" style="grid-template-columns:repeat(3,1fr)" aria-label="Main">${tc('library', 'grid', 'Library', 'library.html')}${tc('shopping', 'list', 'Shopping', 'shopping.html')}${tc('wishlist', 'heart', 'Wishlist', 'wishlist.html')}</nav>`
+    ? `<nav class="tabbar" style="grid-template-columns:repeat(2,1fr)" aria-label="Main">${tc('library', 'grid', 'Library', 'library.html')}${tc('wishlist', 'heart', 'Wishlist', 'wishlist.html')}</nav>`
     : `<nav class="tabbar" aria-label="Main">${tc('library', 'grid', 'Library', 'library.html')}${tc('shopping', 'list', 'Shopping', 'shopping.html', `<small>${OPEN}</small>`)}<a class="plus" href="${href('add.html')}" aria-label="Add set">${I('plus')}Add</a>${tc('wishlist', 'heart', 'Wishlist', 'wishlist.html')}${tc('more', 'more', 'More', 'more.html')}</nav>`;
   const foot = `<footer class="pagefoot"><span>Catalog data from <a href="https://rebrickable.com" rel="noreferrer">Rebrickable</a></span><span>Brick Bin is not affiliated with any set maker.</span></footer>`;
   document.getElementById('app').innerHTML = `<div class="shell">${side}<div style="min-width:0">${top}<main class="main"><div class="wrap">${o.html}${o.nofoot ? '' : foot}</div></main></div></div>${o.tabs === false ? '' : tabs}${o.after || ''}`;

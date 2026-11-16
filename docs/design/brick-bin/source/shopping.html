@@ -5,6 +5,7 @@
 <script src="data.js"></script><script src="art.js"></script><script src="ui.js"></script>
 <script>
 /* ?sort=colour|category|set   ?export=1 (menu open)   ?trip=1 (store-trip mode)   ?done=1 (trip finish dialog) */
+if (KID) location.replace('states.html?s=404&role=kid&theme=' + (Q.get('theme') || 'light')); // kids have no shopping list
 const sg = shoppingGroups(ROLE); const sort = Q.get('sort') || 'colour';
 const groups = sg.groups.slice().sort((a, b) => COL[a.col].n.localeCompare(COL[b.col].n) || a.part.localeCompare(b.part));
 const total = groups.reduce((a, g) => a + g.q, 0) + sg.others.reduce((a, g) => a + g.q, 0);

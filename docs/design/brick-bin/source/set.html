@@ -14,7 +14,7 @@ const stateMenu = () => `<div class="menu" role="menu" aria-label="Build state">
 function copyCard(c, i) {
   const comp = completeness(c);
   const st = KID ? stateBadge(c.state, true) : `<span class="menuhost"><button class="stbtn" aria-haspopup="menu" aria-expanded="${!!(Q.get('menu') && i === 0)}">${stateBadge(c.state)}</button>${Q.get('menu') && i === 0 ? stateMenu() : ''}</span>`;
-  const compHtml = comp.k === 'sealed' ? `<span class="b sealed">${I('lock')}Sealed</span>` : comp.k === 'missing' ? `<a href="${href('missing.html?view=list')}" class="b missing lg" style="text-decoration:underline">${I('warn')}${comp.t}${I('right')}</a>` : compBadge(comp, true);
+  const compHtml = comp.k === 'sealed' ? `<span class="b sealed">${I('lock')}Sealed</span>` : comp.k === 'missing' && KID ? `<span class="b missing lg">${I('warn')}${comp.t}</span>` : comp.k === 'missing' ? `<a href="${href('missing.html?view=list')}" class="b missing lg" style="text-decoration:underline">${I('warn')}${comp.t}${I('right')}</a>` : compBadge(comp, true);
   const money_ = KID ? '' : `<div><div class="l">Paid / value</div><div class="v">${USD(c.paid)} / ${USD(c.value)}</div><div class="xs muted">valued ${c.valued ? new Date(c.valued + '-15').toLocaleString('en-US', { month: 'short', year: 'numeric' }) : '-'}</div></div>`;
   return `<article class="card copycard" aria-label="Copy ${i + 1}">
   <div class="who">${avatar(c.owner)}<div><div>${c.owner ? c.owner + "'s copy" : 'Ours'}${s.copies.length > 1 ? ` <span class="muted" style="font-weight:400">· copy ${i + 1} of ${s.copies.length}</span>` : ''}</div><div class="sm muted" style="font-weight:400;display:flex;gap:5px;align-items:center">${I('pin')}${c.loc}</div></div></div>
@@ -23,6 +23,7 @@ function copyCard(c, i) {
   <div><div class="l">Box and booklets</div><div class="v" style="display:grid;gap:3px"><span class="flag ${c.box ? '' : 'no'}">${I(c.box ? 'check' : 'x')}${c.box ? 'Has the box' : 'No box'}</span><span class="flag ${c.ins ? '' : 'no'}">${I(c.ins ? 'check' : 'x')}${c.ins ? 'Has paper booklets' : 'No paper booklets'}</span></div></div>
   <div><div class="l">Condition notes</div><div class="v" style="font-weight:400">${c.note || '<span class="muted">None</span>'}</div></div>
   ${money_ || `<div><div class="l">Acquired</div><div class="v">${c.acq ? new Date(c.acq).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }) : '-'}</div></div>`}</div>
+  ${KID && c.m.length ? `<div style="grid-column:1/-1;padding-top:12px;border-top:1px solid var(--app-rule)"><div class="lab" style="margin-bottom:6px">Missing from this copy <span class="muted" style="font-weight:400">(read only)</span></div>${c.m.map((r) => `<div class="row" style="gap:12px;padding:6px 0">${r[0] === 'other' ? `<div class="pfr" style="width:64px;flex:none"><div class="noart">${I('tag')}</div></div>` : `<div class="pfr" style="width:64px;flex:none">${partImg(r[0], r[1])}</div>`}<div class="sp" style="min-width:0"><div style="font-weight:600">${r[0] === 'other' ? r[1] : PART[r[0]].n}</div>${r[0] === 'other' ? '' : `<div class="colrow sm"><span class="sw" style="background:${COL[r[1]].h}"></span><span>${COL[r[1]].n}</span> <span class="muted" style="font-weight:400">· ${r[0]}</span></div>`}</div><b style="font:700 18px var(--head)">×${r[2]}</b></div>`).join('')}</div>` : ''}
   ${KID ? '' : `<div class="row" style="grid-column:1/-1;flex-wrap:wrap"><button class="btn sm">${I('edit')}Edit copy</button><a class="btn sm" href="${href('missing.html')}">${I('warn')}Missing pieces</a><button class="btn sm ghost danger" style="margin-left:auto">${I('trash')}Remove copy</button></div>`}
   </article>`;
 }
@@ -38,7 +39,7 @@ const html = `${head(s.name, `${s.brand} ${s.num}`, KID ? '' : `<button class="b
 <p style="margin-top:16px;max-width:60ch">${DESC[s.id] || 'No description yet.'}</p>
 <div class="chips" style="margin-top:14px">${s.tags.map((t) => `<span class="chip">${I('tag')}${t}</span>`).join('')}</div>
 ${KID ? '' : `<p class="sm muted" style="margin-top:14px">Retail price ${USD(s.rrp)} · designer: -</p>`}
-<div class="row" style="margin-top:18px;flex-wrap:wrap"><a class="btn" href="${href('missing.html?view=list')}">${I('list')}Shopping list</a>${KID ? '' : `<button class="btn">${I('refresh')}Re-sync from catalog</button>`}</div></div></div>
+${KID ? '' : `<div class="row" style="margin-top:18px;flex-wrap:wrap"><a class="btn" href="${href('shopping.html')}">${I('list')}Shopping list</a><button class="btn">${I('refresh')}Re-sync from catalog</button></div>`}</div></div>
 <section aria-labelledby="ch"><div class="cardhead"><h2 id="ch">Copies <span class="muted" style="font-weight:400">${s.copies.length}</span></h2></div>${s.copies.map(copyCard).join('')}</section>
 <section style="margin-top:34px" aria-labelledby="ih"><div class="cardhead" style="flex-wrap:wrap"><h2 id="ih">Instructions</h2><span class="sp"></span><a class="btn sm" href="#">${I('ext')}Find on ${FIND[s.brand]}</a></div>
 <div class="card pad" style="padding-top:8px;padding-bottom:8px">${insRows}</div>${KID ? '' : `<div class="row" style="margin-top:12px;flex-wrap:wrap">${insActs}</div>`}</section>

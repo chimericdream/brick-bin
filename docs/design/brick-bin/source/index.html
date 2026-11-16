@@ -19,6 +19,6 @@ const G = [['1. Sign in and first run', [['signin.html', 'Sign in'], ['signin.ht
 ['9. Wishlist', [['wishlist.html', 'Adult view of Wren'], ['wishlist.html?role=kid', "Wren's own list (kid)"], ['wishlist.html?dialog=got&who=Wren', '"We got it" dialog'], ['wishlist.html?who=Dana', "Dana's own list"]]],
 ['10. Settings > Catalog', [['catalog.html', 'Ready to import (paste panel)'], ['catalog.html?state=stale', 'Stale paste warning'], ['catalog.html?state=locked', 'Locked for 48 hours'], ['catalog.html?state=running', 'Import running'], ['catalog.html?state=never', 'First run']]],
 ['11. Kid profile', [['library.html?role=kid', 'Kid library'], ['set.html?role=kid&id=s02', 'Kid set detail']]],
-['12. Smaller states', [['states.html?s=empty', 'Empty library'], ['states.html?s=trash', 'Trash'], ['states.html?s=delete', 'Delete confirmation'], ['states.html?s=people', 'People'], ['states.html?s=places', 'Places'], ['states.html?s=404', '404'], ['states.html?s=more', 'More (phone)']]]];
+['12. Smaller states', [['states.html?s=empty', 'Empty library'], ['states.html?s=trash', 'Trash'], ['states.html?s=delete', 'Delete confirmation'], ['states.html?s=people', 'People'], ['states.html?s=places', 'Places'], ['states.html?s=404', '404'], ['states.html?s=more', 'More (phone)'], ['brands.html', 'Brands and themes'], ['activity.html', 'Activity']]]];
 document.getElementById('l').innerHTML = G.map(([t, l]) => `<h2>${t}</h2><ul>${l.map(([h, n]) => `<li><a href="${h}">${n}<small>${h}</small></a></li>`).join('')}</ul>`).join('');
 </script></body></html>

@@ -5,6 +5,7 @@
 <script src="data.js"></script><script src="art.js"></script><script src="ui.js"></script>
 <script>
 /* ?view=inv|minifigs|catalog|other|list   (phone shows one pane at a time; desktop shows the picker and the copy's list side by side) */
+if (KID) location.replace('states.html?s=404&role=kid&theme=' + (Q.get('theme') || 'light')); // kids read missing pieces on the set page only
 const s = SETS.find((x) => x.id === 's02'); const c = s.copies[0];
 const view = Q.get('view') || 'inv';
 const missingQty = (num, col) => (c.m.find((r) => r[0] === num && r[1] === col) || [0, 0, 0])[2];

@@ -55,7 +55,7 @@ const nf = [f.comp, f.build, f.th, f.brand].filter(Boolean).length;
 const sortSel = `<span class="sel"><span class="muted">Sort</span> ${SORTN[sortKey]}</span>`;
 const sub = `${list.length} ${list.length === 1 ? 'set' : 'sets'} · ${copiesN} copies${KID ? '' : ''}`;
 const finding = nf || f.q ? '' : `<a href="${href('library.html?comp=missing')}" style="color:var(--app-accent-ink);text-decoration:underline;text-underline-offset:3px;font-weight:600">${missingSets.length} sets have missing pieces</a>`;
-const tools = `<div class="toolbar"><div class="searchbox">${I('search')}<input class="in" type="search" placeholder="Search name, number, theme, brand" aria-label="Search sets" value="${Q.get('q') || ''}"></div>
+const tools = `<div class="toolbar"><div class="searchbox">${I('search')}<input class="in" type="search" placeholder="Search sets, numbers, brands" aria-label="Search sets" value="${Q.get('q') || ''}"></div>
   <button class="btn show-m" style="flex:none">${I('filter')}Filters${nf ? ` · ${nf}` : ''}</button>${sortSel}</div>`;
 const selecting = Q.get('select');
 

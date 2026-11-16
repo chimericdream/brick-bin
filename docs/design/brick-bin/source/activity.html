@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark">
+<title>Activity · Brick Bin</title><link rel="stylesheet" href="style.css"></head>
+<body><div id="app"></div>
+<script src="data.js"></script><script src="art.js"></script><script src="ui.js"></script>
+<script>
+const find = (id) => SETS.find((x) => x.id === id);
+const E = [
+  ['Dana', '16 Nov, 9:42 a.m.', 'set', 's10', 'changed the build state of <b>Winter Observatory</b>', 'Hidden from kid profiles: off to on'],
+  ['Theo', '15 Nov, 6:15 p.m.', 'copy', 's03', 'changed the build state of <b>Dune Rover 4x4</b> (Theo\'s copy)', 'Opened → Built'],
+  ['Dana', '15 Nov, 7:18 a.m.', 'catalog', 's05', 'imported the catalog', '14 files downloaded, 184 skipped'],
+  ['Dana', '14 Nov, 8:03 p.m.', 'missing', 's04', 'added 4 missing pieces to <b>Crawler Crane</b>', '4 × Technic Pin with Friction Ridges, Black'],
+  ['Dana', '14 Nov, 7:50 p.m.', 'trash', 's12', 'moved <b>Tower Crane</b> to the trash', 'With 1 copy and 1 instruction PDF'],
+  ['Theo', '12 Nov, 4:30 p.m.', 'instruction', 's08', 'saved a PDF for <b>Botanist\'s Greenhouse</b>', 'Building book 1, 38.4 MB, from a link'],
+  ['Dana', '12 Nov, 12:11 p.m.', 'set', 's03', 'edited <b>Dune Rover 4x4</b>', 'Piece count 1,077 → 1,078'],
+  ['Theo', '8 Nov, 9:02 a.m.', 'copy', 's10', 'added a copy of <b>Winter Observatory</b>', 'Sealed · Attic › Shelf 3'],
+];
+const ic = { set: 'edit', copy: 'copy', missing: 'warn', trash: 'trash', catalog: 'disk', instruction: 'file' };
+const html = `${head('Activity', 'Who changed what. Newest first.', `<span class="sel"><span class="muted">Person</span> Everyone</span>`)}
+<div class="sets">${subnav('activity')}<div style="min-width:0"><div class="card pad" style="padding-top:4px;padding-bottom:4px">${E.map(([who, when, k, id, what, det]) => `<div class="insrow" style="align-items:flex-start;padding:14px 0">${avatar(who, 34)}<div class="sp" style="min-width:0"><div>${who} ${what}</div><div class="sm muted">${det}</div><div class="xs muted" style="margin-top:2px">${when}</div></div><span class="b plain hide-m">${I(ic[k])}${k === 'missing' ? 'Missing item' : k[0].toUpperCase() + k.slice(1)}</span></div>`).join('')}</div>
+<p class="sm muted" style="margin-top:14px">${I('info')} Wishlist purchases are never listed here, and do not change a wishlist item's last-edited line.</p></div></div>`;
+shell({ page: 'activity', title: 'Activity', back: href('more.html'), html });
+</script></body></html>

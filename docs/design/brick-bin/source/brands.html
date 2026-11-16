@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark">
+<title>Brands and themes · Brick Bin</title><link rel="stylesheet" href="style.css"></head>
+<body><div id="app"></div>
+<script src="data.js"></script><script src="art.js"></script><script src="ui.js"></script>
+<script>
+const site = { LEGO: 'lego.example', 'Mould King': 'mouldking.example', CaDA: 'cada.example', COBI: 'cobi.example', BlueBrixx: 'bluebrixx.example', Lumibricks: 'lumibricks.example' };
+const brands = [...new Set(SETS.map((s) => s.brand))].map((b) => ({ b, sets: SETS.filter((s) => s.brand === b).length, copies: SETS.filter((s) => s.brand === b).reduce((a, s) => a + s.copies.length, 0) }));
+const themes = [...new Set(SETS.map((s) => s.theme[0]))].sort().map((t) => ({ t, n: SETS.filter((s) => s.theme[0] === t).length, kids: [...new Set(SETS.filter((s) => s.theme[0] === t && s.theme[1]).map((s) => s.theme[1]))].map((k) => [k, SETS.filter((s) => s.theme[1] === k).length]) }));
+console.assert(brands.reduce((a, x) => a + x.sets, 0) === SETS.length);
+const html = `${head('Brands and themes', 'Rename, merge or remove. A brand or theme that has sets cannot be deleted.', `<button class="btn pri">${I('plus')}New brand</button>`)}
+<div class="sets">${subnav('brands')}<div style="display:grid;gap:var(--gap);min-width:0">
+<div class="card pad"><div class="cardhead"><h2>Brands</h2></div><div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Brand</th><th class="r">Sets</th><th class="r">Copies</th><th></th></tr></thead><tbody>
+${brands.map((x) => `<tr><td><b>${x.b}</b>${x.b === 'LEGO' ? ` <span class="b wish" style="margin-left:6px">${I('check')}Catalog on</span>` : ''}<div class="xs muted">${site[x.b]}</div></td><td class="r">${x.sets}</td><td class="r">${x.copies}</td><td class="r nw"><button class="btn sm">Rename</button> <button class="btn sm ghost danger dis" disabled title="Has sets">${I('lock')}In use</button></td></tr>`).join('')}
+<tr><td><span class="muted">Dream Bricks (no sets yet)</span></td><td class="r">0</td><td class="r">0</td><td class="r nw"><button class="btn sm">Rename</button> <button class="btn sm ghost danger">${I('trash')}Delete</button></td></tr></tbody></table></div></div>
+<div class="card pad"><div class="cardhead"><h2>Themes</h2><span class="sp"></span><button class="btn sm">Merge two themes</button></div>
+${themes.map((t) => `<div class="insrow" style="padding:9px 0"><b class="sp">${t.t}</b><span class="muted sm">${t.n} ${t.n === 1 ? 'set' : 'sets'}</span><button class="btn sm ghost">Rename</button></div>${t.kids.map(([k, n]) => `<div class="insrow" style="padding:9px 0 9px 24px"><span class="sp">${k}</span><span class="muted sm">${n} sets</span><button class="btn sm ghost">Rename</button></div>`).join('')}`).join('')}
+<p class="hint" style="margin-top:10px">Themes are created when you add a set. Only themes you own sets in appear here and in the library filters.</p></div></div></div>`;
+shell({ page: 'brands', title: 'Brands and themes', back: href('more.html'), html });
+</script></body></html>

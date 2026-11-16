@@ -4,6 +4,10 @@ Each file is `<screen>-<width>-<theme>.png`. Widths: 1440 desktop, 390 phone. Fu
 
 | File | What it shows |
 |---|---|
+| activity-1440-dark.png | Settings > Activity: audit trail; wishlist purchases never appear. |
+| activity-1440-light.png | Settings > Activity: audit trail; wishlist purchases never appear. |
+| activity-390-dark.png | Settings > Activity: audit trail; wishlist purchases never appear. |
+| activity-390-light.png | Settings > Activity: audit trail; wishlist purchases never appear. |
 | add-manual-1440-light.png | Add set: off-brand manual form with '+ New brand', 'How many?' and the duplicate-set notice. |
 | add-manual-390-light.png | Add set: off-brand manual form with '+ New brand', 'How many?' and the duplicate-set notice. |
 | add-scan-1440-light.png | Add set: barcode scan state with decoded title and matched set. |
@@ -12,17 +16,29 @@ Each file is `<screen>-<width>-<theme>.png`. Widths: 1440 desktop, 390 phone. Fu
 | add-search-1440-light.png | Add set: catalog typeahead with 'On Wren's wishlist' and 'You have this set' badges and the add form. |
 | add-search-390-dark.png | Add set: catalog typeahead with 'On Wren's wishlist' and 'You have this set' badges and the add form. |
 | add-search-390-light.png | Add set: catalog typeahead with 'On Wren's wishlist' and 'You have this set' badges and the add form. |
+| brands-1440-dark.png | Settings > Brands and themes: brands with in-use guard, theme tree, merge. |
+| brands-1440-light.png | Settings > Brands and themes: brands with in-use guard, theme tree, merge. |
+| brands-390-dark.png | Settings > Brands and themes: brands with in-use guard, theme tree, merge. |
+| brands-390-light.png | Settings > Brands and themes: brands with in-use guard, theme tree, merge. |
 | catalog-1440-dark.png | Settings > Catalog, ready to import: large Last imported line, counts, paste panel with steps, run preview, run history. |
 | catalog-1440-light.png | Settings > Catalog, ready to import: large Last imported line, counts, paste panel with steps, run preview, run history. |
 | catalog-390-dark.png | Settings > Catalog, ready to import: large Last imported line, counts, paste panel with steps, run preview, run history. |
 | catalog-390-light.png | Settings > Catalog, ready to import: large Last imported line, counts, paste panel with steps, run preview, run history. |
+| catalog-locked-1440-dark.png | Settings > Catalog: button disabled, 'Available again 17 Nov 2026, 7:18 a.m.'. |
 | catalog-locked-1440-light.png | Settings > Catalog: button disabled, 'Available again 17 Nov 2026, 7:18 a.m.'. |
+| catalog-locked-390-dark.png | Settings > Catalog: button disabled, 'Available again 17 Nov 2026, 7:18 a.m.'. |
 | catalog-locked-390-light.png | Settings > Catalog: button disabled, 'Available again 17 Nov 2026, 7:18 a.m.'. |
+| catalog-never-1440-dark.png | Settings > Catalog before the first import: never imported, about 6 GB and free-disk warning. |
 | catalog-never-1440-light.png | Settings > Catalog before the first import: never imported, about 6 GB and free-disk warning. |
+| catalog-never-390-dark.png | Settings > Catalog before the first import: never imported, about 6 GB and free-disk warning. |
 | catalog-never-390-light.png | Settings > Catalog before the first import: never imported, about 6 GB and free-disk warning. |
+| catalog-running-1440-dark.png | Settings > Catalog: 'Import running: 41 of 196 colour files' with progress. |
 | catalog-running-1440-light.png | Settings > Catalog: 'Import running: 41 of 196 colour files' with progress. |
+| catalog-running-390-dark.png | Settings > Catalog: 'Import running: 41 of 196 colour files' with progress. |
 | catalog-running-390-light.png | Settings > Catalog: 'Import running: 41 of 196 colour files' with progress. |
+| catalog-stale-1440-dark.png | Settings > Catalog: stale-paste warning. |
 | catalog-stale-1440-light.png | Settings > Catalog: stale-paste warning. |
+| catalog-stale-390-dark.png | Settings > Catalog: stale-paste warning. |
 | catalog-stale-390-light.png | Settings > Catalog: stale-paste warning. |
 | collection-1440-dark.png | Collection and value (members only): totals, paid vs estimated, by brand, theme and build state, stale values, missing pieces, sealed. |
 | collection-1440-light.png | Collection and value (members only): totals, paid vs estimated, by brand, theme and build state, stale values, missing pieces, sealed. |
@@ -32,20 +48,26 @@ Each file is `<screen>-<width>-<theme>.png`. Widths: 1440 desktop, 390 phone. Fu
 | filters-panel-1440-light.png | Desktop facet panel with every group open: brand, theme tree, build state, completeness, location, owner, year, pieces, tags, instructions. |
 | filters-sheet-390-dark.png | Phone filters bottom sheet (viewport shot) with the count on the action button. |
 | filters-sheet-390-light.png | Phone filters bottom sheet (viewport shot) with the count on the action button. |
-| kid-library-1440-dark.png | Kid (restricted) library: no Add, no Collection, 19 sets (the hidden present is absent, counts still add up), no prices. |
-| kid-library-1440-light.png | Kid (restricted) library: no Add, no Collection, 19 sets (the hidden present is absent, counts still add up), no prices. |
-| kid-library-390-dark.png | Kid (restricted) library: no Add, no Collection, 19 sets (the hidden present is absent, counts still add up), no prices. |
-| kid-library-390-light.png | Kid (restricted) library: no Add, no Collection, 19 sets (the hidden present is absent, counts still add up), no prices. |
-| kid-set-1440-dark.png | Kid set detail: read-only, no money, no edit controls, instructions open for building. |
-| kid-set-1440-light.png | Kid set detail: read-only, no money, no edit controls, instructions open for building. |
-| kid-set-390-dark.png | Kid set detail: read-only, no money, no edit controls, instructions open for building. |
-| kid-set-390-light.png | Kid set detail: read-only, no money, no edit controls, instructions open for building. |
-| library-1440-dark.png | Library: planks of landscape box tiles with build-state and completeness badges, facet panel with counts, sort and search. |
-| library-1440-light.png | Library: planks of landscape box tiles with build-state and completeness badges, facet panel with counts, sort and search. |
-| library-390-dark.png | Library: planks of landscape box tiles with build-state and completeness badges, facet panel with counts, sort and search. |
-| library-390-light.png | Library: planks of landscape box tiles with build-state and completeness badges, facet panel with counts, sort and search. |
+| kid-library-1440-dark.png | Kid (restricted) library: nav is Library and Wishlist only, no Add, no Collection, 19 sets and 26 copies (the hidden present is absent, counts still add up), no prices. |
+| kid-library-1440-light.png | Kid (restricted) library: nav is Library and Wishlist only, no Add, no Collection, 19 sets and 26 copies (the hidden present is absent, counts still add up), no prices. |
+| kid-library-320-dark.png | Kid (restricted) library: nav is Library and Wishlist only, no Add, no Collection, 19 sets and 26 copies (the hidden present is absent, counts still add up), no prices. |
+| kid-library-320-light.png | Kid (restricted) library: nav is Library and Wishlist only, no Add, no Collection, 19 sets and 26 copies (the hidden present is absent, counts still add up), no prices. |
+| kid-library-390-dark.png | Kid (restricted) library: nav is Library and Wishlist only, no Add, no Collection, 19 sets and 26 copies (the hidden present is absent, counts still add up), no prices. |
+| kid-library-390-light.png | Kid (restricted) library: nav is Library and Wishlist only, no Add, no Collection, 19 sets and 26 copies (the hidden present is absent, counts still add up), no prices. |
+| kid-set-1440-dark.png | Kid set detail: read-only, no money, no edit controls, missing pieces listed read-only on the copy, instructions open for building. |
+| kid-set-1440-light.png | Kid set detail: read-only, no money, no edit controls, missing pieces listed read-only on the copy, instructions open for building. |
+| kid-set-390-dark.png | Kid set detail: read-only, no money, no edit controls, missing pieces listed read-only on the copy, instructions open for building. |
+| kid-set-390-light.png | Kid set detail: read-only, no money, no edit controls, missing pieces listed read-only on the copy, instructions open for building. |
+| library-1440-dark.png | Library: planks of landscape box tiles with one badge row per copy (up to 3, then +N more), , facet panel with counts, sort and search. |
+| library-1440-light.png | Library: planks of landscape box tiles with one badge row per copy (up to 3, then +N more), , facet panel with counts, sort and search. |
+| library-320-dark.png | Library: planks of landscape box tiles with one badge row per copy (up to 3, then +N more), , facet panel with counts, sort and search. |
+| library-320-light.png | Library: planks of landscape box tiles with one badge row per copy (up to 3, then +N more), , facet panel with counts, sort and search. |
+| library-390-dark.png | Library: planks of landscape box tiles with one badge row per copy (up to 3, then +N more), , facet panel with counts, sort and search. |
+| library-390-light.png | Library: planks of landscape box tiles with one badge row per copy (up to 3, then +N more), , facet panel with counts, sort and search. |
 | library-filtered-1440-light.png | Library filtered to Completeness = Missing pieces (6 sets), with active filter chips. |
 | library-filtered-390-light.png | Library filtered to Completeness = Missing pieces (6 sets), with active filter chips. |
+| library-top-320-dark.png | Library at 320px wide (viewport shot): single column of larger tiles below 360px. |
+| library-top-320-light.png | Library at 320px wide (viewport shot): single column of larger tiles below 360px. |
 | missing-list-390-dark.png | Phone: the copy's missing list with Found / Bought / Substituted / Remove and 'Everything else is here'. |
 | missing-list-390-light.png | Phone: the copy's missing list with Found / Bought / Substituted / Remove and 'Everything else is here'. |
 | picker-1440-dark.png | Missing-part picker, 'From this set' tab: part tiles on white with swatch, colour name, quantity in set, stepper, spares toggle; the copy's missing list beside it (phone: tabbed). |

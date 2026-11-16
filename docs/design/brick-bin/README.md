@@ -10,7 +10,7 @@
 - Chosen: **accent-ladder**. Why: the product's job is reading status at a glance on many objects. This style spends colour only on small marks and pale tints, so the six build states and the completeness labels (all pale tints) carry the colour, and the chrome stays quiet. True-black-flat is dark only and the household uses this by day on phones; editorial-greeting needs a greeting and a centred column that suits a home page, not a library of 25 tiles.
 - Redraws: none of the style's move. Its dealt raspberry hue and DM Sans (a Google Fonts link) were replaced: the hue by bin blue (the Shelf is green/stone/berry, and raspberry sits too close to The Shelf's berry), the font by two self-hosted families.
 - Face chosen: the objects in the lead block (box art on planks) plus a ground tinted toward the hue (`#eef1f5`). Signature element: **the plank with drawer-label tiles**. Brand mark: a three-compartment tray, not a stud.
-- Checks run: `inspect.mjs --app` on library, set and shopping; my own CDP screenshot script for all 102 PNGs; a contrast script (below). Findings and fixes are in `CRITIQUE.md`.
+- Checks run: `inspect.mjs --app` on library, set and shopping; my own CDP screenshot script for all 124 PNGs; a contrast script (below). Findings and fixes are in `CRITIQUE.md`.
 
 ## Why this differs from The Shelf
 
@@ -42,13 +42,13 @@ Fonts are `source/fonts/*.woff2` (latin subset, from `@fontsource-variable/*`) w
 
 ## Components
 
-- **Tile.** 3:2 frame on a sunk neutral card, `preserveAspectRatio: xMidYMid meet` (the contain rule), then name, `brand · number · year`, and up to two badges. A set with several copies shows a copy-count chip on the art. Tile summarises the set: worst completeness wins, build state of the first copy (several states are all listed).
+- **Tile.** 3:2 frame on a sunk neutral card, `preserveAspectRatio: xMidYMid meet` (the contain rule), then name, `brand · number · year`, and one badge row per copy (state badge plus completeness badge, numbered 1, 2, 3 when the set has several copies). Up to 3 copies are listed, then a "+2 more copies" chip. Examples in the library: 1 copy (most sets), 2 (Dune Rover), 3 (Field Kitchen Wagon), 5 (Mini Sailboat polybag). Badges sit directly under the meta line; tiles in a row share a height so they stand level on the rail, and a one-badge-row tile keeps some blank space at its foot.
 - **Badge system.** Always icon + word. State icons: lock, open box, tool, stacked blocks, split squares, shuffle (Mixed also gets a hatched fill). Completeness: warning circle (rust) "Missing 4 pieces", check circle (green) "Complete (checked Mar 2026)", dashed circle (outlined) "Not checked"; sealed copies show only "Sealed". On phone tiles "Complete (checked Mar 2026)" shortens to "Complete"; the full text is on the set page.
 - **Part tile.** A white image tile (always white, both themes), then swatch + colour name, part number, name, quantity in the set, a stepper and an Add button. Light colours stay legible because the name and a ringed swatch sit outside the image. Selected tiles get a 2px accent ring and a "Missing n" badge. The fallback label "shown in Black" sits on the image corner.
 - **Store trip.** One column, 44px tick boxes, 112px part images, 28px quantities, a progress bar, a fixed Done bar above the tab bar. Ticked rows get an accent outline on the image (the image is never dimmed, so white stays white). Ticks are browser-only; the finish sheet shows which copies each part fills first.
 - **Build-state menu.** A button showing the badge; the menu lists all six with a description and a check on the current one (44px rows). On phone it spans the card.
 - **Planks.** Rows of tiles over a 12px rail with a highlight edge and faint grooves. Two planks of the sign-in wall are shifted for rhythm.
-- **Privacy.** Kid pages have no prices, no Collection link, no edit controls; the hidden present is absent and counts (19 sets, 24 copies) are recomputed. The kid wishlist has no mark, count or hint of a purchase; only a "Mockup note" strip (not part of the product) says so.
+- **Privacy.** Kid pages have no prices, no Collection link, no Shopping list tab or page (the nav is Library and Wishlist), no edit controls; missing pieces stay visible, read-only, on the set page; the hidden present is absent and counts (19 sets, 26 copies) are recomputed. The kid wishlist has no mark, count or hint of a purchase; only a "Mockup note" strip (not part of the product) says so.
 
 ## Opening the mockups
 
@@ -56,7 +56,7 @@ Open `source/index.html` in a browser (no server, no network). Every page reads 
 
 ## Data
 
-All set names, numbers, people and prices are invented (brands are real names, the sets are not). Counts are computed in `data.js`: 20 sets, 25 copies, 22 missing pieces in 7 grouped part lines plus 1 other item, total paid $2,064.80, estimated $2,264.99. `console.assert`s check that facets, bands, shopping totals, locations and collection tables add up.
+All set names, numbers, people and prices are invented (brands are real names, the sets are not). Counts are computed in `data.js`: 20 sets, 27 copies, 22 missing pieces in 7 grouped part lines plus 1 other item, total paid $2,112.78, estimated $2,320.99. `console.assert`s check that facets, bands, shopping totals, locations and collection tables add up.
 
 ## Where the mockups deliberately differ from the plan
 
@@ -64,18 +64,21 @@ All set names, numbers, people and prices are invented (brands are real names, t
 |---|---|---|
 | Wishlist example "You bought this on 3 Dec" | Shown as "3 Nov" | The mock date is 16 Nov 2026, so 3 Dec would be in the future |
 | LDraw part renders | Simple isometric SVG drawings on opaque white | No real renders available; the white tile and layout behave the same |
-| Settings sub-pages Brands and themes, Activity | Linked in the nav but not drawn | Not on the screen list |
-| Kid nav "Library, Wishlist" suggested | Library, Shopping list (read-only), Wishlist | Plan section 7 lets kids see the shopping list |
+| Settings sub-pages Brands and themes, Activity | Drawn briefly (brands with in-use guard, theme tree; audit trail with a note that wishlist purchases never appear) | Not on the screen list, added so no link is dead |
+| Plan section 7: kids see the missing list and shopping list read-only | Kids get no Shopping tab or page; nav is Library and Wishlist, and missing pieces show read-only on the set page | User decision after review; `/missing` for a kid profile would need to be not-found or hidden in the app |
 | Sidebar lists every Settings page | One "Settings" link; sub-nav inside Settings shows "Catalog · Imported 15 Nov" | Less clutter; the date stays next to the Catalog link |
 | Library facet counts | Count sets, not copies | A set with 5 polybag copies is one tile |
 | Minifigs tab | Generic boxy pictograms | Avoids minifigure likeness |
 | Catalog button | Import button sits under the paste panel; no separate fetch button | `REBRICKABLE_PAGE_FETCH` defaults to false; the other layout is the same card with a button above |
-| Phone tab bar | Library, Shopping, Add (centre), Wishlist, More | Collection and Settings live under More |
+| Phone tab bar | Library, Shopping, Add (centre), Wishlist, More for members; Library and Wishlist for kids | Collection and Settings live under More |
 | Value sort in the library | In the sort list for members, absent for kids | Plan 6.1 |
 
-## Decisions needed
+## Decisions (made after review)
 
-1. Approve bin blue + Bricolage/Atkinson, or ask for another hue or pair.
-2. Tile summaries for multi-copy sets (worst completeness, first copy's state): fine, or show one badge row per copy?
-3. Should the phone library start with 2 columns (as drawn) or a single wide column of larger boxes?
-4. Do kids get the "Shopping" tab (drawn) or should it be hidden?
+1. **Approved:** bin blue and Bricolage Grotesque + Atkinson Hyperlegible Next.
+2. **Multi-copy tiles:** one badge row per copy, up to 3, then "+N more copies". Done.
+3. **Phone library:** 2 columns at 390, and one column of larger tiles at 359px and below (screenshots at 320). Done.
+4. **Kids:** no Shopping tab, nav item or page. Library and Wishlist only. Done.
+5. **Settings:** Brands and themes and Activity are drawn; Catalog states have dark versions. Done.
+
+Still open: none from this round.

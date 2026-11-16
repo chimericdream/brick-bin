@@ -92,7 +92,9 @@ const SETS = [
   { id: 's16', brand: 'COBI', num: '4849', name: 'Gunboat Larkspur', theme: ['Historical ships'], year: 2021, pcs: 612, figs: 4, age: 8, rrp: 3999, art: 'ship', c1: '#51603a', c2: '#d9e4e6', p: ['#6b7d5a', '#e8dcc4', '#8d6a3f', '#3a4630'], ins: 1, tags: [],
     copies: [cp('Theo', 'Study › Display cabinet', 'built', 'Mar 2026', { paid: 3999, value: 5200, valued: '2025-02', acq: '2021-07-04' })] },
   { id: 's17', brand: 'COBI', num: '2582', name: 'Field Kitchen Wagon', theme: ['Historical'], year: 2020, pcs: 296, figs: 2, age: 7, rrp: 2499, art: 'wagon', c1: '#6b6b45', c2: '#e2e2cf', p: ['#7a7a52', '#8d6a3f', '#3b3b2c', '#e8dcc4'], ins: 1, tags: [],
-    copies: [cp('Theo', 'Attic › Shelf 1', 'sealed', null, { paid: 2499, value: 2800, valued: '2026-03', acq: '2024-06-22' })] },
+    copies: [cp('Theo', 'Attic › Shelf 1', 'sealed', null, { paid: 2499, value: 2800, valued: '2026-03', acq: '2024-06-22' }),
+      cp('Theo', 'Attic › Shelf 1', 'opened', null, { paid: 2499, value: 2800, valued: '2026-03', acq: '2024-06-22' }),
+      cp('Dana', 'Attic › Shelf 1', 'built', 'Mar 2026', { paid: 2299, value: 2800, valued: '2026-03', acq: '2025-01-11' })] },
   { id: 's18', brand: 'BlueBrixx', num: '103511', name: 'Market Hall', theme: ['Architecture'], year: 2022, pcs: 1980, figs: 0, age: 14, rrp: 11900, art: 'hall', c1: '#8c3b35', c2: '#e9e0d0', p: ['#c9b48a', '#8c3b35', '#5d6b78', '#f1ead9'], ins: 2, tags: [],
     copies: [cp('Dana', 'Basement › Totes', 'disassembled', 'Jun 2025', { m: [['3001', 'tan', 3], ['3069b', 'wht', 1]], paid: 11900, value: 11900, valued: '2025-06', acq: '2022-11-25' })] },
   { id: 's19', brand: 'BlueBrixx', num: '105208', name: 'Signal Tower', theme: ['Architecture'], year: 2024, pcs: 884, figs: 0, age: 14, rrp: 5900, art: 'lighthouse', c1: '#3b4f66', c2: '#d9e1e8', p: ['#e8e2d4', '#c34a3d', '#6b7e8c', '#3d5a73'], ins: 1, tags: [],
@@ -182,7 +184,7 @@ const LOOKUP = [
   const g = shoppingGroups();
   const lineSum = g.groups.reduce((a, x) => a + x.q, 0) + g.others.reduce((a, x) => a + x.q, 0);
   A(lineSum === COPIES.reduce((a, c) => a + c.missingN, 0), 'shopping totals = copy totals');
-  A(COPIES.length === 25, 'copies = 25 (got ' + COPIES.length + ')');
+  A(COPIES.length === 27, 'copies = 27 (got ' + COPIES.length + ')');
   A(SETS.length === 20, 'sets = 20');
   A(visibleSets('kid').length === 19, 'kid sees 19');
   A(g.groups.length === 7, '7 grouped lines');
