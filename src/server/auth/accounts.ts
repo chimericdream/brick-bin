@@ -2,7 +2,7 @@ import { count, eq } from 'drizzle-orm';
 import { z } from 'zod';
 
 import type { Db } from '../db/client';
-import { households, users } from '../db/schema';
+import { brands, households, users } from '../db/schema';
 import { createdFields, recordAudit } from '../data/audit';
 import { hashPassword, verifyPassword } from './password';
 
@@ -50,6 +50,28 @@ export async function setupHousehold(db: Db, raw: z.input<typeof setupInput>) {
         entityId: user!.id,
         action: 'create',
         changes: createdFields({ name: user!.name, email: user!.email, role: user!.role }),
+      },
+    );
+    // LEGO is seeded so catalog lookup works from day one; other brands are added as needed.
+    const [lego] = await tx
+      .insert(brands)
+      .values({
+        householdId: household!.id,
+        name: 'LEGO',
+        isLego: true,
+        websiteUrl: 'https://www.lego.com',
+        createdByUserId: user!.id,
+        updatedByUserId: user!.id,
+      })
+      .returning();
+    await recordAudit(
+      tx,
+      { householdId: household!.id, viewer: { userId: user!.id } },
+      {
+        entityType: 'brand',
+        entityId: lego!.id,
+        action: 'create',
+        changes: createdFields({ name: lego!.name }),
       },
     );
     return user!;
