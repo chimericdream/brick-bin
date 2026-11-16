@@ -1,6 +1,7 @@
 import { sql } from 'drizzle-orm';
 import {
   type AnyPgColumn,
+  bigint,
   boolean,
   date,
   index,
@@ -291,4 +292,224 @@ export const setTags = pgTable(
       .references(() => tags.id, { onDelete: 'cascade' }),
   },
   (t) => [primaryKey({ columns: [t.setId, t.tagId] })],
+);
+
+// ---------------------------------------------------------------------------
+// Reference catalog (global): Rebrickable CSVs. Written only by the catalog import; no household_id.
+// Household rows point at these by natural keys (set_num, part_num, color_id, fig_num), never by
+// foreign key, so replacing the catalog cannot break or cascade into household data.
+// ---------------------------------------------------------------------------
+
+export const rbThemes = pgTable('rb_themes', {
+  id: integer('id').primaryKey(),
+  name: text('name').notNull(),
+  parentId: integer('parent_id'),
+});
+
+export const rbColors = pgTable('rb_colors', {
+  id: integer('id').primaryKey(),
+  name: text('name').notNull(),
+  rgb: text('rgb').notNull(),
+  isTrans: boolean('is_trans').notNull(),
+  numParts: integer('num_parts'),
+  numSets: integer('num_sets'),
+  y1: integer('y1'),
+  y2: integer('y2'),
+});
+
+export const rbPartCategories = pgTable('rb_part_categories', {
+  id: integer('id').primaryKey(),
+  name: text('name').notNull(),
+});
+
+export const rbParts = pgTable(
+  'rb_parts',
+  {
+    partNum: text('part_num').primaryKey(),
+    name: text('name').notNull(),
+    partCatId: integer('part_cat_id'),
+    partMaterial: text('part_material'),
+  },
+  (t) => [
+    index('rb_parts_name_idx').on(sql`lower(${t.name})`),
+    index('rb_parts_cat_idx').on(t.partCatId),
+  ],
+);
+
+export const rbPartRelationships = pgTable(
+  'rb_part_relationships',
+  {
+    relType: text('rel_type').notNull(),
+    childPartNum: text('child_part_num').notNull(),
+    parentPartNum: text('parent_part_num').notNull(),
+  },
+  (t) => [
+    index('rb_part_rel_parent_idx').on(t.parentPartNum),
+    index('rb_part_rel_child_idx').on(t.childPartNum),
+  ],
+);
+
+export const rbElements = pgTable(
+  'rb_elements',
+  {
+    elementId: text('element_id').notNull(),
+    partNum: text('part_num').notNull(),
+    colorId: integer('color_id').notNull(),
+    designId: text('design_id'),
+  },
+  (t) => [index('rb_elements_part_color_idx').on(t.partNum, t.colorId)],
+);
+
+export const rbSets = pgTable(
+  'rb_sets',
+  {
+    setNum: text('set_num').primaryKey(),
+    name: text('name').notNull(),
+    year: integer('year'),
+    themeId: integer('theme_id'),
+    numParts: integer('num_parts'),
+    imgUrl: text('img_url'),
+  },
+  (t) => [index('rb_sets_name_idx').on(sql`lower(${t.name})`)],
+);
+
+export const rbMinifigs = pgTable('rb_minifigs', {
+  figNum: text('fig_num').primaryKey(),
+  name: text('name').notNull(),
+  numParts: integer('num_parts'),
+  imgUrl: text('img_url'),
+});
+
+export const rbInventories = pgTable(
+  'rb_inventories',
+  {
+    id: integer('id').primaryKey(),
+    version: integer('version').notNull(),
+    setNum: text('set_num').notNull(),
+  },
+  (t) => [index('rb_inventories_set_idx').on(t.setNum)],
+);
+
+export const rbInventoryParts = pgTable(
+  'rb_inventory_parts',
+  {
+    inventoryId: integer('inventory_id').notNull(),
+    partNum: text('part_num').notNull(),
+    colorId: integer('color_id').notNull(),
+    quantity: integer('quantity').notNull(),
+    isSpare: boolean('is_spare').notNull(),
+    imgUrl: text('img_url'),
+  },
+  (t) => [index('rb_inventory_parts_inv_idx').on(t.inventoryId)],
+);
+
+export const rbInventoryMinifigs = pgTable(
+  'rb_inventory_minifigs',
+  {
+    inventoryId: integer('inventory_id').notNull(),
+    figNum: text('fig_num').notNull(),
+    quantity: integer('quantity').notNull(),
+  },
+  (t) => [index('rb_inventory_minifigs_inv_idx').on(t.inventoryId)],
+);
+
+export const rbInventorySets = pgTable(
+  'rb_inventory_sets',
+  {
+    inventoryId: integer('inventory_id').notNull(),
+    setNum: text('set_num').notNull(),
+    quantity: integer('quantity').notNull(),
+  },
+  (t) => [index('rb_inventory_sets_inv_idx').on(t.inventoryId)],
+);
+
+export const rbColorMappings = pgTable('rb_color_mappings', {
+  id: integer('id').notNull(),
+  extSystem: text('ext_system').notNull(),
+  extId: text('ext_id').notNull(),
+  extDescr: text('ext_descr'),
+  isExportId: boolean('is_export_id').notNull(),
+  isImportId: boolean('is_import_id').notNull(),
+});
+
+export const rbPartMappings = pgTable(
+  'rb_part_mappings',
+  {
+    partNum: text('part_num').notNull(),
+    extSystem: text('ext_system').notNull(),
+    extId: text('ext_id').notNull(),
+    isExportId: boolean('is_export_id').notNull(),
+    isImportId: boolean('is_import_id').notNull(),
+  },
+  (t) => [index('rb_part_mappings_part_idx').on(t.partNum)],
+);
+
+export const rbSetMappings = pgTable(
+  'rb_set_mappings',
+  {
+    setNum: text('set_num').notNull(),
+    extSystem: text('ext_system').notNull(),
+    extId: text('ext_id').notNull(),
+  },
+  (t) => [index('rb_set_mappings_set_idx').on(t.setNum)],
+);
+
+// ---------------------------------------------------------------------------
+// Catalog import bookkeeping (global)
+// ---------------------------------------------------------------------------
+
+export const catalogRunStatus = pgEnum('catalog_run_status', ['running', 'succeeded', 'failed']);
+
+export const catalogRuns = pgTable('catalog_runs', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  startedAt: timestamp('started_at', { withTimezone: true }).notNull().defaultNow(),
+  finishedAt: timestamp('finished_at', { withTimezone: true }),
+  status: catalogRunStatus('status').notNull().default('running'),
+  startedByUserId: uuid('started_by_user_id').references(() => users.id, { onDelete: 'set null' }),
+  /** Where the file list came from: the app fetched the page, or an admin pasted it. */
+  source: text('source').notNull().default('pasted'),
+  error: text('error'),
+  /** Current step and progress, shown while running. */
+  step: text('step'),
+  filesDone: integer('files_done').notNull().default(0),
+  filesTotal: integer('files_total').notNull().default(0),
+  bytesDownloaded: bigint('bytes_downloaded', { mode: 'number' }).notNull().default(0),
+  filesDownloaded: integer('files_downloaded').notNull().default(0),
+  filesSkipped: integer('files_skipped').notNull().default(0),
+  rowsLoaded: bigint('rows_loaded', { mode: 'number' }).notNull().default(0),
+  /** Notes for the run summary (dropped links, colour name mismatches, and so on). */
+  notes: jsonb('notes').$type<string[]>().notNull().default([]),
+});
+
+export const catalogFileKind = pgEnum('catalog_file_kind', [
+  'csv_archive',
+  'ldraw_zip',
+  'schema_svg',
+  'downloads_page',
+]);
+
+/** One row per remote file. Drives "only changed files" and the once-a-day-per-URL rule. */
+export const catalogFiles = pgTable('catalog_files', {
+  url: text('url').primaryKey(),
+  kind: catalogFileKind('kind').notNull(),
+  /** LDraw files only. */
+  colorId: integer('color_id'),
+  colorName: text('color_name'),
+  /** The date the downloads page shows for the file. */
+  remoteDate: timestamp('remote_date', { withTimezone: true }),
+  etag: text('etag'),
+  lastModified: text('last_modified'),
+  bytes: bigint('bytes', { mode: 'number' }),
+  fetchedAt: timestamp('fetched_at', { withTimezone: true }),
+  extractedAt: timestamp('extracted_at', { withTimezone: true }),
+});
+
+/** Which colours each part has an LDraw image in; rebuilt by each run. Used for fallback images. */
+export const catalogPartImages = pgTable(
+  'catalog_part_images',
+  {
+    partNum: text('part_num').notNull(),
+    colorId: integer('color_id').notNull(),
+  },
+  (t) => [primaryKey({ columns: [t.partNum, t.colorId] })],
 );
