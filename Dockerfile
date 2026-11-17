@@ -21,6 +21,7 @@ ENV NODE_ENV=production \
     APP_VERSION=$APP_VERSION
 COPY --from=build /app/.next/standalone ./
 COPY --from=build /app/.next/static ./.next/static
+COPY --from=build /app/drizzle ./drizzle
 RUN mkdir -p /data && chown -R node:node /data /app
 USER node
 VOLUME ["/data"]
