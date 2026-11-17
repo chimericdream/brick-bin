@@ -194,3 +194,25 @@ export async function deleteTheme(ctx: DataContext, id: string): Promise<DeleteT
     return { ok: true } as const;
   });
 }
+
+/**
+ * Finds or creates the household's themes for a Rebrickable theme chain (root first), matching by
+ * `rb_theme_id`, and returns the id of the last one. Only themes you own sets in ever appear.
+ */
+export async function findOrCreateThemeChain(
+  ctx: DataContext,
+  chain: { id: number; name: string }[],
+): Promise<string | null> {
+  assertCanWrite(ctx);
+  let parentId: string | null = null;
+  for (const node of chain) {
+    const [found] = await ctx.db
+      .select({ id: themes.id })
+      .from(themes)
+      .where(and(eq(themes.householdId, ctx.householdId), eq(themes.rbThemeId, node.id)));
+    parentId = found
+      ? found.id
+      : (await createTheme(ctx, { name: node.name, parentId, rbThemeId: node.id })).id;
+  }
+  return parentId;
+}

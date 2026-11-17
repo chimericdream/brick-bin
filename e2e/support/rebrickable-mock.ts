@@ -4,6 +4,7 @@
 import http from 'node:http';
 
 import { SVG, buildArchive, buildLdrawZip } from '../../src/server/catalog/archive-fixture';
+import { TINY_PNG } from '../../src/server/catalog/test-zip';
 import {
   buildDownloadsPage,
   fixtureColors,
@@ -23,7 +24,7 @@ export class RebrickableMock {
   ldrawStatus: number | null = null;
   /** Milliseconds to wait before each colour ZIP, so a test can watch progress. */
   ldrawDelayMs = 0;
-  archive: Promise<Buffer> = buildArchive();
+  archive: Promise<Buffer> = buildArchive({}, MOCK_URL);
   private server: http.Server | null = null;
   private ldraw = buildLdrawZip();
 
@@ -31,7 +32,7 @@ export class RebrickableMock {
     this.requests = [];
     this.ldrawStatus = null;
     this.ldrawDelayMs = 0;
-    this.archive = buildArchive();
+    this.archive = buildArchive({}, MOCK_URL);
   }
 
   /** The downloads page, pointing at this mock. Pass `colors` to change how many colours it lists. */
@@ -72,6 +73,8 @@ export class RebrickableMock {
           return send(200, await this.ldraw, 'application/zip');
         }
         if (url.pathname.includes('downloads_schema_v')) return send(200, SVG, 'image/svg+xml');
+        // Set covers: one tiny PNG for every set, so a saved set gets a real stored image.
+        if (url.pathname.startsWith('/media/sets/')) return send(200, TINY_PNG, 'image/png');
         return send(404, 'not found');
       } catch (e) {
         return send(500, String(e));
