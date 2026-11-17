@@ -1,4 +1,5 @@
-import { IconPlus } from '@tabler/icons-react';
+import { Group } from '@mantine/core';
+import { IconListDetails, IconPlus } from '@tabler/icons-react';
 import Link from 'next/link';
 
 import { LinkButton } from '@/components/Links';
@@ -90,9 +91,18 @@ export default async function LibraryPage({ searchParams }: { searchParams: Prom
           </p>
         </div>
         {!restricted && (
-          <LinkButton href="/sets/new" leftSection={<IconPlus size={18} />}>
-            Add set
-          </LinkButton>
+          <Group gap="xs">
+            <LinkButton
+              href={`/missing?lib=${encodeURIComponent(filtersToQuery({ ...filters, page: 1, sort: 'name' }).slice(1))}`}
+              variant="default"
+              leftSection={<IconListDetails size={18} />}
+            >
+              Shopping list for these…
+            </LinkButton>
+            <LinkButton href="/sets/new" leftSection={<IconPlus size={18} />}>
+              Add set
+            </LinkButton>
+          </Group>
         )}
       </div>
 

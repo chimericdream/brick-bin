@@ -1,0 +1,280 @@
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+
+  & h1 {
+    margin: 0;
+  }
+}
+
+.sub {
+  margin: 2px 0 0;
+  color: var(--app-muted);
+}
+
+.tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.toolLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--app-control);
+  border-radius: var(--app-radius-control);
+  color: var(--app-ink);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px 20px;
+  margin: 18px 0 8px;
+}
+
+.sorts {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--app-muted);
+
+  & a {
+    padding: 8px 12px;
+    border-radius: 999px;
+    color: var(--app-ink);
+    text-decoration: none;
+
+    &[aria-current='true'] {
+      background: var(--app-tint);
+      color: var(--app-accent-ink);
+      font-weight: 650;
+    }
+  }
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 8px 12px;
+
+  & label {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    color: var(--app-muted);
+    font-size: 13px;
+  }
+
+  & select,
+  & button {
+    height: 40px;
+    padding: 0 10px;
+    border: 1px solid var(--app-control);
+    border-radius: var(--app-radius-control);
+    background: var(--app-surface);
+    color: var(--app-ink);
+    font: inherit;
+  }
+
+  & button {
+    font-weight: 600;
+    cursor: pointer;
+  }
+}
+
+.exports {
+  & summary {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 0 14px;
+    border: 1px solid var(--app-control);
+    border-radius: var(--app-radius-control);
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  & ul {
+    position: absolute;
+    z-index: 5;
+    margin: 4px 0 0;
+    padding: 6px;
+    list-style: none;
+    border: 1px solid var(--app-border);
+    border-radius: var(--app-radius-control);
+    background: var(--app-surface);
+
+    & a {
+      display: block;
+      padding: 10px 12px;
+      border-radius: 6px;
+      color: var(--app-ink);
+      text-decoration: none;
+
+      @mixin hover {
+        background: var(--app-tint);
+      }
+    }
+  }
+}
+
+.note {
+  margin: 8px 0;
+  color: var(--app-muted);
+  font-size: 14px;
+}
+
+.list {
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius-card);
+  background: var(--app-surface);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+
+  & + & {
+    border-top: 1px solid var(--app-rule);
+  }
+}
+
+.text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 12px;
+  color: var(--app-muted);
+  font-size: 13px;
+}
+
+.color {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hint {
+  color: var(--app-accent-ink);
+  font-size: 13px;
+}
+
+.sets {
+  color: var(--app-muted);
+  font-size: 14px;
+}
+
+.qty {
+  font-family: var(--app-display);
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.empty {
+  margin-top: 18px;
+  padding: 36px 16px;
+  border: 1px dashed var(--app-control);
+  border-radius: var(--app-radius-card);
+  text-align: center;
+}
+
+.attribution {
+  margin-top: 24px;
+  color: var(--app-muted);
+  font-size: 13px;
+}
+
+/* Store-trip mode: large pictures and large tap targets. */
+.trip {
+  margin: 14px 0 90px;
+  padding: 0;
+  list-style: none;
+}
+
+.tripRow {
+  border-bottom: 1px solid var(--app-rule);
+
+  &[data-ticked] {
+    opacity: 0.55;
+
+    & strong {
+      text-decoration: line-through;
+    }
+  }
+}
+
+.tripLabel {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 112px;
+  padding: 10px 4px;
+  cursor: pointer;
+}
+
+.tripCheck {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  accent-color: var(--app-accent);
+}
+
+.tripText {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  font-size: 17px;
+}
+
+.tripQty {
+  font-family: var(--app-display);
+  font-size: 34px;
+  font-weight: 700;
+}
+
+.tripBar {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 25;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--app-border);
+  background: var(--app-surface);
+
+  @media (max-width: $mantine-breakpoint-md) {
+    bottom: 60px;
+  }
+
+  @media (min-width: $mantine-breakpoint-md) {
+    left: 248px;
+  }
+}

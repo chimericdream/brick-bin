@@ -59,7 +59,7 @@ export function Shell({ user, householdName, children }: Props) {
 
   return (
     <div className={classes.root}>
-      <aside className={classes.side}>
+      <aside className={classes.side} data-noprint>
         <Link href="/sets" className={classes.brand}>
           <BrickMark size={30} />
           Brick Bin
@@ -128,7 +128,7 @@ export function Shell({ user, householdName, children }: Props) {
         </div>
       </aside>
 
-      <header className={classes.topbar}>
+      <header className={classes.topbar} data-noprint>
         <Link href="/sets" className={classes.brand}>
           <BrickMark size={26} />
           Brick Bin
@@ -142,6 +142,7 @@ export function Shell({ user, householdName, children }: Props) {
         aria-label="Tabs"
         className={classes.tabs}
         data-count={tabs.length + (restricted ? 0 : 2)}
+        data-noprint
       >
         {tabs.map(({ href, label, icon: Glyph }, i) => (
           <span key={href} className={classes.tabSlot}>

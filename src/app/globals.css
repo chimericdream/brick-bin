@@ -34,3 +34,15 @@ h3 {
   border-color: var(--app-control);
   color: var(--app-ink);
 }
+
+/* Printing the shopping list: only the list, none of the app around it. */
+@media print {
+  [data-noprint] {
+    display: none !important;
+  }
+
+  body {
+    background: #fff;
+    color: #000;
+  }
+}

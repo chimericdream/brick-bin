@@ -238,3 +238,29 @@ export async function firstCopyId(setId: string): Promise<string> {
   if (!row) throw new Error('The set has no copy');
   return row.id as string;
 }
+
+/** An open missing row on a copy, with names copied from the catalog the way the app does. */
+export async function seedMissing(
+  copyId: string,
+  m: { partNum: string; colorId: number; quantity: number; ageMinutes?: number },
+): Promise<string> {
+  const hh = await householdId();
+  const [part] = await sql`select name from rb_parts where part_num = ${m.partNum}`;
+  const [color] = await sql`select name from rb_colors where id = ${m.colorId}`;
+  const [row] = await sql`
+    insert into copy_missing_items (household_id, copy_id, kind, rb_part_num, rb_color_id, quantity,
+                                    snapshot_name, snapshot_color_name, from_inventory, created_at)
+    values (${hh}, ${copyId}, 'part', ${m.partNum}, ${m.colorId}, ${m.quantity},
+            ${(part?.name as string | undefined) ?? m.partNum}, ${(color?.name as string | undefined) ?? null}, true,
+            now() - make_interval(mins => ${m.ageMinutes ?? 0}))
+    returning id`;
+  return row!.id as string;
+}
+
+/** BrickLink ids for the seeded parts and colours, as the mapping files would give them. */
+export async function seedBrickLinkMappings(): Promise<void> {
+  await sql`insert into rb_color_mappings (id, ext_system, ext_id, ext_descr, is_export_id, is_import_id) values
+    (0, 'BL', '11', '["Black"]', true, true), (4, 'BL', '5', '["Red"]', true, true)`;
+  await sql`insert into rb_part_mappings (part_num, ext_system, ext_id, is_export_id, is_import_id) values
+    ('3001', 'BL', '3001', true, true), ('3023', 'BL', '3023', true, true)`;
+}
