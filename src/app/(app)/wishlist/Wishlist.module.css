@@ -1,0 +1,57 @@
+.person {
+  margin-top: var(--mantine-spacing-xl);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--mantine-spacing-sm);
+}
+
+.item {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: var(--mantine-spacing-md);
+  padding: var(--mantine-spacing-sm);
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  border-radius: var(--mantine-radius-md);
+}
+
+.cover {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  border-radius: var(--mantine-radius-sm);
+  background: var(--app-surface-2, transparent);
+}
+
+.noCover {
+  width: 72px;
+  height: 72px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--mantine-radius-sm);
+  border: 1px dashed var(--app-border);
+  color: var(--app-text-dim, inherit);
+  font-size: 12px;
+}
+
+.meta {
+  color: var(--app-text-dim, inherit);
+  font-size: 0.875rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--mantine-spacing-xs);
+  align-items: center;
+  margin-top: var(--mantine-spacing-xs);
+}
+
+.empty {
+  color: var(--app-text-dim, inherit);
+}

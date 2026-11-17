@@ -64,7 +64,9 @@ kid library leaks nothing through counts, tags, themes or brands; 03 admins see 
 hidden. Phase 11 adds: replaying captured server-action requests as the kid, every route and API
 response checked for hidden data and purchase marks, for admin, member, requester and kid.
 
-**ACT, TRASH, MISS, SHOP, INS, VAL, WISH, IMP, CAT**: written with their phases. The wishlist
+**WISH** (written, Phase 10): 01 add by hand; 02 catalog prefill and one cover download; 03 "on someone's wishlist" badge; 04 owner-or-admin edit and remove, trash round trip; 05 purchase marks private across requester, kid, activity and trash pages, no audit row; 06 removed-from-list notice for the buyer only; 07 "We got it" (set, copy, cover, marks deleted, hide from kids); 08 kid own-list only, no prices; 09 cover route visibility; 10 empty list.
+
+**ACT, TRASH, MISS, SHOP, INS, VAL, IMP, CAT**: written with their phases. The wishlist
 purchase-mark tests assert that only the marker ever sees a mark, including in the activity page,
 exports, API responses and "last edited" lines.
 

@@ -24,6 +24,8 @@ export interface CatalogHit {
   year: number | null;
   pieces: number | null;
   theme: string | null;
+  /** Household members with this set on their wishlist. */
+  wishers?: string[];
 }
 
 // BarcodeDetector is not in the TS DOM lib yet.
@@ -186,6 +188,9 @@ export function CatalogLookup({ catalogReady, canImport, onPick, onTitle }: Prop
                           {h.year ? ` · ${h.year}` : ''}
                           {h.pieces ? ` · ${h.pieces.toLocaleString('en-US')} pieces` : ''}
                           {h.theme ? ` · ${h.theme}` : ''}
+                          {h.wishers && h.wishers.length > 0
+                            ? ` · On ${h.wishers.join(' and ')}’s wishlist`
+                            : ''}
                         </span>
                       </span>
                     </UnstyledButton>

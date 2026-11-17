@@ -60,7 +60,7 @@ export async function resetCatalog(): Promise<void> {
   if (!hh) return;
   await sql`delete from households where id <> ${hh}`;
   await sql`delete from users where household_id = ${hh} and email <> all(${roleEmails})`;
-  await sql`truncate sets, tags, themes, locations restart identity cascade`;
+  await sql`truncate sets, tags, themes, locations, wishlist_items restart identity cascade`;
   await sql`delete from brands where household_id = ${hh} and is_lego = false`;
   await sql`truncate audit_log`;
   // The reference catalog and the import history are global, so they reset too.
@@ -232,6 +232,21 @@ export async function linkSet(setId: string, rbSetNum: string): Promise<void> {
 }
 
 /** The first copy id of a set. */
+/** A wish on someone's list, written straight to the table (no audit row). */
+export async function seedWish(
+  email: string,
+  title: string,
+  extra: { rbSetNum?: string; priceCents?: number; notes?: string } = {},
+): Promise<string> {
+  const hh = await householdId();
+  const uid = await userId(email);
+  const [row] = await sql`
+    insert into wishlist_items (household_id, requested_by_user_id, title, rb_set_num, price_cents, notes, created_by_user_id)
+    values (${hh}, ${uid}, ${title}, ${extra.rbSetNum ?? null}, ${extra.priceCents ?? null}, ${extra.notes ?? null}, ${uid})
+    returning id`;
+  return row!.id as string;
+}
+
 export async function firstCopyId(setId: string): Promise<string> {
   const [row] =
     await sql`select id from copies where set_id = ${setId} order by created_at limit 1`;

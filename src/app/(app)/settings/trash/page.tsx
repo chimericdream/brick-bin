@@ -1,4 +1,5 @@
 import { Text } from '@mantine/core';
+import { notFound } from 'next/navigation';
 
 import { requireContext } from '@/server/auth/current';
 import { listTrash, purgeDate, retentionDays } from '@/server/data/trash';
@@ -13,6 +14,7 @@ const day = (d: Date) =>
 
 export default async function TrashPage() {
   const { ctx } = await requireContext();
+  if (ctx.viewer.role === 'restricted') notFound();
   const items = await listTrash(ctx);
   const days = retentionDays();
   return (

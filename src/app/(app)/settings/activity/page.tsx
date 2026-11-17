@@ -1,4 +1,5 @@
 import { Text } from '@mantine/core';
+import { notFound } from 'next/navigation';
 
 import { describeEntry } from '@/lib/activity';
 import { requireContext } from '@/server/auth/current';
@@ -19,6 +20,7 @@ const when = (d: Date) =>
 
 export default async function ActivityPage() {
   const { ctx } = await requireContext();
+  if (ctx.viewer.role === 'restricted') notFound();
   const entries = await recentActivity(ctx, { limit: 100 });
   return (
     <>
