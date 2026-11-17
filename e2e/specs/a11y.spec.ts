@@ -44,6 +44,7 @@ for (const scheme of ['light', 'dark'] as const) {
         '/sets/new',
         '/missing',
         '/collection',
+        '/import',
         '/wishlist',
         '/settings/places',
         '/settings/brands',

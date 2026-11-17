@@ -66,6 +66,8 @@ response checked for hidden data and purchase marks, for admin, member, requeste
 
 **VIS-04..09** (written, Phase 11): 04 no page a kid can open reveals a hidden set (HTML scans across filters, facets, search, sorts), 05 every page and API that would expose one answers like an unknown one (404/403), 06 catalog search never names wishers to a kid, 07 replayed write requests change nothing, 08 another household is invisible on every page and API, 09 every route needs a session. **A11Y-01/02** (axe, wcag2a/aa, light and dark, admin and kid).
 
+**IMP** (written, Phase 12): 01 Rebrickable list previewed, unmatched row reported, failed-rows CSV, import; 02 Brickset wanted to wishlist; 03 generic column mapping, new brand, build state; 04 re-import adds copies to existing sets; 05 empty, oversized and nothing-importable files; 06 members import, kids have no page or link; 07 one failed write rolls everything back.
+
 **WISH** (written, Phase 10): 01 add by hand; 02 catalog prefill and one cover download; 03 "on someone's wishlist" badge; 04 owner-or-admin edit and remove, trash round trip; 05 purchase marks private across requester, kid, activity and trash pages, no audit row; 06 removed-from-list notice for the buyer only; 07 "We got it" (set, copy, cover, marks deleted, hide from kids); 08 kid own-list only, no prices; 09 cover route visibility; 10 empty list.
 
 **ACT, TRASH, MISS, SHOP, INS, VAL, IMP, CAT**: written with their phases. The wishlist

@@ -9,6 +9,7 @@ import {
   IconLogout,
   IconPlus,
   IconSettings,
+  IconUpload,
   IconChartBar,
   type Icon,
 } from '@tabler/icons-react';
@@ -40,6 +41,7 @@ const NAV: NavItem[] = [
   { href: '/missing', label: 'Shopping list', icon: IconListDetails, tab: true },
   { href: '/wishlist', label: 'Wishlist', icon: IconHeart, tab: true },
   { href: '/collection', label: 'Collection', icon: IconChartBar },
+  { href: '/import', label: 'Import', icon: IconUpload },
 ];
 
 /** Restricted (kid) profiles see only the library and their own wishlist. */
