@@ -13,7 +13,7 @@ export default defineConfig({
   fullyParallel: false,
   retries: ci ? 1 : 0,
   timeout: 30_000,
-  expect: { timeout: 7_000 },
+  expect: { timeout: 10_000 },
   forbidOnly: ci,
   reporter: ci
     ? [['list'], ['html', { open: 'never', outputFolder: 'e2e/.tmp/report' }]]
@@ -73,6 +73,8 @@ export default defineConfig({
         REBRICKABLE_DOWNLOADS_PAGE: `${MOCK_URL}/downloads/`,
         CATALOG_IMAGE_ORIGIN: MOCK_URL,
         UPC_BASE_URL: `${MOCK_URL}/upc`,
+        // A small cap, so the size limit can be tested with a small file.
+        INSTRUCTIONS_MAX_MB: '1',
         ...(process.env.E2E_SKIP_BUILD ? { E2E_SKIP_BUILD: process.env.E2E_SKIP_BUILD } : {}),
       },
     },

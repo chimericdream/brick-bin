@@ -30,6 +30,8 @@ export interface LibraryFilters {
   yearMax: number | null;
   bands: PieceBandId[];
   tags: string[];
+  /** Only sets that have at least one instruction (a PDF or a link). */
+  hasInstructions: boolean;
   /** Also list sets with no live copies (default: owned sets only). */
   includeUnowned: boolean;
   sort: Sort;
@@ -72,6 +74,7 @@ export function parseLibraryFilters(
     yearMax: num(raw.to),
     bands: list(raw.pieces).filter((s): s is PieceBandId => PIECE_BANDS.some((b) => b.id === s)),
     tags: list(raw.tag).slice(0, 20),
+    hasInstructions: list(raw.ins)[0] === '1',
     includeUnowned: list(raw.unowned)[0] === '1',
     // Value sort is for members and admins only; a restricted viewer falls back to the default.
     sort: sortOk && (sort !== 'value' || opts.allowValueSort) ? sort : 'name',
@@ -80,7 +83,12 @@ export function parseLibraryFilters(
 }
 
 type Key = keyof LibraryFilters;
-const DEFAULTS: Partial<Record<Key, unknown>> = { sort: 'name', page: 1, includeUnowned: false };
+const DEFAULTS: Partial<Record<Key, unknown>> = {
+  sort: 'name',
+  page: 1,
+  includeUnowned: false,
+  hasInstructions: false,
+};
 
 const PARAM: Partial<Record<Key, string>> = {
   q: 'q',
@@ -94,6 +102,7 @@ const PARAM: Partial<Record<Key, string>> = {
   yearMax: 'to',
   bands: 'pieces',
   tags: 'tag',
+  hasInstructions: 'ins',
   includeUnowned: 'unowned',
   sort: 'sort',
   page: 'page',

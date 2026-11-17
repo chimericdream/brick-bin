@@ -10,12 +10,16 @@ import { centsToInput, formatMoney } from '@/lib/money';
 import { requireContext } from '@/server/auth/current';
 import { lastEdit } from '@/server/data/audit';
 import { listCopiesForSet } from '@/server/data/copies';
+import { listInstructions } from '@/server/data/instructions';
+import { boxNumber } from '@/server/catalog/reference';
+import { instructionsMaxBytes } from '@/server/instructions-config';
 import { listLocationOptions } from '@/server/data/places';
 import { getSet } from '@/server/data/sets';
 import { listMembers } from '@/server/data/members';
 
 import { trashSetAction } from '../actions';
 import { CopiesPanel, type CopyView } from './CopiesPanel';
+import { InstructionsPanel, type InstructionView } from './InstructionsPanel';
 import { ResyncButton } from './ResyncButton';
 import classes from './Detail.module.css';
 
@@ -35,12 +39,48 @@ export default async function SetDetailPage({ params }: { params: Promise<{ id: 
   const restricted = ctx.viewer.role === 'restricted';
   const canEdit = !restricted;
 
-  const [cards, locations, members, edited] = await Promise.all([
+  const [cards, locations, members, edited, instructionRows] = await Promise.all([
     listCopiesForSet(ctx, id),
     canEdit ? listLocationOptions(ctx) : Promise.resolve([]),
     canEdit ? listMembers(ctx) : Promise.resolve([]),
     canEdit ? lastEdit(ctx, 'set', id) : Promise.resolve(null),
+    listInstructions(ctx, id),
   ]);
+
+  const sizeText = (bytes: number | null) =>
+    bytes === null
+      ? ''
+      : bytes >= 1e6
+        ? `${(bytes / 1e6).toFixed(1)} MB`
+        : `${Math.round(bytes / 1e3)} KB`;
+  const host = (u: string | null) => {
+    try {
+      return u ? new URL(u).hostname : null;
+    } catch {
+      return null;
+    }
+  };
+  const instructions: InstructionView[] = instructionRows.map((i) => ({
+    id: i.id,
+    kind: i.kind,
+    label: i.label,
+    detail:
+      i.kind === 'file'
+        ? `${sizeText(i.fileBytes)} · added ${i.createdAt.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}`
+        : (host(i.url) ?? ''),
+    href: i.kind === 'file' ? `/api/instructions/${i.id}` : (i.url ?? '#'),
+    sourceHost: i.kind === 'file' ? host(i.sourceUrl) : null,
+  }));
+  // A link to the maker's own instructions page. Nothing is fetched from it.
+  const find =
+    brand.isLego && set.setNumber
+      ? {
+          label: 'Find on LEGO.com',
+          href: `https://www.lego.com/service/buildinginstructions/${encodeURIComponent(boxNumber(set.setNumber))}`,
+        }
+      : brand.websiteUrl
+        ? { label: `Find on ${brand.name} site`, href: brand.websiteUrl }
+        : null;
 
   const copies: CopyView[] = cards.map((c) => ({
     id: c.copy.id,
@@ -168,6 +208,14 @@ export default async function SetDetailPage({ params }: { params: Promise<{ id: 
         canEdit={canEdit}
         members={members.map((m) => ({ value: m.id, label: m.name }))}
         locations={locations}
+      />
+
+      <InstructionsPanel
+        setId={id}
+        items={instructions}
+        canEdit={canEdit}
+        maxMb={Math.round(instructionsMaxBytes() / 1_048_576)}
+        find={find}
       />
 
       {canEdit && (

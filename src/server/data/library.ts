@@ -1,6 +1,6 @@
 import { and, asc, desc, eq, gte, inArray, isNull, lte, or, sql, type SQL } from 'drizzle-orm';
 
-import { brands, copies, setTags, sets, tags, themes } from '../db/schema';
+import { brands, copies, setInstructions, setTags, sets, tags, themes } from '../db/schema';
 import { completenessOf, type BuildState, type Completeness } from './completeness';
 import type { DataContext } from './context';
 import {
@@ -49,7 +49,16 @@ interface Resolved {
   locationIds: string[];
 }
 
-type Omit = 'brand' | 'theme' | 'tag' | 'band' | 'state' | 'completeness' | 'location' | 'owner';
+type Omit =
+  | 'instructions'
+  | 'brand'
+  | 'theme'
+  | 'tag'
+  | 'band'
+  | 'state'
+  | 'completeness'
+  | 'location'
+  | 'owner';
 
 function setConditions(ctx: DataContext, r: Resolved, omit?: Omit): SQL[] {
   const { f } = r;
@@ -68,6 +77,12 @@ function setConditions(ctx: DataContext, r: Resolved, omit?: Omit): SQL[] {
     out.push(
       sql`exists (select 1 from set_tags st join tags t on t.id = st.tag_id
         where st.set_id = ${sets.id} and lower(t.name) in ${lower})`,
+    );
+  }
+  if (f.hasInstructions && omit !== 'instructions') {
+    out.push(
+      sql`exists (select 1 from ${setInstructions} where ${setInstructions.setId} = ${sets.id}
+        and ${setInstructions.deletedAt} is null)`,
     );
   }
   if (f.yearMin !== null) out.push(gte(sets.year, f.yearMin));
@@ -155,6 +170,8 @@ export interface Facets {
   locations: Record<string, number>;
   /** `none` counts copies owned by "Ours". */
   owners: Record<string, number>;
+  /** Sets with at least one instruction, under the other filters. */
+  instructions: number;
   /** Sets owned versus all visible sets, for the include-unowned toggle. */
   unowned: number;
 }
@@ -329,6 +346,7 @@ async function loadFacets(
     locRows,
     ownerRows,
     unownedRow,
+    insRow,
   ] = await Promise.all([
     ctx.db
       .select({ key: sets.brandId, n: sql<number>`count(*)::int` })
@@ -410,6 +428,20 @@ async function loadFacets(
               and ${copies.deletedAt} is null)`,
         ),
       ),
+    // Sets with instructions, under every other filter but this one.
+    ctx.db
+      .select({ n: sql<number>`count(*)::int` })
+      .from(sets)
+      .innerJoin(brands, eq(brands.id, sets.brandId))
+      .leftJoin(themes, eq(themes.id, sets.themeId))
+      .where(
+        and(
+          ...setConditions(ctx, r, 'instructions'),
+          ownedCondition(ctx, r),
+          sql`exists (select 1 from ${setInstructions} where ${setInstructions.setId} = ${sets.id}
+            and ${setInstructions.deletedAt} is null)`,
+        ),
+      ),
   ]);
 
   // Places: a set with copies in two places under one parent counts once for the parent.
@@ -442,5 +474,6 @@ async function loadFacets(
     locations: Object.fromEntries([...locSets].map(([k, v]) => [k, v.size])),
     owners: toMap(ownerRows, 'none'),
     unowned: unownedRow[0]?.n ?? 0,
+    instructions: insRow[0]?.n ?? 0,
   };
 }

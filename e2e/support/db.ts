@@ -65,7 +65,9 @@ export async function resetCatalog(): Promise<void> {
   await sql`truncate audit_log`;
   // The reference catalog and the import history are global, so they reset too.
   await sql`truncate catalog_runs, catalog_files, catalog_part_images, rb_themes, rb_colors, rb_part_categories, rb_parts, rb_part_relationships, rb_elements, rb_sets, rb_minifigs, rb_inventories, rb_inventory_parts, rb_inventory_minifigs, rb_inventory_sets, rb_color_mappings, rb_part_mappings, rb_set_mappings`;
-  rmSync(path.join(DATA_DIR, 'catalog'), { recursive: true, force: true });
+  for (const dir of ['catalog', 'instructions', 'covers']) {
+    rmSync(path.join(DATA_DIR, dir), { recursive: true, force: true });
+  }
 }
 
 export async function brandId(name: string, hhId?: string): Promise<string> {

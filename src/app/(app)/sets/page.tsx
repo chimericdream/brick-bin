@@ -58,6 +58,7 @@ export default async function LibraryPage({ searchParams }: { searchParams: Prom
     filters.owners.length +
     filters.bands.length +
     filters.tags.length +
+    (filters.hasInstructions ? 1 : 0) +
     (filters.yearMin !== null || filters.yearMax !== null ? 1 : 0);
 
   const hidden = [

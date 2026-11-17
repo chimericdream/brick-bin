@@ -200,7 +200,7 @@ export async function setCoverImage(
 
 export interface SetDetail {
   set: typeof sets.$inferSelect;
-  brand: { id: string; name: string; isLego: boolean };
+  brand: { id: string; name: string; isLego: boolean; websiteUrl: string | null };
   themePath: { id: string; name: string }[];
   tags: string[];
 }
@@ -209,7 +209,15 @@ export interface SetDetail {
 export async function getSet(ctx: DataContext, id: string): Promise<SetDetail | null> {
   if (!isUuid(id)) return null;
   const [row] = await ctx.db
-    .select({ set: sets, brand: { id: brands.id, name: brands.name, isLego: brands.isLego } })
+    .select({
+      set: sets,
+      brand: {
+        id: brands.id,
+        name: brands.name,
+        isLego: brands.isLego,
+        websiteUrl: brands.websiteUrl,
+      },
+    })
     .from(sets)
     .innerJoin(brands, eq(brands.id, sets.brandId))
     .where(and(eq(sets.id, id), setVisibilityCondition(ctx)));

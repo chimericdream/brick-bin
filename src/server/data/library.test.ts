@@ -256,3 +256,23 @@ describe('visibility in the library', () => {
     expect((await listLibrary(w.other, f({ includeUnowned: true }))).tiles).toEqual([]);
   });
 });
+
+describe('instructions filter', () => {
+  it('lists only sets with live instructions and counts them under the other filters', async () => {
+    const { addLinkInstruction, trashInstruction } = await import('./instructions');
+    const a = await mk({ name: 'With book' });
+    const b = await mk({ name: 'Trashed book' });
+    await mk({ name: 'Without' });
+    await addLinkInstruction(w.admin, a.id, { label: 'Book', url: 'https://x.example' });
+    const gone = await addLinkInstruction(w.admin, b.id, {
+      label: 'Book',
+      url: 'https://x.example',
+    });
+    await trashInstruction(w.admin, gone.id);
+    expect(await names({ hasInstructions: true })).toEqual(['With book']);
+    expect((await listLibrary(w.admin, f())).facets.instructions).toBe(1);
+    expect((await listLibrary(w.admin, f({ hasInstructions: true }))).facets.instructions).toBe(1);
+    expect(parseLibraryFilters({ ins: '1' }).hasInstructions).toBe(true);
+    expect(parseLibraryFilters({ ins: 'yes' }).hasInstructions).toBe(false);
+  });
+});

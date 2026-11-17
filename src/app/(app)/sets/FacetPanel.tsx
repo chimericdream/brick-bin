@@ -332,6 +332,29 @@ export function FacetPanel({
         </ul>
       </Group>
 
+      <Group title="Instructions" active={filters.hasInstructions} defaultOpen>
+        <ul>
+          <li>
+            <Link
+              href={`/sets${filtersToQuery({ ...filters, hasInstructions: !filters.hasInstructions, page: 1 })}`}
+              className={classes.row}
+              data-selected={filters.hasInstructions || undefined}
+              data-empty={facets.instructions === 0 && !filters.hasInstructions ? true : undefined}
+              scroll={false}
+            >
+              <span className={classes.box} aria-hidden>
+                {filters.hasInstructions && <IconCheck size={13} stroke={3} />}
+              </span>
+              <span className={classes.label}>
+                Has instructions
+                {filters.hasInstructions && <span className={classes.sr}> (selected)</span>}
+              </span>
+              <span className={classes.count}>{facets.instructions}</span>
+            </Link>
+          </li>
+        </ul>
+      </Group>
+
       {(tagNames.length > 0 || filters.tags.length > 0) && (
         <Group title="Tags" active={filters.tags.length > 0}>
           <ul>
