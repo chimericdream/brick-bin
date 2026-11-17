@@ -1,7 +1,7 @@
-import { and, eq, isNotNull, lt } from 'drizzle-orm';
+import { and, eq, inArray, isNotNull, lt, sql } from 'drizzle-orm';
 
 import type { Db } from '../db/client';
-import { auditLog, copies, locations, sets, users } from '../db/schema';
+import { auditLog, copies, locations, setInstructions, sets, users } from '../db/schema';
 import { deletedFields, recordAudit, restoredFields, stampUpdate } from './audit';
 import type { DataContext } from './context';
 import { isUuid } from './ids';
@@ -16,14 +16,19 @@ import { assertNotRestricted, isAdmin } from './visibility';
  * and are the only ones who can delete permanently. Instructions and wishlist items join the
  * `TRASH_KINDS` list with their own tables (Phases 6 and 10).
  */
-export const TRASH_KINDS = ['set', 'copy', 'location'] as const;
+export const TRASH_KINDS = ['set', 'copy', 'location', 'instruction'] as const;
 export type TrashKind = (typeof TRASH_KINDS)[number];
 
 export const isTrashKind = (v: unknown): v is TrashKind =>
   typeof v === 'string' && (TRASH_KINDS as readonly string[]).includes(v);
 
 // Every trashable table has the same columns, so one table type stands in for all of them.
-const TABLES = { set: sets, copy: copies, location: locations } as const;
+const TABLES = {
+  set: sets,
+  copy: copies,
+  location: locations,
+  instruction: setInstructions,
+} as const;
 const table = (kind: TrashKind) => TABLES[kind] as typeof sets;
 
 export const DEFAULT_RETENTION_DAYS = 30;
@@ -71,7 +76,7 @@ export async function listTrash(ctx: DataContext): Promise<TrashItem[]> {
       isAdmin(ctx) ? undefined : eq(t.deletedByUserId, ctx.viewer.userId),
     );
 
-  const [setRows, copyRows, locationRows] = await Promise.all([
+  const [setRows, copyRows, locationRows, instructionRows] = await Promise.all([
     ctx.db
       .select({ id: sets.id, name: sets.name, setNumber: sets.setNumber, ...who(sets) })
       .from(sets)
@@ -97,6 +102,18 @@ export async function listTrash(ctx: DataContext): Promise<TrashItem[]> {
       .from(locations)
       .leftJoin(users, eq(users.id, locations.deletedByUserId))
       .where(mine(locations as unknown as typeof sets)),
+    ctx.db
+      .select({
+        id: setInstructions.id,
+        name: setInstructions.label,
+        setName: sets.name,
+        setDeleted: sets.deletedAt,
+        ...who(setInstructions as unknown as typeof sets),
+      })
+      .from(setInstructions)
+      .innerJoin(sets, eq(sets.id, setInstructions.setId))
+      .leftJoin(users, eq(users.id, setInstructions.deletedByUserId))
+      .where(mine(setInstructions as unknown as typeof sets)),
   ]);
 
   const item = (
@@ -130,6 +147,16 @@ export async function listTrash(ctx: DataContext): Promise<TrashItem[]> {
       ),
     ),
     ...locationRows.map((r) => item('location', r, r.name, 'Place')),
+    ...instructionRows.map((r) =>
+      item(
+        'instruction',
+        r,
+        r.name,
+        ['Instructions', r.setName, r.setDeleted ? 'set is in the trash' : null]
+          .filter(Boolean)
+          .join(' · '),
+      ),
+    ),
   ].toSorted((a, b) => b.deletedAt.getTime() - a.deletedAt.getTime() || a.id.localeCompare(b.id));
 }
 
@@ -142,6 +169,8 @@ function labelFields(kind: TrashKind, row: Record<string, unknown>): Record<stri
       return { setId: row.setId, buildState: row.buildState };
     case 'location':
       return { name: row.name, parentId: row.parentId };
+    case 'instruction':
+      return { label: row.label, setId: row.setId };
   }
 }
 
@@ -203,6 +232,28 @@ export async function restoreTrashed(
         }
       }
     }
+    if (kind === 'instruction') {
+      const [set] = await tx
+        .select({ deletedAt: sets.deletedAt })
+        .from(sets)
+        .where(eq(sets.id, r.setId as string));
+      if (set?.deletedAt) return { ok: false, error: 'Restore the set first.' };
+      if (r.sha256) {
+        const [same] = await tx
+          .select({ label: setInstructions.label })
+          .from(setInstructions)
+          .where(
+            and(
+              eq(setInstructions.setId, r.setId as string),
+              eq(setInstructions.sha256, r.sha256 as string),
+              sql`${setInstructions.deletedAt} is null`,
+            ),
+          );
+        if (same) {
+          return { ok: false, error: `This PDF is already stored for the set as "${same.label}".` };
+        }
+      }
+    }
     if (kind === 'location' && r.parentId) {
       const [parent] = await tx
         .select({ deletedAt: locations.deletedAt })
@@ -242,6 +293,34 @@ export type PurgeResult =
  * copies with it. File paths are returned so the caller removes them only after the delete
  * commits (never delete a file a live row points at).
  */
+type Tx = Parameters<Parameters<Db['transaction']>[0]>[0];
+
+/** Stored PDFs that go with sets about to be deleted (their instruction rows disappear with them). */
+async function instructionFilesOfSets(tx: Tx, setIds: string[]): Promise<string[]> {
+  if (setIds.length === 0) return [];
+  const rows = await tx
+    .select({ path: setInstructions.filePath })
+    .from(setInstructions)
+    .where(inArray(setInstructions.setId, setIds));
+  return rows.flatMap((r) => (r.path ? [r.path] : []));
+}
+
+/**
+ * Of these candidate files, the ones no remaining row points at. Two rows can share one PDF (an
+ * upload, a trashed copy, and the same upload again), so a file is only safe to delete once no row
+ * uses it. Never delete a file a live row points at.
+ */
+async function unreferenced(tx: Tx, candidates: string[]): Promise<string[]> {
+  const unique = [...new Set(candidates)];
+  if (unique.length === 0) return [];
+  const used = await tx
+    .select({ path: setInstructions.filePath })
+    .from(setInstructions)
+    .where(inArray(setInstructions.filePath, unique));
+  const inUse = new Set(used.map((u) => u.path));
+  return unique.filter((f) => !inUse.has(f));
+}
+
 export async function purgeTrashed(
   ctx: DataContext,
   kind: TrashKind,
@@ -251,6 +330,14 @@ export async function purgeTrashed(
   if (!isUuid(id)) return { ok: false, error: 'That is no longer in the trash.' };
   const t = table(kind);
   return ctx.db.transaction(async (tx): Promise<PurgeResult> => {
+    // A set takes its instruction rows with it, so note their files before the rows go.
+    const candidates: string[] = [];
+    const [pending] = await tx
+      .select({ id: t.id })
+      .from(t)
+      .where(and(eq(t.id, id), eq(t.householdId, ctx.householdId), isNotNull(t.deletedAt)));
+    if (pending && kind === 'set') candidates.push(...(await instructionFilesOfSets(tx, [id])));
+
     const [row] = await tx
       .delete(t)
       .where(and(eq(t.id, id), eq(t.householdId, ctx.householdId), isNotNull(t.deletedAt)))
@@ -263,10 +350,10 @@ export async function purgeTrashed(
       action: 'delete',
       changes: { ...deletedFields(labelFields(kind, r)), permanent: [null, true] },
     });
-    return {
-      ok: true,
-      files: kind === 'set' && typeof r.coverImage === 'string' ? [r.coverImage] : [],
-    };
+    if (kind === 'instruction' && typeof r.filePath === 'string') candidates.push(r.filePath);
+    const files = await unreferenced(tx, candidates);
+    if (kind === 'set' && typeof r.coverImage === 'string') files.push(r.coverImage);
+    return { ok: true, files };
   });
 }
 
@@ -284,8 +371,21 @@ export async function purgeExpiredTrash(
   return db.transaction(async (tx) => {
     let purged = 0;
     const files: string[] = [];
+    const candidates: string[] = [];
+    // Sets about to go take their instruction rows with them.
+    const dying = await tx
+      .select({ id: sets.id })
+      .from(sets)
+      .where(and(isNotNull(sets.deletedAt), lt(sets.deletedAt, cutoff)));
+    candidates.push(
+      ...(await instructionFilesOfSets(
+        tx,
+        dying.map((d) => d.id),
+      )),
+    );
+
     // Children before parents, so each trashed row is counted and audited on its own.
-    const order: TrashKind[] = ['copy', 'set', 'location'];
+    const order: TrashKind[] = ['instruction', 'copy', 'set', 'location'];
     for (const kind of order) {
       const t = table(kind);
       const rows = await tx
@@ -296,6 +396,7 @@ export async function purgeExpiredTrash(
         const r = row as unknown as Record<string, unknown>;
         purged++;
         if (kind === 'set' && typeof r.coverImage === 'string') files.push(r.coverImage);
+        if (kind === 'instruction' && typeof r.filePath === 'string') candidates.push(r.filePath);
         await tx.insert(auditLog).values({
           householdId: row.householdId,
           actorUserId: null,
@@ -310,6 +411,7 @@ export async function purgeExpiredTrash(
         });
       }
     }
+    files.push(...(await unreferenced(tx, candidates)));
     return { purged, files };
   });
 }

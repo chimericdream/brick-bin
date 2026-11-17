@@ -524,3 +524,48 @@ export const catalogPartImages = pgTable(
   },
   (t) => [primaryKey({ columns: [t.partNum, t.colorId] })],
 );
+
+// ---------------------------------------------------------------------------
+// Instructions
+// ---------------------------------------------------------------------------
+
+export const instructionKind = pgEnum('instruction_kind', ['file', 'link']);
+
+/**
+ * A building booklet for a set: a PDF stored on this server (uploaded, or saved from a link) or a
+ * plain link. Instructions belong to the design (the set), not to a copy.
+ */
+export const setInstructions = pgTable(
+  'set_instructions',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    householdId: uuid('household_id')
+      .notNull()
+      .references(() => households.id, { onDelete: 'cascade' }),
+    setId: uuid('set_id')
+      .notNull()
+      .references(() => sets.id, { onDelete: 'cascade' }),
+    kind: instructionKind('kind').notNull(),
+    /** "Book 1", "Alternate build: lion". */
+    label: text('label').notNull(),
+    /** Relative path under DATA_DIR (files only). */
+    filePath: text('file_path'),
+    fileBytes: bigint('file_bytes', { mode: 'number' }),
+    /** SHA-256 of the file, which also catches a PDF uploaded twice. */
+    sha256: text('sha256'),
+    /** The address of a plain link. */
+    url: text('url'),
+    /** Where a saved PDF was downloaded from. */
+    sourceUrl: text('source_url'),
+    sortOrder: integer('sort_order').notNull().default(0),
+    ...trashable(),
+    ...authorship(),
+    ...stamps(),
+  },
+  (t) => [
+    index('set_instructions_set_idx').on(t.setId),
+    uniqueIndex('set_instructions_sha_unique')
+      .on(t.setId, t.sha256)
+      .where(sql`${t.deletedAt} is null and ${t.sha256} is not null`),
+  ],
+);

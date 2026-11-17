@@ -2,6 +2,7 @@ CREATE TYPE "public"."audit_action" AS ENUM('create', 'update', 'delete');--> st
 CREATE TYPE "public"."build_state" AS ENUM('sealed', 'opened', 'in_progress', 'built', 'disassembled', 'mixed');--> statement-breakpoint
 CREATE TYPE "public"."catalog_file_kind" AS ENUM('csv_archive', 'ldraw_zip', 'schema_svg', 'downloads_page');--> statement-breakpoint
 CREATE TYPE "public"."catalog_run_status" AS ENUM('running', 'succeeded', 'failed');--> statement-breakpoint
+CREATE TYPE "public"."instruction_kind" AS ENUM('file', 'link');--> statement-breakpoint
 CREATE TYPE "public"."user_role" AS ENUM('admin', 'member', 'restricted');--> statement-breakpoint
 CREATE TABLE "audit_log" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
@@ -223,6 +224,26 @@ CREATE TABLE "sessions" (
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
+CREATE TABLE "set_instructions" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"household_id" uuid NOT NULL,
+	"set_id" uuid NOT NULL,
+	"kind" "instruction_kind" NOT NULL,
+	"label" text NOT NULL,
+	"file_path" text,
+	"file_bytes" bigint,
+	"sha256" text,
+	"url" text,
+	"source_url" text,
+	"sort_order" integer DEFAULT 0 NOT NULL,
+	"deleted_at" timestamp with time zone,
+	"deleted_by_user_id" uuid,
+	"created_by_user_id" uuid,
+	"updated_by_user_id" uuid,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE "set_tags" (
 	"household_id" uuid NOT NULL,
 	"set_id" uuid NOT NULL,
@@ -307,6 +328,11 @@ ALTER TABLE "locations" ADD CONSTRAINT "locations_created_by_user_id_users_id_fk
 ALTER TABLE "locations" ADD CONSTRAINT "locations_updated_by_user_id_users_id_fk" FOREIGN KEY ("updated_by_user_id") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "sessions" ADD CONSTRAINT "sessions_household_id_households_id_fk" FOREIGN KEY ("household_id") REFERENCES "public"."households"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "sessions" ADD CONSTRAINT "sessions_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "set_instructions" ADD CONSTRAINT "set_instructions_household_id_households_id_fk" FOREIGN KEY ("household_id") REFERENCES "public"."households"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "set_instructions" ADD CONSTRAINT "set_instructions_set_id_sets_id_fk" FOREIGN KEY ("set_id") REFERENCES "public"."sets"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "set_instructions" ADD CONSTRAINT "set_instructions_deleted_by_user_id_users_id_fk" FOREIGN KEY ("deleted_by_user_id") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "set_instructions" ADD CONSTRAINT "set_instructions_created_by_user_id_users_id_fk" FOREIGN KEY ("created_by_user_id") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "set_instructions" ADD CONSTRAINT "set_instructions_updated_by_user_id_users_id_fk" FOREIGN KEY ("updated_by_user_id") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "set_tags" ADD CONSTRAINT "set_tags_household_id_households_id_fk" FOREIGN KEY ("household_id") REFERENCES "public"."households"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "set_tags" ADD CONSTRAINT "set_tags_set_id_sets_id_fk" FOREIGN KEY ("set_id") REFERENCES "public"."sets"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "set_tags" ADD CONSTRAINT "set_tags_tag_id_tags_id_fk" FOREIGN KEY ("tag_id") REFERENCES "public"."tags"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
@@ -345,6 +371,8 @@ CREATE INDEX "rb_parts_cat_idx" ON "rb_parts" USING btree ("part_cat_id");--> st
 CREATE INDEX "rb_set_mappings_set_idx" ON "rb_set_mappings" USING btree ("set_num");--> statement-breakpoint
 CREATE INDEX "rb_sets_name_idx" ON "rb_sets" USING btree (lower("name"));--> statement-breakpoint
 CREATE INDEX "sessions_user_idx" ON "sessions" USING btree ("user_id");--> statement-breakpoint
+CREATE INDEX "set_instructions_set_idx" ON "set_instructions" USING btree ("set_id");--> statement-breakpoint
+CREATE UNIQUE INDEX "set_instructions_sha_unique" ON "set_instructions" USING btree ("set_id","sha256") WHERE "set_instructions"."deleted_at" is null and "set_instructions"."sha256" is not null;--> statement-breakpoint
 CREATE INDEX "sets_household_idx" ON "sets" USING btree ("household_id");--> statement-breakpoint
 CREATE INDEX "sets_brand_idx" ON "sets" USING btree ("brand_id");--> statement-breakpoint
 CREATE UNIQUE INDEX "sets_number_unique" ON "sets" USING btree ("household_id","brand_id",lower("set_number")) WHERE "sets"."deleted_at" is null and "sets"."set_number" is not null;--> statement-breakpoint
