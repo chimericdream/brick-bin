@@ -20,8 +20,9 @@ sets (LEGO and off-brand). Hosted on a Proxmox server, reachable over Tailscale.
   Hyperlegible Next (body) are in `src/fonts/`. Use `--app-*` variables in CSS modules, not hard-coded
   colours. Fonts and assets are
   **self-hosted**; never load anything from a CDN at runtime.
-- PostgreSQL 17 + Drizzle ORM (migrations via drizzle-kit). Until v1 is deployed, migrations can be
-  reset freely. After that, never regenerate `drizzle/`.
+- PostgreSQL 17 + Drizzle ORM (migrations via drizzle-kit). v1 is deployed, so **never regenerate or
+  edit existing migration SQL or snapshots in `drizzle/`**. Every schema change is a new migration:
+  run `pnpm db:generate` and commit its output, including the updated `drizzle/meta/_journal.json`.
 - pnpm; tool versions pinned with **mise** (`mise.toml`). Run `mise install` once, then use
   `mise exec -- pnpm <cmd>` if the shell isn't mise-activated.
 - Linting and formatting use the **oxc stack** (oxlint + oxfmt). Do not add ESLint or Prettier.
@@ -53,9 +54,7 @@ Full detail is in `docs/PLAN.md` section 2. In short:
 
 - Strict TypeScript. Validate external input with zod.
 - Keep commits small and conventional (`feat:`, `fix:`, `chore:`, `test:`, `docs:`).
-- **Work directly on `main`** until the first version ships (v1 usable and deployed). No feature
-  branches or PRs for now. After v1 deploys, switch to branches + PRs with CI as the gate, because a
-  push to `main` deploys.
+- **Work from branches.** v1 is deployed (tagged `v1.0.0`). Every change goes on a branch (`feat/...`, `fix/...`, `chore/...`) and lands on `main` through a PR once CI passes. A push to `main` publishes the image and the Proxmox host deploys it within minutes, so never push to `main` directly.
 - Do not commit secrets or `.env` files.
 - Avoid LEGO trade dress in the UI: no LEGO logo, red-and-yellow scheme, minifigure likeness.
 
