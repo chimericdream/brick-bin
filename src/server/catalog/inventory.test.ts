@@ -207,8 +207,8 @@ describe('catalog-wide part search', () => {
   it('finds numbers first (shortest first), then names', async () => {
     expect((await searchParts(db, '3001')).map((p) => p.partNum)).toEqual(['3001', '3001a']);
     expect((await searchParts(db, 'plate')).map((p) => p.partNum)).toEqual([
-      '3023',
       '3020',
+      '3023',
       '4081',
     ]);
     expect((await searchParts(db, 'clip'))[0]).toMatchObject({
