@@ -21,7 +21,8 @@ sets (LEGO and off-brand). Hosted on a Proxmox server, reachable over Tailscale.
   colours. Fonts and assets are
   **self-hosted**; never load anything from a CDN at runtime.
 - PostgreSQL 17 + Drizzle ORM (migrations via drizzle-kit). v1 is deployed, so **never regenerate or
-  edit existing files in `drizzle/`**; every schema change is a new migration.
+  edit existing migration SQL or snapshots in `drizzle/`**. Every schema change is a new migration:
+  run `pnpm db:generate` and commit its output, including the updated `drizzle/meta/_journal.json`.
 - pnpm; tool versions pinned with **mise** (`mise.toml`). Run `mise install` once, then use
   `mise exec -- pnpm <cmd>` if the shell isn't mise-activated.
 - Linting and formatting use the **oxc stack** (oxlint + oxfmt). Do not add ESLint or Prettier.
