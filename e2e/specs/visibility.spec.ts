@@ -296,6 +296,6 @@ test.describe('household isolation', () => {
     ]) {
       expect([401, 403], url).toContain((await anonPage.request.get(url)).status());
     }
-    expect((await anonPage.request.get('/api/health')).status()).toBe(200);
+    expect((await anonPage.request.get('/healthz')).status()).toBe(200);
   });
 });

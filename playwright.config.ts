@@ -56,7 +56,7 @@ export default defineConfig({
   webServer: [
     {
       command: 'node e2e/start-app.mjs',
-      url: `${BASE_URL}/api/health`,
+      url: `${BASE_URL}/healthz`,
       // The database is recreated on start, so never reuse a running instance.
       reuseExistingServer: false,
       timeout: 300_000,

@@ -735,7 +735,7 @@ self-hoster cannot accidentally break Rebrickable's terms. Tests use an injected
   its **own** `postgres:17`, a Tailscale sidecar serving `https://brick-bin.<tailnet>.ts.net`, and
   Watchtower (`nickfedor/watchtower`, label-enabled, 5-minute interval, Postgres never
   auto-updated). Separate containers, volumes and tailnet hostname from the games stack.
-- Next.js standalone output, non-root `node` user, `/data` volume, `/api/health` healthcheck.
+- Next.js standalone output, non-root `node` user, `/data` volume, `/healthz` healthcheck (`{status, version}`; `/api/health` kept as an alias).
 - **Disk**: plan for the catalog images (about 6 GB extracted, plus up to the largest ZIP, about
   220 MB, while extracting), the `rb_*` tables (a few hundred MB including `rb_inventory_parts`),
   and instruction PDFs (tens of GB over time).
