@@ -400,3 +400,24 @@ export async function markPiecesChecked(
     });
   });
 }
+
+export interface Allocation {
+  itemId: string;
+  quantity: number;
+}
+
+/**
+ * Marks several open rows as bought in one go (the end of a store trip). All of it happens or none
+ * of it does. Each allocation may be less than the row holds, which splits the row like any partial
+ * resolution.
+ */
+export async function markBoughtBatch(ctx: DataContext, allocations: Allocation[]): Promise<void> {
+  assertCanWrite(ctx);
+  const clean = allocations.filter((a) => a.quantity > 0);
+  if (clean.length === 0) return;
+  await ctx.db.transaction(async (tx) => {
+    // The inner calls open savepoints on this transaction, so a failure rolls everything back.
+    const inner = { ...ctx, db: tx as unknown as DataContext['db'] };
+    for (const a of clean) await resolveMissing(inner, a.itemId, 'bought', a.quantity);
+  });
+}

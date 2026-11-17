@@ -349,3 +349,65 @@ describe('exports', () => {
     expect(csvField(null)).toBe('');
   });
 });
+
+describe('store trips', () => {
+  it('allocates a bought quantity to the oldest rows first', async () => {
+    const { allocateOldestFirst } = await import('./shopping');
+    const at = (n: number) => new Date(2026, 0, n);
+    const sources = [
+      { itemId: 'new', quantity: 3, createdAt: at(5) },
+      { itemId: 'old', quantity: 3, createdAt: at(1) },
+    ];
+    expect(allocateOldestFirst(sources, 4)).toEqual([
+      { itemId: 'old', quantity: 3 },
+      { itemId: 'new', quantity: 1 },
+    ]);
+    expect(allocateOldestFirst(sources, 2)).toEqual([{ itemId: 'old', quantity: 2 }]);
+    expect(allocateOldestFirst(sources, 99)).toHaveLength(2);
+    expect(allocateOldestFirst(sources, 0)).toEqual([]);
+  });
+
+  it('marks several rows bought in one transaction, or none of them', async () => {
+    const { markBoughtBatch } = await import('./missing');
+    const a = await mk('A', 2);
+    const x = await addMissing(w.admin, a.copies[0]!.id, part('3001', 0, 3));
+    const y = await addMissing(w.admin, a.copies[1]!.id, part('3001', 0, 3));
+    const z = await addMissing(w.admin, a.copies[1]!.id, part('3023', 4, 1));
+
+    // One bad allocation (more than is missing) undoes the good ones before it.
+    await expect(
+      markBoughtBatch(w.admin, [
+        { itemId: x.id, quantity: 3 },
+        { itemId: z.id, quantity: 5 },
+      ]),
+    ).rejects.toThrow(/Only 1 is missing/);
+    expect((await listShopping(w.admin)).pieces).toBe(7);
+
+    await markBoughtBatch(w.admin, [
+      { itemId: x.id, quantity: 3 },
+      { itemId: y.id, quantity: 1 },
+      { itemId: z.id, quantity: 0 },
+    ]);
+    const { groups } = await listShopping(w.admin);
+    expect(groups.map((g) => [g.partNum, g.quantity])).toEqual([
+      ['3001', 2],
+      ['3023', 1],
+    ]);
+    await expect(markBoughtBatch(w.kid, [{ itemId: x.id, quantity: 1 }])).rejects.toThrow(
+      /cannot make changes/,
+    );
+  });
+
+  it('lists the ids of every set matching library filters, not one page', async () => {
+    const { libraryMatchingSetIds } = await import('./library');
+    const { parseLibraryFilters } = await import('./library-filters');
+    const a = await mk('A');
+    await mk('B', 0);
+    const ids = await libraryMatchingSetIds(w.admin, parseLibraryFilters({}));
+    expect(ids).toEqual([a.set.id]);
+    expect(
+      await libraryMatchingSetIds(w.admin, parseLibraryFilters({ unowned: '1' })),
+    ).toHaveLength(2);
+    expect(await libraryMatchingSetIds(w.other, parseLibraryFilters({ unowned: '1' }))).toEqual([]);
+  });
+});

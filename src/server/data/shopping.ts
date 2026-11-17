@@ -348,3 +348,5 @@ export async function shoppingFacets(ctx: DataContext) {
     hasUnowned: rows.some((r) => r.ownerId === null),
   };
 }
+
+export { allocateOldestFirst } from '../../lib/allocate';

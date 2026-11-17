@@ -480,3 +480,30 @@ async function loadFacets(
     instructions: insRow[0]?.n ?? 0,
   };
 }
+
+/**
+ * Ids of every set that matches the filters, not just one page (up to 500), for "Shopping list for
+ * these": the same rules as the library itself, including what a viewer may see.
+ */
+export async function libraryMatchingSetIds(
+  ctx: DataContext,
+  f: LibraryFilters,
+): Promise<string[]> {
+  const [allThemes, allLocations] = await Promise.all([listThemes(ctx), listLocations(ctx)]);
+  const r: Resolved = {
+    f,
+    themeIds: withDescendants(f.themes, allThemes),
+    locationIds: withDescendants(
+      f.locations.filter((l) => l !== 'none'),
+      allLocations,
+    ),
+  };
+  const rows = await ctx.db
+    .select({ id: sets.id })
+    .from(sets)
+    .innerJoin(brands, eq(brands.id, sets.brandId))
+    .leftJoin(themes, eq(themes.id, sets.themeId))
+    .where(and(...setConditions(ctx, r), ownedCondition(ctx, r)))
+    .limit(500);
+  return rows.map((x) => x.id);
+}
