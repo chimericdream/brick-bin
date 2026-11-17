@@ -1,3 +1,4 @@
+import { catalogStatus } from '@/server/catalog/runs';
 import { listBrands } from '@/server/data/brands';
 import type { DataContext } from '@/server/data/context';
 import { listLocationOptions } from '@/server/data/places';
@@ -20,5 +21,15 @@ export async function loadFormOptions(ctx: DataContext) {
     locations,
     members: members.map((m) => ({ value: m.id, label: m.name })),
     tagSuggestions: tags.map((t) => t.name),
+  };
+}
+
+/** What the add-set form needs for the LEGO catalog lookup. */
+export async function loadLookup(ctx: DataContext) {
+  const [brands, status] = await Promise.all([listBrands(ctx), catalogStatus(ctx.db)]);
+  return {
+    catalogReady: status.sets > 0,
+    legoBrandId: brands.find((b) => b.isLego)?.id ?? null,
+    canImport: ctx.viewer.role === 'admin',
   };
 }

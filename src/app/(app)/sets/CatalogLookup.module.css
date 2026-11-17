@@ -1,0 +1,33 @@
+.hits {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius-control);
+  background: var(--app-surface);
+
+  & li + li {
+    border-top: 1px solid var(--app-rule);
+  }
+}
+
+.hit {
+  display: flex;
+  width: 100%;
+  min-height: 52px;
+  align-items: center;
+  padding: 8px 12px;
+  text-align: left;
+
+  @mixin hover {
+    background: var(--app-tint);
+  }
+}
+
+.meta {
+  display: block;
+  color: var(--app-muted);
+  font-size: 13px;
+}

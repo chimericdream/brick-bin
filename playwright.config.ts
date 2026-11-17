@@ -72,6 +72,7 @@ export default defineConfig({
         REBRICKABLE_ALLOWED_ORIGINS: MOCK_URL,
         REBRICKABLE_DOWNLOADS_PAGE: `${MOCK_URL}/downloads/`,
         CATALOG_IMAGE_ORIGIN: MOCK_URL,
+        UPC_BASE_URL: `${MOCK_URL}/upc`,
         ...(process.env.E2E_SKIP_BUILD ? { E2E_SKIP_BUILD: process.env.E2E_SKIP_BUILD } : {}),
       },
     },

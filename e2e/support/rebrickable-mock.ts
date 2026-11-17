@@ -22,6 +22,8 @@ export class RebrickableMock {
   requests: RequestLog[] = [];
   /** Answer every colour ZIP with this status instead of the ZIP. */
   ldrawStatus: number | null = null;
+  /** Answer set cover requests with this status instead of an image. */
+  coverStatus: number | null = null;
   /** Milliseconds to wait before each colour ZIP, so a test can watch progress. */
   ldrawDelayMs = 0;
   archive: Promise<Buffer> = buildArchive({}, MOCK_URL);
@@ -31,6 +33,7 @@ export class RebrickableMock {
   reset() {
     this.requests = [];
     this.ldrawStatus = null;
+    this.coverStatus = null;
     this.ldrawDelayMs = 0;
     this.archive = buildArchive({}, MOCK_URL);
   }
@@ -74,7 +77,16 @@ export class RebrickableMock {
         }
         if (url.pathname.includes('downloads_schema_v')) return send(200, SVG, 'image/svg+xml');
         // Set covers: one tiny PNG for every set, so a saved set gets a real stored image.
-        if (url.pathname.startsWith('/media/sets/')) return send(200, TINY_PNG, 'image/png');
+        if (url.pathname.startsWith('/media/sets/')) {
+          if (this.coverStatus) return send(this.coverStatus, 'no cover');
+          return send(200, TINY_PNG, 'image/png');
+        }
+        // UPCitemdb: one known barcode for the Titanic box.
+        if (url.pathname === '/upc/lookup') {
+          const known = url.searchParams.get('upc') === '5702017189000';
+          const items = known ? [{ title: 'LEGO Icons Titanic 10294 Building Kit' }] : [];
+          return send(200, JSON.stringify({ items }), 'application/json');
+        }
         return send(404, 'not found');
       } catch (e) {
         return send(500, String(e));

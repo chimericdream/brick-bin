@@ -22,6 +22,7 @@ import {
 import Link from 'next/link';
 
 import type { ActionState } from './actions';
+import { CatalogLookup, type CatalogHit } from './CatalogLookup';
 import { CopyFields, type Option } from './CopyFields';
 
 export interface SetDefaults {
@@ -39,6 +40,8 @@ export interface SetDefaults {
   notes?: string | null;
   hiddenFromRestricted?: boolean;
   tags?: string[];
+  /** The Rebrickable set this one is linked to, when it is. */
+  rbSetNum?: string | null;
 }
 
 interface Props {
@@ -51,6 +54,8 @@ interface Props {
   members: Option[];
   tagSuggestions: string[];
   defaults?: SetDefaults;
+  /** LEGO catalog lookup: whether the catalog has been imported, and which brand is LEGO. */
+  lookup?: { catalogReady: boolean; legoBrandId: string | null; canImport: boolean } | null;
 }
 
 export function SetForm({
@@ -62,11 +67,29 @@ export function SetForm({
   members,
   tagSuggestions,
   defaults = {},
+  lookup = null,
 }: Props) {
   const [state, formAction, pending] = useActionState(action, {});
   const [newBrand, setNewBrand] = useState(false);
   const [addCopy, setAddCopy] = useState(true);
   const creating = setId === null;
+  // A set picked from the catalog (or scanned) prefills the fields below it.
+  const [picked, setPicked] = useState<CatalogHit | null>(null);
+  const [scannedName, setScannedName] = useState<string | null>(null);
+  const d: SetDefaults = picked
+    ? {
+        ...defaults,
+        brandId: lookup?.legoBrandId ?? defaults.brandId,
+        name: picked.name,
+        setNumber: picked.number,
+        year: picked.year,
+        pieceCount: picked.pieces,
+        rbSetNum: picked.setNum,
+      }
+    : scannedName
+      ? { ...defaults, name: scannedName }
+      : defaults;
+  const fieldsKey = picked?.setNum ?? scannedName ?? 'manual';
 
   return (
     <form action={formAction} encType="multipart/form-data">
@@ -86,8 +109,39 @@ export function SetForm({
           </Alert>
         )}
 
-        <Paper withBorder p="md">
+        {creating && lookup && (
+          <CatalogLookup
+            catalogReady={lookup.catalogReady}
+            canImport={lookup.canImport}
+            onPick={(h) => {
+              setScannedName(null);
+              setNewBrand(false);
+              setPicked(h);
+            }}
+            onTitle={(t) => {
+              setPicked(null);
+              setScannedName(t);
+            }}
+          />
+        )}
+
+        <Paper withBorder p="md" key={fieldsKey}>
           <Stack gap="sm">
+            {d.rbSetNum && (
+              <>
+                <input type="hidden" name="rbSetNum" value={d.rbSetNum} />
+                <Alert color="blue" variant="light" role="status">
+                  Linked to Rebrickable set {d.rbSetNum}.{' '}
+                  {creating &&
+                    'The theme is added for you, and the cover is downloaded once when you save. '}
+                  {picked && (
+                    <Anchor component="button" type="button" onClick={() => setPicked(null)}>
+                      Unlink
+                    </Anchor>
+                  )}
+                </Alert>
+              </>
+            )}
             <Title order={2} size="h4">
               The set
             </Title>
@@ -116,7 +170,7 @@ export function SetForm({
                   name="brandId"
                   label="Brand"
                   data={brands}
-                  defaultValue={defaults.brandId ?? brands[0]?.value ?? null}
+                  defaultValue={d.brandId ?? brands[0]?.value ?? null}
                   allowDeselect={false}
                   searchable
                   required
@@ -127,7 +181,7 @@ export function SetForm({
                 label="Set number"
                 description="As printed on the box. Optional for unnumbered kits."
                 placeholder="10294"
-                defaultValue={defaults.setNumber ?? ''}
+                defaultValue={d.setNumber ?? ''}
               />
             </SimpleGrid>
             {!newBrand && (
@@ -141,13 +195,13 @@ export function SetForm({
                 + New brand
               </Anchor>
             )}
-            <TextInput name="name" label="Name" required defaultValue={defaults.name ?? ''} />
+            <TextInput name="name" label="Name" required defaultValue={d.name ?? ''} />
             <Select
               name="themeId"
               label="Theme"
               placeholder="None"
               data={themes}
-              defaultValue={defaults.themeId ?? null}
+              defaultValue={d.themeId ?? null}
               searchable
               clearable
             />
@@ -158,7 +212,7 @@ export function SetForm({
                 min={1900}
                 max={2200}
                 hideControls
-                defaultValue={defaults.year ?? ''}
+                defaultValue={d.year ?? ''}
               />
               <NumberInput
                 name="pieceCount"
@@ -166,21 +220,21 @@ export function SetForm({
                 min={0}
                 hideControls
                 thousandSeparator=","
-                defaultValue={defaults.pieceCount ?? ''}
+                defaultValue={d.pieceCount ?? ''}
               />
               <NumberInput
                 name="minifigCount"
                 label="Minifigs"
                 min={0}
                 hideControls
-                defaultValue={defaults.minifigCount ?? ''}
+                defaultValue={d.minifigCount ?? ''}
               />
               <NumberInput
                 name="minAge"
                 label="Min age"
                 min={0}
                 hideControls
-                defaultValue={defaults.minAge ?? ''}
+                defaultValue={d.minAge ?? ''}
               />
             </SimpleGrid>
             <Textarea
@@ -188,7 +242,7 @@ export function SetForm({
               label="Description"
               autosize
               minRows={3}
-              defaultValue={defaults.description ?? ''}
+              defaultValue={d.description ?? ''}
             />
             <SimpleGrid cols={{ base: 1, sm: 2 }}>
               <TextInput
@@ -197,13 +251,13 @@ export function SetForm({
                 placeholder="0.00"
                 inputMode="decimal"
                 leftSection="$"
-                defaultValue={defaults.retailPrice ?? ''}
+                defaultValue={d.retailPrice ?? ''}
               />
               <TextInput
                 name="designer"
                 label="Designer"
                 description="For example a MOC designer"
-                defaultValue={defaults.designer ?? ''}
+                defaultValue={d.designer ?? ''}
               />
             </SimpleGrid>
             <TagsInput
@@ -211,7 +265,7 @@ export function SetForm({
               label="Tags"
               placeholder="Christmas 2025"
               data={tagSuggestions}
-              defaultValue={defaults.tags ?? []}
+              defaultValue={d.tags ?? []}
             />
             <FileInput
               name="cover"
@@ -225,13 +279,13 @@ export function SetForm({
               label="Notes"
               autosize
               minRows={2}
-              defaultValue={defaults.notes ?? ''}
+              defaultValue={d.notes ?? ''}
             />
             <Checkbox
               name="hiddenFromRestricted"
               label="Hide from kid profiles"
               description="Kid profiles will not see this set, its copies or its cover. Useful for a present."
-              defaultChecked={defaults.hiddenFromRestricted ?? false}
+              defaultChecked={d.hiddenFromRestricted ?? false}
             />
           </Stack>
         </Paper>

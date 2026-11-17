@@ -5,7 +5,7 @@ import path from 'node:path';
 
 import postgres from 'postgres';
 
-import { DATABASE_URL, DATA_DIR } from './env';
+import { DATABASE_URL, DATA_DIR, MOCK_URL } from './env';
 import { TINY_PNG } from './images';
 import { ACCOUNTS, ADMIN } from './roles';
 
@@ -190,4 +190,27 @@ export async function setIdByName(name: string): Promise<string> {
   const [row] = await sql`select id from sets where name = ${name}`;
   if (!row) throw new Error(`No set named ${name}`);
   return row.id as string;
+}
+
+/** A small reference catalog, with set covers on the mock server. */
+export async function seedCatalog(): Promise<void> {
+  await sql`insert into rb_themes (id, name, parent_id) values (1, 'Star Wars', null), (2, 'Ultimate Collector Series', 1), (721, 'Icons', null)`;
+  await sql`
+    insert into rb_sets (set_num, name, year, theme_id, num_parts, img_url) values
+      ('10294-1', 'Titanic', 2021, 721, 9092, ${MOCK_URL + '/media/sets/10294-1.jpg'}),
+      ('75192-1', 'Millennium Falcon', 2017, 2, 7541, ${MOCK_URL + '/media/sets/75192-1.jpg'}),
+      ('75257-1', 'Millennium Falcon', 2019, 1, 1351, ${MOCK_URL + '/media/sets/75257-1.jpg'})`;
+  await sql`insert into rb_colors (id, name, rgb, is_trans) values (0, 'Black', '05131D', false), (15, 'White', 'FFFFFF', false), (71, 'Light Bluish Gray', 'A0A5A9', false)`;
+}
+
+/** Puts a real PNG where the part-image route looks, and records it in the index. */
+export async function seedPartImage(colorId: number, partNum: string): Promise<void> {
+  const folder = path.join(DATA_DIR, 'catalog', 'ldraw', String(colorId));
+  mkdirSync(folder, { recursive: true });
+  writeFileSync(path.join(folder, `${partNum}.png`), TINY_PNG);
+  await sql`insert into catalog_part_images (part_num, color_id) values (${partNum}, ${colorId}) on conflict do nothing`;
+}
+
+export function coverPath(rel: string): string {
+  return path.join(DATA_DIR, rel);
 }

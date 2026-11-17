@@ -4,7 +4,12 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 import { requireContext } from '@/server/auth/current';
-import { createBrand } from '@/server/data/brands';
+import { catalogConfig } from '@/server/catalog/config';
+import { applyResync, previewResync, type ResyncKey } from '@/server/catalog/resync';
+import { fetchCatalogCover } from '@/server/catalog/cover';
+import { catalogThemeChain, getCatalogSet } from '@/server/catalog/reference';
+import { createBrand, listBrands } from '@/server/data/brands';
+import { findOrCreateThemeChain } from '@/server/data/themes';
 import type { BuildState } from '@/server/data/completeness';
 import {
   addCopies,
@@ -84,6 +89,13 @@ export async function saveSetAction(
     const newBrand = text(fd, 'newBrandName');
     if (newBrand) brandId = (await createBrand(ctx, { name: newBrand })).id;
 
+    // A link to the Rebrickable catalog is only kept for LEGO-brand sets that really are in the catalog.
+    const wantedLink = text(fd, 'rbSetNum');
+    const isLego = wantedLink
+      ? (await listBrands(ctx)).find((b) => b.id === brandId)?.isLego === true
+      : false;
+    const catalogSet = wantedLink && isLego ? await getCatalogSet(ctx.db, wantedLink) : null;
+
     const input: SetInput = {
       brandId: brandId ?? '',
       setNumber: text(fd, 'setNumber'),
@@ -97,13 +109,22 @@ export async function saveSetAction(
       retailPriceCents: retail,
       designer: text(fd, 'designer'),
       notes: text(fd, 'notes'),
-      rbSetNum: text(fd, 'rbSetNum'),
+      rbSetNum: catalogSet?.setNum ?? null,
+      // themeId may be filled from the catalog just below.
       hiddenFromRestricted: fd.get('hiddenFromRestricted') === 'on',
       tags: (text(fd, 'tags') ?? '')
         .split(',')
         .map((t) => t.trim())
         .filter(Boolean),
     };
+
+    // No theme chosen: use the catalog's, creating the household's matching themes on the way.
+    if (catalogSet && !input.themeId) {
+      input.themeId = await findOrCreateThemeChain(
+        ctx,
+        await catalogThemeChain(ctx.db, catalogSet.themeId),
+      );
+    }
 
     if (id) {
       await updateSet(ctx, id, input);
@@ -118,9 +139,15 @@ export async function saveSetAction(
     }
 
     const upload = fd.get('cover');
-    if (setId && upload instanceof File && upload.size > 0) {
+    // One request, for one set someone just saved. A failed download leaves the set without a cover.
+    const catalogCover =
+      !id && catalogSet && !(upload instanceof File && upload.size > 0)
+        ? await fetchCatalogCover(catalogSet.imgUrl, catalogConfig())
+        : null;
+    const cover = upload instanceof File && upload.size > 0 ? upload : catalogCover;
+    if (setId && cover) {
       // The set is already saved, so a bad image reports an error without losing the form.
-      const path = await saveCover(ctx.householdId, setId, upload);
+      const path = await saveCover(ctx.householdId, setId, cover);
       const old = await setCoverImage(ctx, setId, path);
       if (old && old !== path) await removeStored(old);
     }
@@ -184,4 +211,24 @@ export async function trashSetAction(setId: string): Promise<ActionState> {
   }
   revalidatePath('/sets');
   redirect('/sets');
+}
+
+export async function resyncPreviewAction(setId: string) {
+  const { ctx } = await requireContext();
+  return previewResync(ctx, setId);
+}
+
+export async function resyncApplyAction(
+  setId: string,
+  keys: ResyncKey[],
+  replaceCover: boolean,
+): Promise<ActionState & { coverFailed?: boolean }> {
+  const { ctx } = await requireContext();
+  try {
+    const result = await applyResync(ctx, setId, keys, { replaceCover });
+    revalidatePath(`/sets/${setId}`);
+    return { saved: true, coverFailed: result.coverFailed };
+  } catch (e) {
+    return { error: message(e) };
+  }
 }

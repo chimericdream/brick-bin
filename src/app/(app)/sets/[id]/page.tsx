@@ -16,6 +16,7 @@ import { listMembers } from '@/server/data/members';
 
 import { trashSetAction } from '../actions';
 import { CopiesPanel, type CopyView } from './CopiesPanel';
+import { ResyncButton } from './ResyncButton';
 import classes from './Detail.module.css';
 
 export const dynamic = 'force-dynamic';
@@ -144,6 +145,14 @@ export default async function SetDetailPage({ params }: { params: Promise<{ id: 
               {set.retailPriceCents !== null && set.designer && ' · '}
               {set.designer && <>Designer: {set.designer}</>}
             </Text>
+          )}
+          {set.rbSetNum && brand.isLego && canEdit && (
+            <Group mt="sm" gap="sm" align="center">
+              <Text size="sm" c="dimmed">
+                Linked to Rebrickable {set.rbSetNum}. Catalog data from Rebrickable.
+              </Text>
+              <ResyncButton setId={id} setNum={set.rbSetNum} />
+            </Group>
           )}
           {set.hiddenFromRestricted && canEdit && (
             <Text size="sm" c="dimmed" mt="sm">

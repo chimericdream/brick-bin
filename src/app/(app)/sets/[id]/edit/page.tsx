@@ -40,6 +40,7 @@ export default async function EditSetPage({ params }: { params: Promise<{ id: st
           notes: set.notes,
           hiddenFromRestricted: set.hiddenFromRestricted,
           tags: detail.tags,
+          rbSetNum: set.rbSetNum,
         }}
       />
     </>
