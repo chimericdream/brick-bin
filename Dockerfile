@@ -18,6 +18,7 @@ ENV NODE_ENV=production \
     PORT=3000 \
     HOSTNAME=0.0.0.0 \
     DATA_DIR=/data \
+    MIGRATIONS_DIR=/app/drizzle \
     APP_VERSION=$APP_VERSION
 COPY --from=build /app/.next/standalone ./
 COPY --from=build /app/.next/static ./.next/static
