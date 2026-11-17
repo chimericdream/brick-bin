@@ -898,3 +898,29 @@ Listed so v1 does not block them. None of them needs schema now.
 
 1. **Rebrickable's answer** (5.1). Until it arrives, admins paste the page (5.5). A yes turns on
    `REBRICKABLE_PAGE_FETCH`; a no keeps pasting, with 5.7 in reserve.
+
+## Implementation notes
+
+Where the build departs from the plan above (kept here so the plan itself stays as decided).
+
+- **Catalog load (5.3 step 5):** rows go into the `rb_<file>_next` staging tables with batched
+  multi-row `INSERT`s, not `COPY`. One code path runs in production and in PGlite tests, and the load
+  still streams. The swap is one transaction that truncates each live table and `INSERT ... SELECT`s
+  from staging, so indexes stay in place and a failed swap leaves the old catalog.
+- **One run at a time:** a partial unique index on `catalog_runs` (`status = 'running'`) replaces the
+  advisory lock, so even a race cannot start two runs.
+- **The 24-hour rule** is keyed on the file's address without the cache-busting query string.
+- **Loopback exception:** `http` is allowed only for `127.0.0.1` / `localhost` origins that are named
+  in `REBRICKABLE_ALLOWED_ORIGINS`. The e2e tests use it for a mock; the default list is two `https`
+  origins.
+- **The downloads page parser** was written from the description in 5.2 and tested against a
+  synthetic page (`src/server/catalog/fixtures.ts`), because the real page may not be fetched yet.
+  **Check it against the first real paste.** The archive and its 15 CSV files were checked against a
+  real download (`docs/REBRICKABLE_SPIKE.md`).
+- **Set typeahead** shows text only. A cover is downloaded once, when a set is saved, never while
+  typing (5.6 says one request per saved set).
+- **Cover route** is `/api/sets/[id]/cover` (the set id is what visibility is checked against), not
+  `/api/covers/[...path]`.
+- **Kid navigation** has no Shopping list tab (decided after design review). Library tiles show one
+  badge row per copy, up to three, then "+N more copies". Phones use two columns, and one column
+  under 360 px.
