@@ -15,7 +15,15 @@ import {
   Title,
   UnstyledButton,
 } from '@mantine/core';
-import { IconCheck, IconChevronDown, IconMapPin, IconPencil, IconPlus } from '@tabler/icons-react';
+import {
+  IconAlertTriangle,
+  IconCheck,
+  IconChevronDown,
+  IconMapPin,
+  IconPencil,
+  IconPlus,
+} from '@tabler/icons-react';
+import Link from 'next/link';
 
 import { ConfirmDelete } from '@/components/ConfirmDelete';
 import { BUILD_STATE_INFO, BuildBadge, CompletenessBadge } from '@/components/sets/Badges';
@@ -217,7 +225,14 @@ export function CopiesPanel({ setId, copies, canEdit, members, locations }: Prop
               <div>
                 <dt>Pieces</dt>
                 <dd>
-                  <CompletenessBadge completeness={copy.completeness} />
+                  {copy.completeness.kind === 'missing' ? (
+                    // The badge is the way into the list of what is missing, for kids too (read only).
+                    <Link href={`/copies/${copy.id}/missing`} className={classes.badgeLink}>
+                      <CompletenessBadge completeness={copy.completeness} />
+                    </Link>
+                  ) : (
+                    <CompletenessBadge completeness={copy.completeness} />
+                  )}
                 </dd>
               </div>
               <div>
@@ -269,6 +284,15 @@ export function CopiesPanel({ setId, copies, canEdit, members, locations }: Prop
                   onClick={() => setEditing(copy)}
                 >
                   Edit copy
+                </Button>
+                <Button
+                  component={Link}
+                  href={`/copies/${copy.id}/missing`}
+                  variant="default"
+                  size="compact-md"
+                  leftSection={<IconAlertTriangle size={16} />}
+                >
+                  Missing pieces
                 </Button>
                 <ConfirmDelete
                   title={`Remove copy ${copy.position}?`}

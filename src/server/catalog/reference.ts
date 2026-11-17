@@ -121,6 +121,25 @@ const PREFERRED_FALLBACK = 71;
 /** The set number as printed on the box: `10294-1` becomes `10294`. */
 export const boxNumber = (setNum: string) => setNum.replace(/-\d{1,2}$/, '');
 
+/** The colour whose image to show for a wanted colour: itself, else Light Bluish Gray, else the lowest. */
+export function pickImageColor(have: number[], wanted: number): number | null {
+  if (have.length === 0) return null;
+  if (have.includes(wanted)) return wanted;
+  return have.includes(PREFERRED_FALLBACK) ? PREFERRED_FALLBACK : Math.min(...have);
+}
+
+/** Colours that have an LDraw image, for each of these parts (one query, for a page of tiles). */
+export async function partImageColors(db: Db, partNums: string[]): Promise<Map<string, number[]>> {
+  const out = new Map<string, number[]>();
+  if (partNums.length === 0) return out;
+  const rows = await db
+    .select({ partNum: catalogPartImages.partNum, colorId: catalogPartImages.colorId })
+    .from(catalogPartImages)
+    .where(inArray(catalogPartImages.partNum, partNums));
+  for (const r of rows) out.set(r.partNum, [...(out.get(r.partNum) ?? []), r.colorId]);
+  return out;
+}
+
 const PART = /^[A-Za-z0-9][A-Za-z0-9_.-]{0,80}$/;
 
 /**
@@ -141,12 +160,8 @@ export async function resolvePartImage(
       .from(catalogPartImages)
       .where(and(eq(catalogPartImages.partNum, partNum)))
   ).map((r) => r.colorId);
-  if (have.length === 0) return null;
-  const used = have.includes(colorId)
-    ? colorId
-    : have.includes(PREFERRED_FALLBACK)
-      ? PREFERRED_FALLBACK
-      : Math.min(...have);
+  const used = pickImageColor(have, colorId);
+  if (used === null) return null;
   const file = path.join(catalogPaths(dataDir).ldraw, String(used), `${partNum}.png`);
   try {
     return { bytes: await readFile(file), colorId: used, exact: used === colorId };
@@ -207,4 +222,17 @@ export async function getCatalogFig(db: Db, figNum: string): Promise<CatalogFig 
     .from(rbMinifigs)
     .where(eq(rbMinifigs.figNum, figNum));
   return row ?? null;
+}
+
+/** Colours by id, for a list of rows (names and swatches). */
+export async function getCatalogColors(db: Db, ids: number[]): Promise<Map<number, CatalogColor>> {
+  const out = new Map<number, CatalogColor>();
+  const unique = [...new Set(ids)];
+  if (unique.length === 0) return out;
+  const rows = await db
+    .select({ id: rbColors.id, name: rbColors.name, rgb: rbColors.rgb, isTrans: rbColors.isTrans })
+    .from(rbColors)
+    .where(inArray(rbColors.id, unique));
+  for (const r of rows) out.set(r.id, r);
+  return out;
 }

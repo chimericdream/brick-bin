@@ -130,3 +130,13 @@
   min-width: 0;
   overflow-wrap: anywhere;
 }
+
+.badgeLink {
+  display: inline-block;
+  border-radius: var(--app-radius-badge);
+  text-decoration: none;
+
+  & span {
+    text-decoration: underline;
+  }
+}

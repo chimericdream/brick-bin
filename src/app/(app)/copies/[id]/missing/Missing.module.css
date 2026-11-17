@@ -1,0 +1,153 @@
+.crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  color: var(--app-muted);
+  font-size: 13px;
+
+  & a {
+    color: var(--app-accent-ink);
+  }
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.section {
+  margin-top: 28px;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  padding: 12px;
+
+  & + & {
+    border-top: 1px solid var(--app-rule);
+  }
+}
+
+.rowText {
+  flex: 1 1 200px;
+  min-width: 0;
+}
+
+.sub {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  color: var(--app-muted);
+  font-size: 13px;
+}
+
+.colorLine {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.qty {
+  font-family: var(--app-display);
+  font-size: 22px;
+}
+
+.actions {
+  flex-wrap: wrap;
+}
+
+.history {
+  margin-top: 20px;
+
+  & summary {
+    min-height: 44px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @media (max-width: 420px) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.tile {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px 12px;
+  padding: 10px;
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius-tile);
+  background: var(--app-surface);
+}
+
+.tileText {
+  min-width: 0;
+}
+
+.tileActions {
+  display: flex;
+  flex-wrap: wrap;
+  grid-column: 1 / -1;
+  align-items: center;
+  gap: 8px;
+}
+
+.spare {
+  margin-left: 6px;
+  padding: 1px 6px;
+  border: 1px solid var(--app-control);
+  border-radius: 6px;
+  color: var(--app-muted);
+  font-size: 12px;
+}
+
+.hits {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius-control);
+  background: var(--app-surface);
+
+  & li + li {
+    border-top: 1px solid var(--app-rule);
+  }
+}
+
+.hit {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 48px;
+  padding: 8px 12px;
+  border: 0;
+  background: transparent;
+  color: var(--app-ink);
+  text-align: left;
+  cursor: pointer;
+
+  @mixin hover {
+    background: var(--app-tint);
+  }
+}

@@ -1,7 +1,7 @@
 import { and, asc, eq, isNull } from 'drizzle-orm';
 import { z } from 'zod';
 
-import { copies, locations, sets, users } from '../db/schema';
+import { brands, copies, locations, sets, users } from '../db/schema';
 import {
   createdFields,
   diffFields,
@@ -279,4 +279,46 @@ export async function listCopiesForSet(ctx: DataContext, setId: string): Promise
       missingPieces: missing.get(r.copy.id) ?? 0,
     }),
   }));
+}
+
+export interface CopyContext {
+  copy: typeof copies.$inferSelect;
+  set: { id: string; name: string; setNumber: string | null; rbSetNum: string | null };
+  brand: { name: string; isLego: boolean };
+  /** 1-based position among the set's live copies, and how many there are. */
+  position: number;
+  total: number;
+}
+
+/** One visible copy with its set and brand, for pages that hang off a copy (missing pieces). */
+export async function getCopyContext(
+  ctx: DataContext,
+  copyId: string,
+): Promise<CopyContext | null> {
+  if (!isUuid(copyId)) return null;
+  const [row] = await ctx.db
+    .select({
+      copy: copies,
+      set: { id: sets.id, name: sets.name, setNumber: sets.setNumber, rbSetNum: sets.rbSetNum },
+      brand: { name: brands.name, isLego: brands.isLego },
+    })
+    .from(copies)
+    .innerJoin(sets, eq(sets.id, copies.setId))
+    .innerJoin(brands, eq(brands.id, sets.brandId))
+    .where(and(eq(copies.id, copyId), copyVisibilityCondition(ctx)));
+  if (!row) return null;
+  const siblings = await ctx.db
+    .select({ id: copies.id })
+    .from(copies)
+    .innerJoin(sets, eq(sets.id, copies.setId))
+    .where(and(eq(copies.setId, row.set.id), copyVisibilityCondition(ctx)))
+    .orderBy(asc(copies.createdAt), asc(copies.id));
+  const at = siblings.findIndex((s) => s.id === copyId);
+  return {
+    copy: redactCopy(row.copy, ctx.viewer),
+    set: row.set,
+    brand: row.brand,
+    position: at + 1,
+    total: siblings.length,
+  };
 }
