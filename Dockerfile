@@ -12,11 +12,13 @@ COPY . .
 RUN pnpm build
 
 FROM node:24-alpine AS runtime
+ARG APP_VERSION=dev
 WORKDIR /app
 ENV NODE_ENV=production \
     PORT=3000 \
     HOSTNAME=0.0.0.0 \
-    DATA_DIR=/data
+    DATA_DIR=/data \
+    APP_VERSION=$APP_VERSION
 COPY --from=build /app/.next/standalone ./
 COPY --from=build /app/.next/static ./.next/static
 RUN mkdir -p /data && chown -R node:node /data /app

@@ -1,0 +1,76 @@
+# Runs on the Proxmox Docker host (copy this directory there). Then:
+#   cp .env.example .env     # set TS_AUTHKEY and POSTGRES_PASSWORD
+#   docker compose up -d
+# The app is served over HTTPS at https://brick-bin.<tailnet>.ts.net. Watchtower pulls new images of
+# the app (only containers with the enable label) every 5 minutes; Postgres is never auto-updated.
+# Everything here is separate from the games stack: own containers, volumes and tailnet hostname.
+name: brick-bin
+
+services:
+  tailscale:
+    image: tailscale/tailscale:latest
+    container_name: brick-tailscale
+    hostname: brick-bin
+    environment:
+      TS_AUTHKEY: ${TS_AUTHKEY:?set TS_AUTHKEY in .env}
+      TS_STATE_DIR: /var/lib/tailscale
+      TS_SERVE_CONFIG: /config/serve.json
+      TS_USERSPACE: 'true'
+    volumes:
+      - ts-state:/var/lib/tailscale
+      - ./serve.json:/config/serve.json:ro
+    restart: unless-stopped
+
+  db:
+    image: postgres:17
+    container_name: brick-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: bricks
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: bricks
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U bricks -d bricks']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    image: ghcr.io/chimericdream/brick-bin:latest
+    container_name: brick-app
+    # Shares the tailscale container's network so `tailscale serve` can proxy to localhost:3000.
+    # `db` still resolves because that namespace is on the compose network.
+    network_mode: service:tailscale
+    depends_on:
+      tailscale:
+        condition: service_started
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://bricks:${POSTGRES_PASSWORD}@db:5432/bricks
+      TRASH_RETENTION_DAYS: ${TRASH_RETENTION_DAYS:-30}
+      INSTRUCTIONS_MAX_MB: ${INSTRUCTIONS_MAX_MB:-200}
+      # Leave false until Rebrickable has said fetching their downloads page is OK; admins paste it.
+      REBRICKABLE_PAGE_FETCH: ${REBRICKABLE_PAGE_FETCH:-false}
+      COOKIE_SECURE: 'true'
+    volumes:
+      # covers/, instructions/ and catalog/ (the extracted Rebrickable files, about 6 GB)
+      - app-data:/data
+    labels:
+      com.centurylinklabs.watchtower.enable: 'true'
+    restart: unless-stopped
+
+  watchtower:
+    image: nickfedor/watchtower:latest
+    container_name: brick-watchtower
+    command: --label-enable --interval 300 --cleanup
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+
+volumes:
+  ts-state:
+  db-data:
+  app-data:

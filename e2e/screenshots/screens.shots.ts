@@ -78,6 +78,10 @@ test('capture the main screens', async ({ browser, db }) => {
       await shot('/sets/new', 'add-set');
       await shot('/settings/places', 'settings-places');
       await shot('/settings/brands', 'settings-brands');
+      await shot('/missing', 'shopping-list');
+      await shot('/collection', 'collection');
+      await shot('/wishlist', 'wishlist');
+      await shot('/import', 'import');
       await context.close();
     }
   }
