@@ -1,7 +1,15 @@
 import { and, eq, inArray, isNotNull, lt, sql } from 'drizzle-orm';
 
 import type { Db } from '../db/client';
-import { auditLog, copies, locations, setInstructions, sets, users } from '../db/schema';
+import {
+  auditLog,
+  copies,
+  locations,
+  setInstructions,
+  sets,
+  users,
+  wishlistItems,
+} from '../db/schema';
 import { deletedFields, recordAudit, restoredFields, stampUpdate } from './audit';
 import type { DataContext } from './context';
 import { isUuid } from './ids';
@@ -16,7 +24,7 @@ import { assertNotRestricted, isAdmin } from './visibility';
  * and are the only ones who can delete permanently. Instructions and wishlist items join the
  * `TRASH_KINDS` list with their own tables (Phases 6 and 10).
  */
-export const TRASH_KINDS = ['set', 'copy', 'location', 'instruction'] as const;
+export const TRASH_KINDS = ['set', 'copy', 'location', 'instruction', 'wishlist_item'] as const;
 export type TrashKind = (typeof TRASH_KINDS)[number];
 
 export const isTrashKind = (v: unknown): v is TrashKind =>
@@ -28,6 +36,7 @@ const TABLES = {
   copy: copies,
   location: locations,
   instruction: setInstructions,
+  wishlist_item: wishlistItems,
 } as const;
 const table = (kind: TrashKind) => TABLES[kind] as typeof sets;
 
@@ -76,7 +85,7 @@ export async function listTrash(ctx: DataContext): Promise<TrashItem[]> {
       isAdmin(ctx) ? undefined : eq(t.deletedByUserId, ctx.viewer.userId),
     );
 
-  const [setRows, copyRows, locationRows, instructionRows] = await Promise.all([
+  const [setRows, copyRows, locationRows, instructionRows, wishRows] = await Promise.all([
     ctx.db
       .select({ id: sets.id, name: sets.name, setNumber: sets.setNumber, ...who(sets) })
       .from(sets)
@@ -114,6 +123,16 @@ export async function listTrash(ctx: DataContext): Promise<TrashItem[]> {
       .innerJoin(sets, eq(sets.id, setInstructions.setId))
       .leftJoin(users, eq(users.id, setInstructions.deletedByUserId))
       .where(mine(setInstructions as unknown as typeof sets)),
+    ctx.db
+      .select({
+        id: wishlistItems.id,
+        name: wishlistItems.title,
+        owner: users.name,
+        ...who(wishlistItems as unknown as typeof sets),
+      })
+      .from(wishlistItems)
+      .innerJoin(users, eq(users.id, wishlistItems.requestedByUserId))
+      .where(mine(wishlistItems as unknown as typeof sets)),
   ]);
 
   const item = (
@@ -147,6 +166,7 @@ export async function listTrash(ctx: DataContext): Promise<TrashItem[]> {
       ),
     ),
     ...locationRows.map((r) => item('location', r, r.name, 'Place')),
+    ...wishRows.map((r) => item('wishlist_item', r, r.name, `Wishlist · ${r.owner}`)),
     ...instructionRows.map((r) =>
       item(
         'instruction',
@@ -171,6 +191,8 @@ function labelFields(kind: TrashKind, row: Record<string, unknown>): Record<stri
       return { name: row.name, parentId: row.parentId };
     case 'instruction':
       return { label: row.label, setId: row.setId };
+    case 'wishlist_item':
+      return { title: row.title };
   }
 }
 
@@ -352,7 +374,8 @@ export async function purgeTrashed(
     });
     if (kind === 'instruction' && typeof r.filePath === 'string') candidates.push(r.filePath);
     const files = await unreferenced(tx, candidates);
-    if (kind === 'set' && typeof r.coverImage === 'string') files.push(r.coverImage);
+    if ((kind === 'set' || kind === 'wishlist_item') && typeof r.coverImage === 'string')
+      files.push(r.coverImage);
     return { ok: true, files };
   });
 }
@@ -395,7 +418,8 @@ export async function purgeExpiredTrash(
       for (const row of rows) {
         const r = row as unknown as Record<string, unknown>;
         purged++;
-        if (kind === 'set' && typeof r.coverImage === 'string') files.push(r.coverImage);
+        if ((kind === 'set' || kind === 'wishlist_item') && typeof r.coverImage === 'string')
+          files.push(r.coverImage);
         if (kind === 'instruction' && typeof r.filePath === 'string') candidates.push(r.filePath);
         await tx.insert(auditLog).values({
           householdId: row.householdId,

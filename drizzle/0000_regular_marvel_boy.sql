@@ -334,6 +334,36 @@ CREATE TABLE "users" (
 	CONSTRAINT "users_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint
+CREATE TABLE "wishlist_items" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"household_id" uuid NOT NULL,
+	"requested_by_user_id" uuid NOT NULL,
+	"title" text NOT NULL,
+	"brand_id" uuid,
+	"set_number" text,
+	"rb_set_num" text,
+	"cover_image" text,
+	"url" text,
+	"price_cents" integer,
+	"notes" text,
+	"deleted_at" timestamp with time zone,
+	"deleted_by_user_id" uuid,
+	"created_by_user_id" uuid,
+	"updated_by_user_id" uuid,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "wishlist_purchases" (
+	"household_id" uuid NOT NULL,
+	"item_id" uuid NOT NULL,
+	"user_id" uuid NOT NULL,
+	"purchased_on" date NOT NULL,
+	"note" text,
+	"dismissed_at" timestamp with time zone,
+	CONSTRAINT "wishlist_purchases_item_id_user_id_pk" PRIMARY KEY("item_id","user_id")
+);
+--> statement-breakpoint
 ALTER TABLE "audit_log" ADD CONSTRAINT "audit_log_household_id_households_id_fk" FOREIGN KEY ("household_id") REFERENCES "public"."households"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "audit_log" ADD CONSTRAINT "audit_log_actor_user_id_users_id_fk" FOREIGN KEY ("actor_user_id") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "brands" ADD CONSTRAINT "brands_household_id_households_id_fk" FOREIGN KEY ("household_id") REFERENCES "public"."households"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
@@ -380,6 +410,15 @@ ALTER TABLE "themes" ADD CONSTRAINT "themes_brand_id_brands_id_fk" FOREIGN KEY (
 ALTER TABLE "themes" ADD CONSTRAINT "themes_created_by_user_id_users_id_fk" FOREIGN KEY ("created_by_user_id") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "themes" ADD CONSTRAINT "themes_updated_by_user_id_users_id_fk" FOREIGN KEY ("updated_by_user_id") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "users" ADD CONSTRAINT "users_household_id_households_id_fk" FOREIGN KEY ("household_id") REFERENCES "public"."households"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "wishlist_items" ADD CONSTRAINT "wishlist_items_household_id_households_id_fk" FOREIGN KEY ("household_id") REFERENCES "public"."households"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "wishlist_items" ADD CONSTRAINT "wishlist_items_requested_by_user_id_users_id_fk" FOREIGN KEY ("requested_by_user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "wishlist_items" ADD CONSTRAINT "wishlist_items_brand_id_brands_id_fk" FOREIGN KEY ("brand_id") REFERENCES "public"."brands"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "wishlist_items" ADD CONSTRAINT "wishlist_items_deleted_by_user_id_users_id_fk" FOREIGN KEY ("deleted_by_user_id") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "wishlist_items" ADD CONSTRAINT "wishlist_items_created_by_user_id_users_id_fk" FOREIGN KEY ("created_by_user_id") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "wishlist_items" ADD CONSTRAINT "wishlist_items_updated_by_user_id_users_id_fk" FOREIGN KEY ("updated_by_user_id") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "wishlist_purchases" ADD CONSTRAINT "wishlist_purchases_household_id_households_id_fk" FOREIGN KEY ("household_id") REFERENCES "public"."households"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "wishlist_purchases" ADD CONSTRAINT "wishlist_purchases_item_id_wishlist_items_id_fk" FOREIGN KEY ("item_id") REFERENCES "public"."wishlist_items"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "wishlist_purchases" ADD CONSTRAINT "wishlist_purchases_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 CREATE INDEX "audit_entity_idx" ON "audit_log" USING btree ("household_id","entity_type","entity_id","at");--> statement-breakpoint
 CREATE INDEX "audit_household_at_idx" ON "audit_log" USING btree ("household_id","at");--> statement-breakpoint
 CREATE INDEX "brands_household_idx" ON "brands" USING btree ("household_id");--> statement-breakpoint
@@ -413,4 +452,7 @@ CREATE UNIQUE INDEX "sets_number_unique" ON "sets" USING btree ("household_id","
 CREATE INDEX "tags_household_idx" ON "tags" USING btree ("household_id");--> statement-breakpoint
 CREATE UNIQUE INDEX "tags_name_unique" ON "tags" USING btree ("household_id",lower("name"));--> statement-breakpoint
 CREATE INDEX "themes_household_idx" ON "themes" USING btree ("household_id");--> statement-breakpoint
-CREATE INDEX "users_household_idx" ON "users" USING btree ("household_id");
+CREATE INDEX "users_household_idx" ON "users" USING btree ("household_id");--> statement-breakpoint
+CREATE INDEX "wishlist_household_idx" ON "wishlist_items" USING btree ("household_id");--> statement-breakpoint
+CREATE INDEX "wishlist_requester_idx" ON "wishlist_items" USING btree ("requested_by_user_id");--> statement-breakpoint
+CREATE INDEX "wishlist_purchases_user_idx" ON "wishlist_purchases" USING btree ("user_id");

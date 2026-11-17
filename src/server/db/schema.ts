@@ -629,3 +629,68 @@ export const copyMissingItems = pgTable(
       .where(sql`${t.resolvedAt} is null and ${t.kind} <> 'other'`),
   ],
 );
+
+// ---------------------------------------------------------------------------
+// Wishlist
+// ---------------------------------------------------------------------------
+
+/** One person's wish. `requestedByUserId` is whose list it is on. */
+export const wishlistItems = pgTable(
+  'wishlist_items',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    householdId: uuid('household_id')
+      .notNull()
+      .references(() => households.id, { onDelete: 'cascade' }),
+    requestedByUserId: uuid('requested_by_user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    title: text('title').notNull(),
+    brandId: uuid('brand_id').references(() => brands.id, { onDelete: 'set null' }),
+    setNumber: text('set_number'),
+    rbSetNum: text('rb_set_num'),
+    /** Relative path under DATA_DIR. */
+    coverImage: text('cover_image'),
+    url: text('url'),
+    /** The price seen. Hidden from, and never entered by, kid profiles. */
+    priceCents: integer('price_cents'),
+    /** For gift-givers. */
+    notes: text('notes'),
+    ...trashable(),
+    ...authorship(),
+    ...stamps(),
+  },
+  (t) => [
+    index('wishlist_household_idx').on(t.householdId),
+    index('wishlist_requester_idx').on(t.requestedByUserId),
+  ],
+);
+
+/**
+ * "I bought this": a mark only its maker can ever see. Every read filters to the viewer's own rows
+ * in SQL, including for admins. Writing a mark creates no audit entry and no authorship stamp, and
+ * never touches the item, so neither the activity log nor "last edited" can reveal it. There is
+ * deliberately no `created_by` column and no timestamps on the item side.
+ */
+export const wishlistPurchases = pgTable(
+  'wishlist_purchases',
+  {
+    householdId: uuid('household_id')
+      .notNull()
+      .references(() => households.id, { onDelete: 'cascade' }),
+    itemId: uuid('item_id')
+      .notNull()
+      .references(() => wishlistItems.id, { onDelete: 'cascade' }),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    purchasedOn: date('purchased_on', { mode: 'string' }).notNull(),
+    note: text('note'),
+    /** The marker has seen that the item was removed from the list and dismissed the notice. */
+    dismissedAt: timestamp('dismissed_at', { withTimezone: true }),
+  },
+  (t) => [
+    primaryKey({ columns: [t.itemId, t.userId] }),
+    index('wishlist_purchases_user_idx').on(t.userId),
+  ],
+);
