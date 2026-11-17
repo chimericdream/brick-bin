@@ -1,0 +1,125 @@
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin: 20px 0;
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  & > div {
+    padding: 16px;
+    border: 1px solid var(--app-border);
+    border-radius: var(--app-radius-card);
+    background: var(--app-surface);
+  }
+
+  & dt {
+    color: var(--app-muted);
+    font-size: 14px;
+  }
+
+  & dd {
+    margin: 2px 0 4px;
+    font-family: var(--app-display);
+    font-size: clamp(26px, 3vw, 36px);
+    font-weight: 700;
+
+    &[data-sign='up'] {
+      color: var(--app-ok-ink);
+    }
+
+    &[data-sign='down'] {
+      color: var(--app-danger);
+    }
+  }
+
+  & span {
+    color: var(--app-muted);
+    font-size: 13px;
+  }
+}
+
+.cols {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+
+  @media (max-width: $mantine-breakpoint-md) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.panel {
+  margin-top: 14px;
+  padding: 16px;
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius-card);
+  background: var(--app-surface);
+
+  & h2 {
+    margin: 0 0 8px;
+    font-size: 20px;
+  }
+
+  & p {
+    margin: 0;
+  }
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+
+  & th,
+  & td {
+    padding: 8px 6px;
+    border-bottom: 1px solid var(--app-rule);
+    text-align: right;
+  }
+
+  & th:first-child {
+    text-align: left;
+    font-weight: 600;
+  }
+
+  & thead th {
+    color: var(--app-muted);
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  & tr:last-child > * {
+    border-bottom: 0;
+  }
+}
+
+.plain {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  & li {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 0;
+
+    & + li {
+      border-top: 1px solid var(--app-rule);
+    }
+  }
+
+  & span {
+    color: var(--app-muted);
+  }
+}
+
+.empty {
+  padding: 36px 16px;
+  border: 1px dashed var(--app-control);
+  border-radius: var(--app-radius-card);
+  text-align: center;
+}
