@@ -1,2 +1,4 @@
-// Legacy path, still used by the Dockerfile HEALTHCHECK and e2e. Same response as `/healthz`.
-export { GET, dynamic } from '../../healthz/route';
+export { GET } from '../../healthz/route';
+
+// Legacy alias of `/healthz`. Route config can't be re-exported, so it is declared here too.
+export const dynamic = 'force-dynamic';
