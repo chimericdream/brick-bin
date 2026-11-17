@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   Alert,
   Button,
@@ -173,30 +173,39 @@ function InventoryTab({
   const [qty, setQty] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(false);
   const debounced = useDebounced(q);
-  const seq = useRef(0);
-
-  const load = useCallback(
-    async (offset: number) => {
-      const mine = ++seq.current;
-      setLoading(true);
+  /** One page of the inventory for the current filters. */
+  const fetchPage = useCallback(
+    async (offset: number): Promise<InvResponse> => {
       const p = new URLSearchParams({ offset: String(offset) });
       if (debounced) p.set('q', debounced);
       if (color) p.set('color', color);
       if (cat) p.set('cat', cat);
       if (spares) p.set('spares', '1');
       const res = await fetch(`/api/copies/${copyId}/inventory?${p}`);
-      const json = (await res.json()) as InvResponse;
-      if (mine !== seq.current) return;
-      setData(json);
-      setParts((prev) => (offset === 0 ? (json.parts ?? []) : [...prev, ...(json.parts ?? [])]));
-      setLoading(false);
+      return (await res.json()) as InvResponse;
     },
     [copyId, debounced, color, cat, spares],
   );
 
+  // A new set of filters replaces the grid. A slow answer for old filters is dropped.
   useEffect(() => {
-    void load(0);
-  }, [load]);
+    let live = true;
+    fetchPage(0).then((json) => {
+      if (!live) return;
+      setData(json);
+      setParts(json.parts ?? []);
+    });
+    return () => {
+      live = false;
+    };
+  }, [fetchPage]);
+
+  async function showMore() {
+    setLoading(true);
+    const json = await fetchPage(parts.length);
+    setParts((prev) => [...prev, ...(json.parts ?? [])]);
+    setLoading(false);
+  }
 
   if (data && data.version === null) {
     return (
@@ -327,7 +336,7 @@ function InventoryTab({
         })}
       </ul>
       {data && data.total !== undefined && parts.length < data.total && (
-        <Button variant="default" loading={loading} onClick={() => load(parts.length)}>
+        <Button variant="default" loading={loading} onClick={showMore}>
           Show more
         </Button>
       )}
@@ -394,7 +403,6 @@ function CatalogTab({ add, busy, linked }: { add: AddFn; busy: boolean; linked: 
   useEffect(() => {
     let live = true;
     if (debounced.trim().length < 2) {
-      queueMicrotask(() => live && setHits([]));
       return () => {
         live = false;
       };
@@ -433,6 +441,7 @@ function CatalogTab({ add, busy, linked }: { add: AddFn; busy: boolean; linked: 
         onChange={(e) => {
           setQ(e.currentTarget.value);
           setChosen(null);
+          if (e.currentTarget.value.trim().length < 2) setHits([]);
         }}
       />
       {!chosen && hits.length > 0 && (

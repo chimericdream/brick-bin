@@ -202,7 +202,16 @@ export async function seedCatalog(): Promise<void> {
       ('10294-1', 'Titanic', 2021, 721, 9092, ${MOCK_URL + '/media/sets/10294-1.jpg'}),
       ('75192-1', 'Millennium Falcon', 2017, 2, 7541, ${MOCK_URL + '/media/sets/75192-1.jpg'}),
       ('75257-1', 'Millennium Falcon', 2019, 1, 1351, ${MOCK_URL + '/media/sets/75257-1.jpg'})`;
-  await sql`insert into rb_colors (id, name, rgb, is_trans) values (0, 'Black', '05131D', false), (15, 'White', 'FFFFFF', false), (71, 'Light Bluish Gray', 'A0A5A9', false)`;
+  await sql`insert into rb_colors (id, name, rgb, is_trans) values (0, 'Black', '05131D', false), (4, 'Red', 'C91A09', false), (15, 'White', 'FFFFFF', false), (71, 'Light Bluish Gray', 'A0A5A9', false)`;
+  await sql`insert into rb_part_categories (id, name) values (11, 'Bricks'), (14, 'Plates')`;
+  await sql`insert into rb_parts (part_num, name, part_cat_id) values ('3001', 'Brick 2 x 4', 11), ('3023', 'Plate 1 x 2', 14), ('3020', 'Plate 2 x 4', 14), ('4081', 'Plate, Modified 1 x 1 with Clip', 14)`;
+  await sql`insert into rb_inventories (id, version, set_num) values (1, 1, '10294-1'), (2, 1, '75192-1')`;
+  await sql`
+    insert into rb_inventory_parts (inventory_id, part_num, color_id, quantity, is_spare) values
+      (1, '3001', 0, 4, false), (1, '3023', 4, 2, false), (1, '3023', 4, 1, true), (1, '3020', 15, 6, false), (2, '3001', 4, 9, false)`;
+  await sql`insert into rb_minifigs (fig_num, name) values ('fig-000001', 'Captain'), ('fig-000002', 'Deckhand')`;
+  await sql`insert into rb_inventory_minifigs (inventory_id, fig_num, quantity) values (1, 'fig-000001', 1), (1, 'fig-000002', 3)`;
+  await sql`insert into rb_elements (element_id, part_num, color_id) values ('300126', '3001', 0), ('300121', '3001', 4)`;
 }
 
 /** Puts a real PNG where the part-image route looks, and records it in the index. */
@@ -215,4 +224,17 @@ export async function seedPartImage(colorId: number, partNum: string): Promise<v
 
 export function coverPath(rel: string): string {
   return path.join(DATA_DIR, rel);
+}
+
+/** Links a set to a catalog set (as picking it from the lookup would). */
+export async function linkSet(setId: string, rbSetNum: string): Promise<void> {
+  await sql`update sets set rb_set_num = ${rbSetNum} where id = ${setId}`;
+}
+
+/** The first copy id of a set. */
+export async function firstCopyId(setId: string): Promise<string> {
+  const [row] =
+    await sql`select id from copies where set_id = ${setId} order by created_at limit 1`;
+  if (!row) throw new Error('The set has no copy');
+  return row.id as string;
 }
