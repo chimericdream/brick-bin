@@ -14,6 +14,7 @@ import {
 import { BUILD_STATES, completenessOf, type BuildState } from './completeness';
 import type { DataContext } from './context';
 import { isUuid } from './ids';
+import { openMissingByCopy } from './missing';
 import {
   assertCanWrite,
   copyVisibilityCondition,
@@ -263,16 +264,19 @@ export async function listCopiesForSet(ctx: DataContext, setId: string): Promise
     }
     return parts.length ? parts.join(' › ') : null;
   };
+  const missing = await openMissingByCopy(
+    ctx,
+    rows.map((r) => r.copy.id),
+  );
   return rows.map((r, i) => ({
     copy: redactCopy(r.copy, ctx.viewer),
     ownerName: r.ownerName,
     locationPath: pathOf(r.copy.locationId),
     position: i + 1,
-    // Missing-item rows arrive in Phase 7; until then nothing is open.
     completeness: completenessOf({
       buildState: r.copy.buildState,
       piecesCheckedOn: r.copy.piecesCheckedOn,
-      missingPieces: 0,
+      missingPieces: missing.get(r.copy.id) ?? 0,
     }),
   }));
 }

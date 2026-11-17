@@ -1,5 +1,5 @@
 {
-  "id": "e258fce4-fc1e-4a89-b977-3ab3811e133a",
+  "id": "6d2a0a82-1704-46aa-9096-0c76d5745761",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -774,6 +774,274 @@
         "copies_updated_by_user_id_users_id_fk": {
           "name": "copies_updated_by_user_id_users_id_fk",
           "tableFrom": "copies",
+          "tableTo": "users",
+          "columnsFrom": ["updated_by_user_id"],
+          "columnsTo": ["id"],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.copy_missing_items": {
+      "name": "copy_missing_items",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "household_id": {
+          "name": "household_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "copy_id": {
+          "name": "copy_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "kind": {
+          "name": "kind",
+          "type": "missing_kind",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "rb_part_num": {
+          "name": "rb_part_num",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "rb_color_id": {
+          "name": "rb_color_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "rb_fig_num": {
+          "name": "rb_fig_num",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "quantity": {
+          "name": "quantity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "snapshot_name": {
+          "name": "snapshot_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "snapshot_color_name": {
+          "name": "snapshot_color_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "snapshot_image": {
+          "name": "snapshot_image",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "from_inventory": {
+          "name": "from_inventory",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "resolved_at": {
+          "name": "resolved_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "resolved_by_user_id": {
+          "name": "resolved_by_user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "resolution": {
+          "name": "resolution",
+          "type": "missing_resolution",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "notes": {
+          "name": "notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_by_user_id": {
+          "name": "created_by_user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_by_user_id": {
+          "name": "updated_by_user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "copy_missing_copy_idx": {
+          "name": "copy_missing_copy_idx",
+          "columns": [
+            {
+              "expression": "copy_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "copy_missing_part_idx": {
+          "name": "copy_missing_part_idx",
+          "columns": [
+            {
+              "expression": "rb_part_num",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "rb_color_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "copy_missing_open_unique": {
+          "name": "copy_missing_open_unique",
+          "columns": [
+            {
+              "expression": "copy_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "kind",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "coalesce(\"rb_part_num\", '')",
+              "asc": true,
+              "isExpression": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "coalesce(\"rb_color_id\", -999999)",
+              "asc": true,
+              "isExpression": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "coalesce(\"rb_fig_num\", '')",
+              "asc": true,
+              "isExpression": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "\"copy_missing_items\".\"resolved_at\" is null and \"copy_missing_items\".\"kind\" <> 'other'",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "copy_missing_items_household_id_households_id_fk": {
+          "name": "copy_missing_items_household_id_households_id_fk",
+          "tableFrom": "copy_missing_items",
+          "tableTo": "households",
+          "columnsFrom": ["household_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "copy_missing_items_copy_id_copies_id_fk": {
+          "name": "copy_missing_items_copy_id_copies_id_fk",
+          "tableFrom": "copy_missing_items",
+          "tableTo": "copies",
+          "columnsFrom": ["copy_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "copy_missing_items_resolved_by_user_id_users_id_fk": {
+          "name": "copy_missing_items_resolved_by_user_id_users_id_fk",
+          "tableFrom": "copy_missing_items",
+          "tableTo": "users",
+          "columnsFrom": ["resolved_by_user_id"],
+          "columnsTo": ["id"],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "copy_missing_items_created_by_user_id_users_id_fk": {
+          "name": "copy_missing_items_created_by_user_id_users_id_fk",
+          "tableFrom": "copy_missing_items",
+          "tableTo": "users",
+          "columnsFrom": ["created_by_user_id"],
+          "columnsTo": ["id"],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "copy_missing_items_updated_by_user_id_users_id_fk": {
+          "name": "copy_missing_items_updated_by_user_id_users_id_fk",
+          "tableFrom": "copy_missing_items",
           "tableTo": "users",
           "columnsFrom": ["updated_by_user_id"],
           "columnsTo": ["id"],
@@ -2683,6 +2951,16 @@
       "name": "instruction_kind",
       "schema": "public",
       "values": ["file", "link"]
+    },
+    "public.missing_kind": {
+      "name": "missing_kind",
+      "schema": "public",
+      "values": ["part", "minifig", "other"]
+    },
+    "public.missing_resolution": {
+      "name": "missing_resolution",
+      "schema": "public",
+      "values": ["found", "bought", "substituted"]
     },
     "public.user_role": {
       "name": "user_role",

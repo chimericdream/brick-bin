@@ -569,3 +569,63 @@ export const setInstructions = pgTable(
       .where(sql`${t.deletedAt} is null and ${t.sha256} is not null`),
   ],
 );
+
+// ---------------------------------------------------------------------------
+// Missing pieces
+// ---------------------------------------------------------------------------
+
+export const missingKind = pgEnum('missing_kind', ['part', 'minifig', 'other']);
+export const missingResolution = pgEnum('missing_resolution', ['found', 'bought', 'substituted']);
+
+/**
+ * A piece a copy is missing. Parts and minifigs are real catalog items (part + colour + quantity),
+ * so they can be grouped into a shopping list; `other` is free text for things the catalog does not
+ * have. Names are copied in when the row is made, so it still reads well if Rebrickable renames or
+ * drops the part. A row is open while `resolved_at` is null.
+ */
+export const copyMissingItems = pgTable(
+  'copy_missing_items',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    householdId: uuid('household_id')
+      .notNull()
+      .references(() => households.id, { onDelete: 'cascade' }),
+    copyId: uuid('copy_id')
+      .notNull()
+      .references(() => copies.id, { onDelete: 'cascade' }),
+    kind: missingKind('kind').notNull(),
+    rbPartNum: text('rb_part_num'),
+    rbColorId: integer('rb_color_id'),
+    rbFigNum: text('rb_fig_num'),
+    quantity: integer('quantity').notNull(),
+    snapshotName: text('snapshot_name'),
+    snapshotColorName: text('snapshot_color_name'),
+    snapshotImage: text('snapshot_image'),
+    /** For `other`: a non-catalog piece, a sticker sheet, a printed tile. */
+    description: text('description'),
+    /** True when picked from the set's own inventory; false when picked from the whole catalog. */
+    fromInventory: boolean('from_inventory').notNull().default(false),
+    resolvedAt: timestamp('resolved_at', { withTimezone: true }),
+    resolvedByUserId: uuid('resolved_by_user_id').references(() => users.id, {
+      onDelete: 'set null',
+    }),
+    resolution: missingResolution('resolution'),
+    notes: text('notes'),
+    ...authorship(),
+    ...stamps(),
+  },
+  (t) => [
+    index('copy_missing_copy_idx').on(t.copyId),
+    index('copy_missing_part_idx').on(t.rbPartNum, t.rbColorId),
+    // Adding the same part and colour again raises the quantity instead of making a second row.
+    uniqueIndex('copy_missing_open_unique')
+      .on(
+        t.copyId,
+        t.kind,
+        sql`coalesce(${t.rbPartNum}, '')`,
+        sql`coalesce(${t.rbColorId}, -999999)`,
+        sql`coalesce(${t.rbFigNum}, '')`,
+      )
+      .where(sql`${t.resolvedAt} is null and ${t.kind} <> 'other'`),
+  ],
+);

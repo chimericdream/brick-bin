@@ -4,7 +4,15 @@ import path from 'node:path';
 import { and, asc, eq, ilike, inArray, or, sql } from 'drizzle-orm';
 
 import type { Db } from '../db/client';
-import { catalogPartImages, rbSets, rbThemes } from '../db/schema';
+import {
+  catalogPartImages,
+  rbColors,
+  rbMinifigs,
+  rbPartCategories,
+  rbParts,
+  rbSets,
+  rbThemes,
+} from '../db/schema';
 import { catalogPaths } from './config';
 
 /**
@@ -145,4 +153,58 @@ export async function resolvePartImage(
   } catch {
     return null;
   }
+}
+
+// ---------------------------------------------------------------------------
+// Parts, colours and minifigs (for missing pieces)
+// ---------------------------------------------------------------------------
+
+export interface CatalogPart {
+  partNum: string;
+  name: string;
+  categoryId: number | null;
+  categoryName: string | null;
+}
+
+export interface CatalogColor {
+  id: number;
+  name: string;
+  rgb: string;
+  isTrans: boolean;
+}
+
+export interface CatalogFig {
+  figNum: string;
+  name: string;
+  imgUrl: string | null;
+}
+
+export async function getCatalogPart(db: Db, partNum: string): Promise<CatalogPart | null> {
+  const [row] = await db
+    .select({
+      partNum: rbParts.partNum,
+      name: rbParts.name,
+      categoryId: rbParts.partCatId,
+      categoryName: rbPartCategories.name,
+    })
+    .from(rbParts)
+    .leftJoin(rbPartCategories, eq(rbPartCategories.id, rbParts.partCatId))
+    .where(eq(rbParts.partNum, partNum));
+  return row ?? null;
+}
+
+export async function getCatalogColor(db: Db, id: number): Promise<CatalogColor | null> {
+  const [row] = await db
+    .select({ id: rbColors.id, name: rbColors.name, rgb: rbColors.rgb, isTrans: rbColors.isTrans })
+    .from(rbColors)
+    .where(eq(rbColors.id, id));
+  return row ?? null;
+}
+
+export async function getCatalogFig(db: Db, figNum: string): Promise<CatalogFig | null> {
+  const [row] = await db
+    .select({ figNum: rbMinifigs.figNum, name: rbMinifigs.name, imgUrl: rbMinifigs.imgUrl })
+    .from(rbMinifigs)
+    .where(eq(rbMinifigs.figNum, figNum));
+  return row ?? null;
 }

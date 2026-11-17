@@ -3,6 +3,8 @@ CREATE TYPE "public"."build_state" AS ENUM('sealed', 'opened', 'in_progress', 'b
 CREATE TYPE "public"."catalog_file_kind" AS ENUM('csv_archive', 'ldraw_zip', 'schema_svg', 'downloads_page');--> statement-breakpoint
 CREATE TYPE "public"."catalog_run_status" AS ENUM('running', 'succeeded', 'failed');--> statement-breakpoint
 CREATE TYPE "public"."instruction_kind" AS ENUM('file', 'link');--> statement-breakpoint
+CREATE TYPE "public"."missing_kind" AS ENUM('part', 'minifig', 'other');--> statement-breakpoint
+CREATE TYPE "public"."missing_resolution" AS ENUM('found', 'bought', 'substituted');--> statement-breakpoint
 CREATE TYPE "public"."user_role" AS ENUM('admin', 'member', 'restricted');--> statement-breakpoint
 CREATE TABLE "audit_log" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
@@ -83,6 +85,30 @@ CREATE TABLE "copies" (
 	"notes" text,
 	"deleted_at" timestamp with time zone,
 	"deleted_by_user_id" uuid,
+	"created_by_user_id" uuid,
+	"updated_by_user_id" uuid,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "copy_missing_items" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"household_id" uuid NOT NULL,
+	"copy_id" uuid NOT NULL,
+	"kind" "missing_kind" NOT NULL,
+	"rb_part_num" text,
+	"rb_color_id" integer,
+	"rb_fig_num" text,
+	"quantity" integer NOT NULL,
+	"snapshot_name" text,
+	"snapshot_color_name" text,
+	"snapshot_image" text,
+	"description" text,
+	"from_inventory" boolean DEFAULT false NOT NULL,
+	"resolved_at" timestamp with time zone,
+	"resolved_by_user_id" uuid,
+	"resolution" "missing_resolution",
+	"notes" text,
 	"created_by_user_id" uuid,
 	"updated_by_user_id" uuid,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
@@ -321,6 +347,11 @@ ALTER TABLE "copies" ADD CONSTRAINT "copies_location_id_locations_id_fk" FOREIGN
 ALTER TABLE "copies" ADD CONSTRAINT "copies_deleted_by_user_id_users_id_fk" FOREIGN KEY ("deleted_by_user_id") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "copies" ADD CONSTRAINT "copies_created_by_user_id_users_id_fk" FOREIGN KEY ("created_by_user_id") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "copies" ADD CONSTRAINT "copies_updated_by_user_id_users_id_fk" FOREIGN KEY ("updated_by_user_id") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "copy_missing_items" ADD CONSTRAINT "copy_missing_items_household_id_households_id_fk" FOREIGN KEY ("household_id") REFERENCES "public"."households"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "copy_missing_items" ADD CONSTRAINT "copy_missing_items_copy_id_copies_id_fk" FOREIGN KEY ("copy_id") REFERENCES "public"."copies"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "copy_missing_items" ADD CONSTRAINT "copy_missing_items_resolved_by_user_id_users_id_fk" FOREIGN KEY ("resolved_by_user_id") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "copy_missing_items" ADD CONSTRAINT "copy_missing_items_created_by_user_id_users_id_fk" FOREIGN KEY ("created_by_user_id") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "copy_missing_items" ADD CONSTRAINT "copy_missing_items_updated_by_user_id_users_id_fk" FOREIGN KEY ("updated_by_user_id") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "locations" ADD CONSTRAINT "locations_household_id_households_id_fk" FOREIGN KEY ("household_id") REFERENCES "public"."households"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "locations" ADD CONSTRAINT "locations_parent_id_locations_id_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."locations"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "locations" ADD CONSTRAINT "locations_deleted_by_user_id_users_id_fk" FOREIGN KEY ("deleted_by_user_id") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
@@ -357,6 +388,9 @@ CREATE UNIQUE INDEX "catalog_runs_one_running" ON "catalog_runs" USING btree ("s
 CREATE INDEX "copies_household_idx" ON "copies" USING btree ("household_id");--> statement-breakpoint
 CREATE INDEX "copies_set_idx" ON "copies" USING btree ("set_id");--> statement-breakpoint
 CREATE INDEX "copies_location_idx" ON "copies" USING btree ("location_id");--> statement-breakpoint
+CREATE INDEX "copy_missing_copy_idx" ON "copy_missing_items" USING btree ("copy_id");--> statement-breakpoint
+CREATE INDEX "copy_missing_part_idx" ON "copy_missing_items" USING btree ("rb_part_num","rb_color_id");--> statement-breakpoint
+CREATE UNIQUE INDEX "copy_missing_open_unique" ON "copy_missing_items" USING btree ("copy_id","kind",coalesce("rb_part_num", ''),coalesce("rb_color_id", -999999),coalesce("rb_fig_num", '')) WHERE "copy_missing_items"."resolved_at" is null and "copy_missing_items"."kind" <> 'other';--> statement-breakpoint
 CREATE INDEX "locations_household_idx" ON "locations" USING btree ("household_id");--> statement-breakpoint
 CREATE INDEX "rb_elements_part_color_idx" ON "rb_elements" USING btree ("part_num","color_id");--> statement-breakpoint
 CREATE INDEX "rb_inventories_set_idx" ON "rb_inventories" USING btree ("set_num");--> statement-breakpoint

@@ -9,15 +9,14 @@ import {
   type CompletenessFilter,
   type LibraryFilters,
 } from './library-filters';
+import { openMissingByCopy } from './missing';
 import { listLocations } from './places';
 import { listThemes } from './themes';
 import { copyVisibilityCondition, isRestricted, setVisibilityCondition } from './visibility';
 
-/**
- * Open missing pieces on a copy. Zero until the missing-item rows arrive (Phase 7), which replace
- * this one fragment; every completeness rule below reads it.
- */
-const missingCount = sql`0`;
+/** Open missing pieces on a copy: the sum of the quantities of its unresolved rows. */
+const missingCount = sql`(select coalesce(sum(m.quantity), 0) from copy_missing_items m
+  where m.copy_id = ${copies.id} and m.resolved_at is null)`;
 
 const notSealed = sql`${copies.buildState} <> 'sealed'`;
 
@@ -267,6 +266,10 @@ export async function listLibrary(ctx: DataContext, f: LibraryFilters): Promise<
         .where(and(copyVisibilityCondition(ctx), inArray(copies.setId, ids)))
         .orderBy(asc(copies.createdAt), asc(copies.id))
     : [];
+  const missing = await openMissingByCopy(
+    ctx,
+    copyRows.map((c) => c.id),
+  );
   const bySet = new Map<string, TileCopy[]>();
   for (const c of copyRows) {
     bySet.set(c.setId, [
@@ -277,7 +280,7 @@ export async function listLibrary(ctx: DataContext, f: LibraryFilters): Promise<
         completeness: completenessOf({
           buildState: c.buildState,
           piecesCheckedOn: c.piecesCheckedOn,
-          missingPieces: 0, // Phase 7 supplies open missing-item counts
+          missingPieces: missing.get(c.id) ?? 0,
         }),
       },
     ]);
