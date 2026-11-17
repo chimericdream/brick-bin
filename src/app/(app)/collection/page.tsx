@@ -64,16 +64,16 @@ export default async function CollectionPage() {
         <div>
           <dt>Paid</dt>
           <dd>{formatMoney(c.paidCents)}</dd>
-          <span>
+          <dd className={classes.note}>
             {c.copiesWithPrice} of {c.copies} copies have a price
-          </span>
+          </dd>
         </div>
         <div>
           <dt>Estimated value</dt>
           <dd>{formatMoney(c.estimatedCents)}</dd>
-          <span>
+          <dd className={classes.note}>
             {c.copiesWithEstimate} of {c.copies} copies have an estimate
-          </span>
+          </dd>
         </div>
         <div>
           <dt>Difference</dt>
@@ -81,7 +81,7 @@ export default async function CollectionPage() {
             {diff > 0 ? '+' : diff < 0 ? '−' : ''}
             {formatMoney(Math.abs(diff))}
           </dd>
-          <span>Over copies that have both numbers</span>
+          <dd className={classes.note}>Over copies that have both numbers</dd>
         </div>
       </dl>
 

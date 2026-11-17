@@ -64,6 +64,8 @@ kid library leaks nothing through counts, tags, themes or brands; 03 admins see 
 hidden. Phase 11 adds: replaying captured server-action requests as the kid, every route and API
 response checked for hidden data and purchase marks, for admin, member, requester and kid.
 
+**VIS-04..09** (written, Phase 11): 04 no page a kid can open reveals a hidden set (HTML scans across filters, facets, search, sorts), 05 every page and API that would expose one answers like an unknown one (404/403), 06 catalog search never names wishers to a kid, 07 replayed write requests change nothing, 08 another household is invisible on every page and API, 09 every route needs a session. **A11Y-01/02** (axe, wcag2a/aa, light and dark, admin and kid).
+
 **WISH** (written, Phase 10): 01 add by hand; 02 catalog prefill and one cover download; 03 "on someone's wishlist" badge; 04 owner-or-admin edit and remove, trash round trip; 05 purchase marks private across requester, kid, activity and trash pages, no audit row; 06 removed-from-list notice for the buyer only; 07 "We got it" (set, copy, cover, marks deleted, hide from kids); 08 kid own-list only, no prices; 09 cover route visibility; 10 empty list.
 
 **ACT, TRASH, MISS, SHOP, INS, VAL, IMP, CAT**: written with their phases. The wishlist

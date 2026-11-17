@@ -172,6 +172,9 @@ export const cssVariablesResolver: CSSVariablesResolver = () => ({
     '--app-danger-ink': '#8a1c0f',
   },
   dark: {
+    // Mantine derives the contrast colour from the light shade; the dark fill is lighter, so text on it is dark.
+    '--mantine-primary-color-contrast': '#0e1319',
+    '--mantine-color-bin-contrast': '#0e1319',
     '--mantine-color-body': '#0e1319',
     '--mantine-color-text': '#e8edf3',
     '--mantine-color-dimmed': '#a3b0be',

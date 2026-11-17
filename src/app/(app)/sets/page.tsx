@@ -25,6 +25,31 @@ import { SetTile } from './SetTile';
 
 export const dynamic = 'force-dynamic';
 
+interface TreeOption {
+  id: string;
+  name: string;
+  parentId: string | null;
+}
+
+/**
+ * For a kid profile, keeps only the nodes that hold a visible set, and their parents. Names of
+ * anything else (including ones passed in the URL by id) are never sent to the page.
+ */
+function visibleTree(nodes: TreeOption[], counts: Record<string, number>, restricted: boolean) {
+  if (!restricted) return nodes;
+  const byId = new Map(nodes.map((n) => [n.id, n]));
+  const keep = new Set<string>();
+  for (const n of nodes) {
+    if ((counts[n.id] ?? 0) <= 0) continue;
+    let at: TreeOption | undefined = n;
+    while (at && !keep.has(at.id)) {
+      keep.add(at.id);
+      at = at.parentId ? byId.get(at.parentId) : undefined;
+    }
+  }
+  return nodes.filter((n) => keep.has(n.id));
+}
+
 export default async function LibraryPage({ searchParams }: { searchParams: Promise<RawParams> }) {
   const { ctx } = await requireContext();
   const restricted = ctx.viewer.role === 'restricted';
@@ -43,10 +68,18 @@ export default async function LibraryPage({ searchParams }: { searchParams: Prom
   // never names a brand or a theme that holds only hidden sets.
   const options = {
     brands: brands
-      .filter((b) => !restricted || (facets.brands[b.id] ?? 0) > 0 || filters.brands.includes(b.id))
+      .filter((b) => !restricted || (facets.brands[b.id] ?? 0) > 0)
       .map((b) => ({ id: b.id, name: b.name })),
-    themes: themes.map((t) => ({ id: t.id, name: t.name, parentId: t.parentId })),
-    locations: locations.map((l) => ({ id: l.id, name: l.name, parentId: l.parentId })),
+    themes: visibleTree(
+      themes.map((t) => ({ id: t.id, name: t.name, parentId: t.parentId })),
+      facets.themes,
+      restricted,
+    ),
+    locations: visibleTree(
+      locations.map((l) => ({ id: l.id, name: l.name, parentId: l.parentId })),
+      facets.locations,
+      restricted,
+    ),
     owners: members.map((m) => ({ id: m.id, name: m.name })),
   };
 

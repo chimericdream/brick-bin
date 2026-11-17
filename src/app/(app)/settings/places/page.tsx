@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation';
 import { Text } from '@mantine/core';
 
 import { requireContext } from '@/server/auth/current';
@@ -11,6 +12,7 @@ export const dynamic = 'force-dynamic';
 
 export default async function PlacesPage() {
   const { ctx } = await requireContext();
+  if (ctx.viewer.role === 'restricted') notFound();
   const [places, options] = await Promise.all([
     listLocationsWithCounts(ctx),
     listLocationOptions(ctx),

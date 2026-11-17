@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation';
 import { Text, Title } from '@mantine/core';
 
 import { requireContext } from '@/server/auth/current';
@@ -20,6 +21,7 @@ export const dynamic = 'force-dynamic';
 
 export default async function BrandsPage() {
   const { ctx } = await requireContext();
+  if (ctx.viewer.role === 'restricted') notFound();
   const [brands, themes, themeOptions] = await Promise.all([
     listBrandsWithCounts(ctx),
     listThemesWithCounts(ctx),

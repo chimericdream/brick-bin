@@ -46,3 +46,12 @@ h3 {
     color: #000;
   }
 }
+
+/*
+ * In dark mode every filled colour uses its lighter shade, so text on it must be dark. Mantine
+ * picks the filled-button text colour from the light shade, which leaves white on light blue.
+ */
+:root[data-mantine-color-scheme='dark']
+  .mantine-Button-root:is(:not([data-variant]), [data-variant='filled']):not([data-disabled]) {
+  --button-color: #0e1319 !important;
+}

@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation';
 import { Text } from '@mantine/core';
 
 import { requireContext } from '@/server/auth/current';
@@ -16,6 +17,7 @@ const ROLE: Record<string, string> = {
 
 export default async function PeoplePage() {
   const { ctx } = await requireContext();
+  if (ctx.viewer.role === 'restricted') notFound();
   const people = await listMembers(ctx);
   const isAdmin = ctx.viewer.role === 'admin';
   return (
