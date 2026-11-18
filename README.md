@@ -108,12 +108,18 @@ tens of GB over time.
 The extracted `catalog/` directory is not backed up; it can be downloaded again. Newest 14 of each
 are kept.
 
-**To restore:** start the stack, then
+**To restore:** set up the stack with the same `.env`, but start only the database. Load the dump
+into it while it is still empty, then start the rest and put the files back. The dump includes the
+schema and the migrations journal, so it must go into an empty database, and the app then applies
+only the migrations that are newer than the backup when it starts.
 
 ```sh
+docker compose up -d db
 gunzip -c db-<stamp>.sql.gz | docker compose exec -T db psql -U bricks -d bricks
+docker compose up -d
 docker compose exec -T app tar -C /data -xzf - < covers-<stamp>.tar.gz
-cp -a instructions/<stamp>/. <the app-data volume>/instructions/
+# the PDFs go straight into the volume, as root (brick-bin-local_app-data on the try-out stack)
+cp -a instructions/<stamp>/. "$(docker volume inspect -f '{{ .Mountpoint }}' brick-bin_app-data)/instructions/"
 ```
 
 Then **run a catalog import**: the reference tables come back empty and the import history is not
@@ -122,7 +128,12 @@ days on the old machine, wait out the rest of that window.
 
 ## Configuration
 
-Everything comes from environment variables (`.env.example` has them all).
+Everything comes from environment variables. `.env.example` is for local development and the
+try-out compose file; `deploy/.env.example` is for the Tailscale stack. Both compose files pass the
+variables below from `.env` to the app, with three exceptions: `DATABASE_URL` is built from
+`POSTGRES_PASSWORD`, `DATA_DIR` stays `/data` (where the `app-data` volume is mounted), and the
+Tailscale stack always sets `COOKIE_SECURE=true`. A variable left out of `.env` keeps the app's
+default.
 
 | Variable                      | Purpose                                                                                       |
 | ----------------------------- | --------------------------------------------------------------------------------------------- |
