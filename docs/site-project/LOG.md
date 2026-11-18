@@ -165,3 +165,7 @@ Design A / Design B mapping for Phase 1.5.
   5. Setup/Hosting/Configuration: make the callout and code block widths deliberate and consistent.
   6. US spelling. 7. No-JS Menu button jumps to the footer links.
 - When the final package is copied to `site/design/`, leave out `inputs/` and `feedback/`.
+- 48-hour reason (human, relayed to Designer 3b): Rebrickable's downloads page says "You may automate
+  downloading these archives at most once a day. Scraping our web pages is strictly against our Terms
+  and will get you banned." Brick Bin reads "once a day" conservatively as 48 hours. Imports should
+  only be needed a handful of times a year (once a month at most).
