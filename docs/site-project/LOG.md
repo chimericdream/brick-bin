@@ -244,3 +244,15 @@ Design A / Design B mapping for Phase 1.5.
   `docs/site-project/design/` and added it to `.gitignore` (0c1f7ec). They stay in the branch history
   until a squash merge.
 - The designer accepted a 900px width for the social card's descriptor line (SPEC 6.28).
+
+### Developer handoff 3 (2026-11-18)
+
+- PR #5 (`fix/compose-env-passthrough`, head 12a8297): both compose files pass `AUTO_MIGRATE`,
+  `APP_VERSION`, the three Rebrickable/catalog origin variables and `UPC_BASE_URL`. `DATA_DIR` is
+  deliberately not passed through: it stays at `/data` on the `app-data` volume. Adds
+  `deploy/.env.example`. CI green.
+- PR #4 (head 00f0306): new `/more` page for the phone "More" tab, with e2e spec NAV-01/02 (first run
+  is in CI). Docs updated for after #5; the description opens with "Merge after #5".
+- Restore order: tested with PGlite `pg_dump` and `scripts/backup.sh`'s options. Migrate-then-restore
+  gives 167 errors and loses brands, sets and copies; empty-database-first restores everything. The
+  docs keep empty-database-first. The README still says the other order; awaiting the human's decision.
