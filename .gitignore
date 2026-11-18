@@ -14,3 +14,6 @@ next-env.d.ts
 /.taste-skill/
 /.mempalace-host
 /site/out/
+
+# Marketing site design history: kept on disk, not in the repo
+docs/site-project/design/

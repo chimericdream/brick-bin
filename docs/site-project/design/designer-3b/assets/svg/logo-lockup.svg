@@ -1,5 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 32" role="img" aria-label="Brick Bin">
-  <!-- The wordmark is live text: Albert Sans 800, tracking -0.035em. Outline the text before using this file anywhere the font is not loaded. -->
-  <path fill="currentColor" d="M10.5 5.5H15V9h2V5.5h4.5V9H23v14H9V9h1.5z"/><path fill="currentColor" d="M3 13h4v13h18V13h4v17H3z"/>
-  <text x="41" y="24" font-family="'Albert Sans', sans-serif" font-weight="800" font-size="23" letter-spacing="-0.8" fill="currentColor">Brick Bin</text>
-</svg>

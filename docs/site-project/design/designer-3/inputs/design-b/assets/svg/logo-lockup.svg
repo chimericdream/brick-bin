@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 34" role="img" aria-label="Brick Bin">
-  <!-- Wordmark is live text in Albert Sans 700, tracking -0.04em. Convert to outlines before using outside the site. -->
-  <rect x="10" y="9" width="14" height="15" fill="#3d8791"/>
-  <rect x="11.5" y="5" width="4.5" height="4" fill="#3d8791"/>
-  <rect x="18" y="5" width="4.5" height="4" fill="#3d8791"/>
-  <path d="M3 13h5v13h18V13h5v18H3z" fill="#06525c"/>
-  <text x="46" y="25" font-family="'Albert Sans', sans-serif" font-weight="700" font-size="21" letter-spacing="-0.84" fill="#06525c">Brick Bin</text>
-</svg>

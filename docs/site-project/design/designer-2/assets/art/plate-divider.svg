@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 22" preserveAspectRatio="none">
-  <!-- The plate: a long flat plate with studs, used once per page as the band that separates two halves. In CSS it is built from the stud mask; this file is the reference drawing. -->
-  <g fill="currentColor">
-    <path d="M4 0h12v6H4zM24 0h12v6H24zM44 0h12v6H44zM64 0h12v6H64zM84 0h12v6H84zM104 0h12v6h-12zM124 0h12v6h-12zM144 0h12v6h-12zM164 0h12v6h-12zM184 0h12v6h-12zM204 0h12v6h-12zM224 0h12v6h-12zM244 0h12v6h-12zM264 0h12v6h-12zM284 0h12v6h-12zM304 0h12v6h-12z"/>
-    <rect y="6" width="320" height="16" rx="2"/>
-  </g>
-</svg>

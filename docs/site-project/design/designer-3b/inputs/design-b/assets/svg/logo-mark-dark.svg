@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 34 34" role="img" aria-label="Brick Bin mark: a two-stud brick sitting in a bin">
-  <rect x="10" y="9" width="14" height="15" fill="#4fa39a"/>
-  <rect x="11.5" y="5" width="4.5" height="4" fill="#4fa39a"/>
-  <rect x="18" y="5" width="4.5" height="4" fill="#4fa39a"/>
-  <path d="M3 13h5v13h18V13h5v18H3z" fill="#e4f1ee"/>
-</svg>

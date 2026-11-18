@@ -1,3 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 22" preserveAspectRatio="none">
-<!-- Reference drawing of the plate band (one per page at most). In CSS it is a flat band plus the stud mask, not this file. -->
-<g fill="currentColor"><path d="M4 0h12v6H4zM24 0h12v6H24zM44 0h12v6H44zM64 0h12v6H64zM84 0h12v6H84zM104 0h12v6h-12zM124 0h12v6h-12zM144 0h12v6h-12zM164 0h12v6h-12zM184 0h12v6h-12zM204 0h12v6h-12zM224 0h12v6h-12zM244 0h12v6h-12zM264 0h12v6h-12zM284 0h12v6h-12zM304 0h12v6h-12z"/><rect y="6" width="320" height="16" rx="2"/></g></svg>

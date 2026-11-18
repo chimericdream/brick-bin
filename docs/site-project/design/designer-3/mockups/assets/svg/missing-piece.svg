@@ -1,3 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 68" fill="none">
-<!-- The missing piece: the 1x2 brick drawn as a dashed outline. Means "a piece is out of place" (404 gap, missing-pieces chip, "mind this" callouts). Never filled, never coloured. Uses currentColor. -->
-<g stroke="currentColor" stroke-width="3" stroke-dasharray="7 5"><path d="M12.5 10V1.5h25V10M58.5 10V1.5h25V10"/><rect x="3.5" y="11.5" width="89" height="55" rx="3"/></g></svg>
