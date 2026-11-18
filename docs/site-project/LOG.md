@@ -111,3 +111,42 @@ Design A / Design B mapping for Phase 1.5.
   Designer 2, B = Designer 1).
 - It gets the same briefs (01 + 03), the same process limits, and the human's answers up front.
 - The two Designer 3s never see each other's work. They run in parallel, each limited to one browser.
+
+### Designer 3 handoffs (2026-11-17)
+
+**Designer 3, Opus 5.5 (`design/designer-3/`, agent af26e218208a11fb5)**
+- Merged both designs: A's section-colour identity, mark, phone menu, toggle and footer wall; B's
+  structure (hero message, grouped config tables, tutorial template, open FAQ, phone docs bar,
+  baseplate placeholders, stepped hosting bricks) and B's type (Albert Sans + JetBrains Mono). Pink
+  became lavender. Kept one CSS-only build-state menu and dropped the other interactive pieces.
+- Completeness: passed. EVALUATION, SPEC (tokens, motif, components, pages, accessibility, voice,
+  flexible list, content checks, build notes), PLACEHOLDERS (7), mockups for 8 pages + states sheet,
+  every page at 390 and 1440 in light and dark, 58 PNGs, 16 SVGs, 2 fonts with OFL. `tools/` included.
+- Isolation: opened no repo files outside its directory. It saw injected CLAUDE.md/AGENTS.md and git
+  commit titles. It first wrote the app's catalog table prefix (from injected context) into a backup
+  example, then replaced it with a placeholder.
+- Screenshots: one Edge at a time over 15 runs; cleaned up.
+
+**Designer 3b, Fable 5.2 (`design/designer-3b/`, agent a1771c9935a3c72df)**
+- Merged both designs: A's section-colour identity (pink kept), studded page heads, phone menu, footer
+  wall, three-setting toggle; B's structure, live build-state brick pile, baseplate placeholders,
+  grouped config tables, open FAQ, hosting brick stack, and B's type. Dropped A's Jost uppercase titles
+  and hand-drawn wordmark, and both feature mosaics. Minimum type size 14px.
+- Completeness: passed. EVALUATION, SPEC, PLACEHOLDERS (7 mocked + 19 planned), 8 pages + states
+  sheet, every page at 390 and 1440 in light and dark, 73 PNGs, 15 SVGs, 2 fonts with OFL. `tools/`
+  included.
+- Isolation: opened no repo files outside its directory. It saw injected CLAUDE.md/AGENTS.md and git
+  status. In the shared session scratchpad it saw file names from other runs but says it opened none.
+- Incident: a malformed shell line opened a VS Code window (~8:35 PM) that restored an unsaved
+  "Untitled-3" buffer. Left open for the human to close.
+- Screenshots: one Edge at a time, five launches; cleaned up.
+
+**Questions from both, and how each is handled**
+- LICENSE file and copyright year: `LICENSE` exists on `main` (MIT, "Copyright (c) 2026 Bill
+  Parrott"), so `/blob/main/LICENSE` and "© 2026 Bill Parrott" both hold. Answered from the repo.
+- Compose file name, `DATABASE_URL` handling, menu labels, commands: representative per the brief; the
+  Developer verifies them in Phase 2.
+- Font files may be a Latin subset: for the Developer to fetch fresh copies from the sources in SPEC.
+- Lockup SVG uses live text: outlining is needed only for off-site use; noted for Phase 2.
+- UK or US spelling: for the human.
+- Phone menu without JavaScript: for the human.
