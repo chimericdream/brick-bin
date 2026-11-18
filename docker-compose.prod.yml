@@ -33,6 +33,14 @@ services:
       REBRICKABLE_PAGE_FETCH: ${REBRICKABLE_PAGE_FETCH:-false}
       # Set to true once the app is served over HTTPS (for example with tailscale serve).
       COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      # Passed on only when set in .env (or the shell); unset, the app keeps its own default.
+      AUTO_MIGRATE:
+      APP_VERSION:
+      REBRICKABLE_DOWNLOADS_PAGE:
+      REBRICKABLE_ALLOWED_ORIGINS:
+      CATALOG_IMAGE_ORIGIN:
+      UPC_BASE_URL:
+      # DATA_DIR is not passed on: it stays /data (set in the image), where the app-data volume is.
     ports:
       - '${APP_PORT:-3000}:3000'
     volumes:

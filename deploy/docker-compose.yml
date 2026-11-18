@@ -59,6 +59,14 @@ services:
       # Leave false until Rebrickable has said fetching their downloads page is OK; admins paste it.
       REBRICKABLE_PAGE_FETCH: ${REBRICKABLE_PAGE_FETCH:-false}
       COOKIE_SECURE: 'true'
+      # Passed on only when set in .env (or the shell); unset, the app keeps its own default.
+      AUTO_MIGRATE:
+      APP_VERSION:
+      REBRICKABLE_DOWNLOADS_PAGE:
+      REBRICKABLE_ALLOWED_ORIGINS:
+      CATALOG_IMAGE_ORIGIN:
+      UPC_BASE_URL:
+      # DATA_DIR is not passed on: it stays /data (set in the image), where the app-data volume is.
     volumes:
       # covers/, instructions/ and catalog/ (the extracted Rebrickable files, about 6 GB)
       - app-data:/data
