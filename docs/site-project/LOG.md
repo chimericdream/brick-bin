@@ -43,3 +43,10 @@ Design A / Design B mapping for Phase 1.5.
   The cause is not proven.
 - Designer 2 was resumed with mandatory limits: one browser process at a time, no parallel or
   background captures, re-shoot only what's missing, clean up its own processes and profiles.
+
+### Human decisions (2026-11-17)
+
+- Designer 1's work still counts, despite the injected CLAUDE.md/AGENTS.md context.
+- The human agrees Designer 2 was the likely cause of the near-crash: Designer 1 had finished well
+  before the machine locked up.
+- Answers to Designer 1's open questions: pending from the human.
