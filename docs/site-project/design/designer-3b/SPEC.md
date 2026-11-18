@@ -771,12 +771,47 @@ One or two per page. There is no "tip", "success" or "danger" variant.
   "Default", is mono for literal values (`3000`, `false`, `./data`), plain text for descriptions
   ("Rebrickable's CDN", "Empty"), and a dashed tag for `Required` and `Set it`.
 - A row reached by its link (`:target`) gets a `--surface` background that bleeds 8px each side.
-- **Grouping.** Fourteen variables in four tables: "The ones you must set" (3), "Server" (5),
+- **Grouping.** Fourteen variables in four tables: "The ones you must set" (2: `POSTGRES_PASSWORD`,
+  `TS_AUTHKEY`), "Server" (6, including `DATABASE_URL`, whose default reads "Built for you"),
   "Storage and limits" (2), "Catalog import" (4). Each has an `h2` that appears in "On this page".
+  (The mockup still shows the earlier 3 and 5 split. The built site is right.)
 - **Under 720px** (`.table-stack`): the header row is visually hidden and every row becomes a
-  block: the name, then the purpose, then "Default: value" (the label comes from `data-label`).
-  Blocks are separated by 1px rules, with a 2px ink rule above the first. Long variable names may
-  wrap. No sideways scrolling.
+  block: the name, then the purpose, then the compose note if there is one, then "Default: value"
+  (the label comes from `data-label`). Blocks are separated by 1px rules, with a 2px ink rule above
+  the first. Long variable names may wrap. No sideways scrolling.
+
+**The compose note (added in the build; not in the mockups).** Most variables do not reach the app
+straight from `.env`, because the compose files pass some on, set others themselves and leave some
+out. A row whose variable is treated differently carries one extra line saying so.
+
+- **Where:** inside the purpose cell, on its own line under the purpose text (a block-level
+  `span`). Rows that behave as the Default column says have no note.
+- **Style:** 14px, weight 400, `--muted`, line height 1.45, 4px above (6px if the rows feel
+  crowded). No label, no icon, no tag, no background. The muted second line is the whole treatment.
+- **Code in a note:** every literal value is `code`, as everywhere else (`true`, `3000`, `/data`,
+  variable names). Inside a note, code is `font-size: 1em` (14px, so it stays on the 14px floor),
+  weight 500, `color: inherit`, no background and no padding. Without this rule it inherits
+  0.875em and drops to about 12px.
+- **Wording rule:**
+  - One or two short sentences, each ending in a period.
+  - Name the files with exactly these terms and no others: "the try-out compose file", "the
+    Tailscale install", "both compose files" (or "the compose files").
+  - Say what the file does first, then what the reader should do, if anything.
+  - Contractions, as on the rest of the site. No jokes.
+  - The standard note for a variable the files leave out: "The compose files don't pass this on.
+    To set it, add it to the app's environment." Repeat it word for word on every such row. Rows
+    are reached one at a time by their links, so the repetition is correct.
+  - Other examples: "Not used by the try-out compose file." "The Tailscale install sets it to
+    `true` itself." "Always `/data` in the Docker image, on the app-data volume."
+- **The Default column keeps one meaning: the app's own default.** It does not change to show what
+  a compose file sets. The note carries that.
+
+**The callout that goes with it.** A "mind this" callout (6.19) sits between the opening paragraph
+and the first table, titled "Not every variable reaches the app from .env". It explains that the
+compose files pass some variables on and set others, and how to set one they leave out. It must
+end with these two sentences: "The Default column is the app's own default. The note under a row
+says what the compose files do instead." With the page-fetch callout further down, that makes two
+on the page, which is the limit.
 
 Mantine: `Table` with borders and stripes off. The stacked layout is plain CSS on the same markup.
 
@@ -864,6 +899,25 @@ height 1.4, ink (it sits on a bright brick).
 `.skip` is the first element, off-screen until focused, then pinned 8px from the top left as an ink
 button. Every focusable thing shows a 3px solid ring at 3px offset, with `:focus-visible`.
 
+### 6.28 Social card (`og.png`)
+
+Added in the build; there is no mockup. One card for the whole site, 1200 by 630, the same in both
+themes. It is rendered from live type, because the lockup's wordmark is live text (section 4).
+
+| Piece | Values |
+| --- | --- |
+| Background | `#F5F5F2` (the light ground) |
+| Field brick | `#17191C`, 3px radius, x 48 to 1152, y 56 to 486, with a whole-stud row on top (studs flat, inset from both ends) |
+| Lockup | Top left of the brick, in line with the headline's left edge (x 115): the mark with a green (`#6CC04A`) brick in a `#F5F5F2` bin, as on the favicon, then "Brick Bin" in Albert Sans 800, `#F5F5F2` |
+| Headline | "Know what’s in every box." on two lines. Albert Sans 800, 100px, line height 0.96, tracking -0.04em, `#F5F5F2`, top at y=190. Curly apostrophe. |
+| Descriptor | "A free, self-hosted app for your household's building-brick sets." Albert Sans 500, 30px, line height 1.3, `#B8BBBF`, max width 820px, left-aligned with the headline, top at y=406. About 40px of field stays under it. |
+| Wall | Along the bottom, x 48 to 1152: the eight footer bricks in footer order (orange, green, blue, tan, pink, blue, orange, green), two studs each, varied heights, **no letters**, running off the bottom edge |
+
+- The card has no other text, no screenshot, no URL and no tagline beyond these two lines.
+- In the page head: `og:image:alt` = "Brick Bin: know what's in every box. A row of colored
+  bricks." and `twitter:card` = `summary_large_image`.
+- If the headline or the descriptor changes on the site, change the card to match.
+
 ## 7. Pages
 
 Copy in the mockups is final for the landing page, FAQ and 404. Docs and tutorial text is
@@ -916,7 +970,8 @@ Green, blue, tan. Docs layout with the docs sidebar. Page head with a lede, "On 
 - **Hosting:** What runs (table of four containers); Storage (table); Backups (list and a "mind
   this" callout); Restoring (numbered); Running without Tailscale; What it downloads, and when.
   Ends with a tan "next" brick to Configuration.
-- **Configuration:** one paragraph, then the four tables (6.20), a "mind this" callout about the
+- **Configuration:** one paragraph, a "mind this" callout about how the compose files treat the
+  variables, then the four tables with their compose notes (6.20), a "mind this" callout about the
   page fetch, "A typical .env", and a pink "next" brick to the FAQ.
 
 ### 7.5 FAQ and 404
