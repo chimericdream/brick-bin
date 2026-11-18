@@ -1,0 +1,54 @@
+<!--meta {"title": "Hosting · Docs · Brick Bin", "file": "docs-hosting.html", "section": "hosting", "nav": "docs", "layout": "docs", "crumb": "Hosting", "desc": "Hosting Brick Bin: Proxmox, Tailscale and HTTPS, updates with Watchtower, disk space, backups and restoring.", "toc": [["proxmox", "Proxmox and Docker"], ["tailscale", "Tailscale and HTTPS"], ["without", "Running without Tailscale"], ["updates", "Updates"], ["disk", "Disk space"], ["backups", "Backups"], ["restore", "Restoring"]]} -->
+<header class="page-head studs on-brick">
+  <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="index.html">Home</a></li><li><a href="docs-setup.html">Docs</a></li><li aria-current="page">Hosting</li></ol></nav>
+  <h1>Hosting</h1>
+  <p class="lede">The recommended home for Brick Bin, how it stays up to date, how much disk it wants, and how to back it up.</p>
+</header>
+<!--TOC-MOBILE-->
+<article class="prose">
+  <h2 id="proxmox">Proxmox and Docker</h2>
+  <p>A Proxmox VM or LXC container with Docker is the recommended home. Either works; pick whichever you already know. Any other machine that runs Docker is fine for a try-out.</p>
+
+  <h2 id="tailscale">Tailscale and HTTPS</h2>
+  <p>The production compose file includes a <a href="https://tailscale.com">Tailscale</a> sidecar. It joins your tailnet with <a href="docs-configuration.html#TS_AUTHKEY"><code>TS_AUTHKEY</code></a> and serves Brick Bin over HTTPS at:</p>
+  <div class="code"><div class="code__bar"><span>Address</span><button class="code__copy" type="button">Copy</button></div><pre tabindex="0" aria-label="Address"><code>https://brick-bin.&lt;your-tailnet&gt;.ts.net</code></pre></div>
+  <p>Only devices on your tailnet can reach it. Once it's served over HTTPS, set <a href="docs-configuration.html#COOKIE_SECURE"><code>COOKIE_SECURE=true</code></a>.</p>
+
+  <h2 id="without">Running without Tailscale</h2>
+  <p>Run the production compose file and open port 3000 (or whatever <a href="docs-configuration.html#APP_PORT"><code>APP_PORT</code></a> says). This is fine on a home network for a try-out. Without HTTPS, leave <code>COOKIE_SECURE</code> at <code>false</code> or you won't be able to sign in.</p>
+
+  <h2 id="updates">Updates</h2>
+  <p>Watchtower checks for a new Brick Bin image every five minutes and restarts the app when there is one. Database migrations run on start unless <a href="docs-configuration.html#AUTO_MIGRATE"><code>AUTO_MIGRATE</code></a> is <code>false</code>.</p>
+  <div class="callout studs"><b>Postgres is never updated automatically</b><p>A major database upgrade needs a backup and a person paying attention, so Watchtower leaves Postgres alone.</p></div>
+
+  <h2 id="disk">Disk space</h2>
+  <ul>
+    <li><b>Catalog:</b> several GB. The first import downloads about 6 GB of part images plus a data archive.</li>
+    <li><b>Database:</b> a few hundred MB.</li>
+    <li><b>Instruction PDFs:</b> tens of GB over time. Cap single files with <a href="docs-configuration.html#INSTRUCTIONS_MAX_MB"><code>INSTRUCTIONS_MAX_MB</code></a>.</li>
+  </ul>
+  <p>Covers, PDFs and catalog images live in <a href="docs-configuration.html#DATA_DIR"><code>DATA_DIR</code></a>.</p>
+
+  <h2 id="backups">Backups</h2>
+  <p>Back up three things:</p>
+  <ol>
+    <li><b>Database dumps.</b> The catalog tables are skipped, because they can be imported again.</li>
+    <li><b>Cover images.</b></li>
+    <li><b>Instruction PDFs.</b></li>
+  </ol>
+  <p>The downloaded catalog images are not backed up. They're large and Rebrickable still has them.</p>
+  <div class="code"><div class="code__bar"><span>Example: check against your compose file</span><button class="code__copy" type="button">Copy</button></div><pre tabindex="0" aria-label="Example backup command"><code><span class="c"># Dump the database, skipping the catalog tables</span>
+docker compose exec db pg_dump -U &lt;user&gt; &lt;database&gt; \
+  --exclude-table-data='&lt;catalog tables&gt;' &gt; brick-bin-$(date +%F).sql</code></pre></div>
+
+  <h2 id="restore">Restoring</h2>
+  <ol>
+    <li>Start a fresh stack with the same <code>.env</code>.</li>
+    <li>Load the database dump, then copy back the covers and PDFs.</li>
+    <li>Run a catalog import again. Until you do, catalog searches come back empty and part pictures are missing.</li>
+  </ol>
+  <p class="credit">Catalog data comes from <a href="https://rebrickable.com">Rebrickable</a>.</p>
+
+  <h2 class="vh">What next</h2>
+  <a class="next studs" href="docs-configuration.html" data-section="config"><small>Next in Docs</small><strong>Configuration &rarr;</strong><p>Every environment variable, what it does and its default.</p></a>
+</article>

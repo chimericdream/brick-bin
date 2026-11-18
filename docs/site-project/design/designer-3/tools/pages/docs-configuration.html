@@ -1,0 +1,77 @@
+<!--meta {"title": "Configuration · Docs · Brick Bin", "file": "docs-configuration.html", "section": "config", "nav": "docs", "layout": "docs", "crumb": "Configuration", "desc": "Every Brick Bin environment variable, what it does and its default.", "toc": [["must", "The ones you must set"], ["server", "Server"], ["storage", "Storage and limits"], ["catalog", "Catalog import"], ["example", "A typical .env"]]} -->
+<header class="page-head studs on-brick">
+  <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="index.html">Home</a></li><li><a href="docs-setup.html">Docs</a></li><li aria-current="page">Configuration</li></ol></nav>
+  <h1>Configuration</h1>
+  <p class="lede">Brick Bin reads its settings from environment variables, usually in a <code>.env</code> file next to the compose file. There are fourteen. Most installs set three or four.</p>
+</header>
+<!--TOC-MOBILE-->
+<article class="prose" style="max-width: 52rem">
+  <p>Restart the app after changing anything. Each variable name is a link you can share.</p>
+
+  <h2 id="must">The ones you must set</h2>
+  <div class="cfg-group">
+  <table class="cfg">
+    <caption class="vh">Required variables</caption>
+    <thead><tr><th scope="col">Variable</th><th scope="col">What it does</th><th scope="col">Default</th></tr></thead>
+    <tbody>
+      <tr id="DATABASE_URL"><td><a class="var" href="#DATABASE_URL">DATABASE_URL</a></td><td>Postgres connection</td><td class="def"><span class="tag">Required</span></td></tr>
+      <tr id="POSTGRES_PASSWORD"><td><a class="var" href="#POSTGRES_PASSWORD">POSTGRES_PASSWORD</a></td><td>Database password in the production compose file</td><td class="def"><span class="tag">Set it</span></td></tr>
+      <tr id="TS_AUTHKEY"><td><a class="var" href="#TS_AUTHKEY">TS_AUTHKEY</a></td><td>Tailscale key for the sidecar. Only needed on the Tailscale route.</td><td class="def"><span class="tag">Set it</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2 id="server">Server</h2>
+  <div class="cfg-group">
+  <table class="cfg">
+    <caption class="vh">Server variables</caption>
+    <thead><tr><th scope="col">Variable</th><th scope="col">What it does</th><th scope="col">Default</th></tr></thead>
+    <tbody>
+      <tr id="APP_PORT"><td><a class="var" href="#APP_PORT">APP_PORT</a></td><td>Port published by the plain compose file</td><td class="def"><code>3000</code></td></tr>
+      <tr id="COOKIE_SECURE"><td><a class="var" href="#COOKIE_SECURE">COOKIE_SECURE</a></td><td>Set <code>true</code> once Brick Bin is served over HTTPS</td><td class="def"><code>false</code></td></tr>
+      <tr id="AUTO_MIGRATE"><td><a class="var" href="#AUTO_MIGRATE">AUTO_MIGRATE</a></td><td><code>false</code> skips database migrations on start</td><td class="def"><code>true</code></td></tr>
+      <tr id="APP_VERSION"><td><a class="var" href="#APP_VERSION">APP_VERSION</a></td><td>Optional label shown in health checks and the import's User-Agent</td><td class="def">Empty</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2 id="storage">Storage and limits</h2>
+  <div class="cfg-group">
+  <table class="cfg">
+    <caption class="vh">Storage variables</caption>
+    <thead><tr><th scope="col">Variable</th><th scope="col">What it does</th><th scope="col">Default</th></tr></thead>
+    <tbody>
+      <tr id="DATA_DIR"><td><a class="var" href="#DATA_DIR">DATA_DIR</a></td><td>Where covers, instruction PDFs and catalog images are kept</td><td class="def"><code>./data</code></td></tr>
+      <tr id="TRASH_RETENTION_DAYS"><td><a class="var" href="#TRASH_RETENTION_DAYS">TRASH_RETENTION_DAYS</a></td><td>Days a deleted item waits in the trash before it's deleted for good. <code>0</code> keeps it until an admin deletes it.</td><td class="def"><code>30</code></td></tr>
+      <tr id="INSTRUCTIONS_MAX_MB"><td><a class="var" href="#INSTRUCTIONS_MAX_MB">INSTRUCTIONS_MAX_MB</a></td><td>Largest instruction PDF the app will store, in megabytes</td><td class="def"><code>200</code></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2 id="catalog">Catalog import</h2>
+  <p>These decide where catalog downloads may come from. Catalog data comes from <a href="https://rebrickable.com">Rebrickable</a>, and the defaults point there. Downloads only ever go over HTTPS.</p>
+  <div class="cfg-group">
+  <table class="cfg">
+    <caption class="vh">Catalog import variables</caption>
+    <thead><tr><th scope="col">Variable</th><th scope="col">What it does</th><th scope="col">Default</th></tr></thead>
+    <tbody>
+      <tr id="REBRICKABLE_PAGE_FETCH"><td><a class="var" href="#REBRICKABLE_PAGE_FETCH">REBRICKABLE_PAGE_FETCH</a></td><td><code>true</code> lets the import fetch the downloads page itself, instead of an admin pasting it</td><td class="def"><code>false</code></td></tr>
+      <tr id="REBRICKABLE_DOWNLOADS_PAGE"><td><a class="var" href="#REBRICKABLE_DOWNLOADS_PAGE">REBRICKABLE_DOWNLOADS_PAGE</a></td><td>Address of the downloads page</td><td class="def">Rebrickable's page</td></tr>
+      <tr id="REBRICKABLE_ALLOWED_ORIGINS"><td><a class="var" href="#REBRICKABLE_ALLOWED_ORIGINS">REBRICKABLE_ALLOWED_ORIGINS</a></td><td>Origins the import may download from. HTTPS only.</td><td class="def">Rebrickable and its CDN</td></tr>
+      <tr id="CATALOG_IMAGE_ORIGIN"><td><a class="var" href="#CATALOG_IMAGE_ORIGIN">CATALOG_IMAGE_ORIGIN</a></td><td>The only origin set covers are downloaded from</td><td class="def">Rebrickable's CDN</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="callout callout--mind studs"><b>Leave the page fetch off for now</b><p>Until Rebrickable confirms that automated page reads are fine, keep <code>REBRICKABLE_PAGE_FETCH</code> at <code>false</code> and paste the page instead. <a href="tutorial-import-catalog.html">The import tutorial shows how.</a></p></div>
+
+  <h2 id="example">A typical .env</h2>
+  <p>The recommended Tailscale install, with everything else left at its default:</p>
+  <div class="code"><div class="code__bar"><span>.env</span><button class="code__copy" type="button">Copy</button></div><pre tabindex="0" aria-label="Example .env file"><code>POSTGRES_PASSWORD=choose-something-long
+DATABASE_URL=postgres://&lt;user&gt;:&lt;password&gt;@db:5432/&lt;database&gt;
+TS_AUTHKEY=tskey-auth-&hellip;
+COOKIE_SECURE=true</code></pre></div>
+  <p class="credit">Variables used only by tests aren't listed here.</p>
+
+  <h2 class="vh">What next</h2>
+  <a class="next studs" href="faq.html" data-section="faq"><small>Still wondering?</small><strong>FAQ &rarr;</strong><p>Short answers about kids, prices, the internet and what it costs.</p></a>
+</article>

@@ -1,0 +1,3 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 6" preserveAspectRatio="none">
+<!-- One stud pitch, used as a repeating CSS mask (mask-repeat: round, so studs are always whole). Stud width is 0.6 of the pitch: the real ratio of a brick (4.8 mm stud on an 8 mm pitch). -->
+<rect x="4" width="12" height="6" rx="1"/></svg>

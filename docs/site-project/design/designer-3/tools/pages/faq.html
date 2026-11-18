@@ -1,0 +1,47 @@
+<!--meta {"title": "FAQ · Brick Bin", "file": "faq.html", "section": "faq", "nav": "faq", "desc": "Short, honest answers about Brick Bin: brands, the internet, the catalog, kids, Tailscale, backups and cost."} -->
+<div class="wrap" style="padding-top: var(--bb-s6); padding-bottom: var(--bb-section)">
+  <header class="page-head studs on-brick">
+    <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="index.html">Home</a></li><li aria-current="page">FAQ</li></ol></nav>
+    <h1>Short answers to fair questions</h1>
+    <p class="lede">The short answer comes first. The reasons follow, for anyone who wants them.</p>
+  </header>
+  <div class="faq-layout">
+    <ol class="faq-list">
+      <li class="faq-item"><h2 id="lego"><a href="#lego">Is this a LEGO app?</a></h2><div class="a"><p><strong>No.</strong> Brick Bin works with any brand of building brick, including Mould King, CaDA, COBI, BlueBrixx and Lumibricks. It isn't affiliated with the LEGO Group.</p><p>The optional catalog lookup covers LEGO sets because that's what Rebrickable's data describes. Sets from other brands are added by hand.</p></div></li>
+      <li class="faq-item"><h2 id="internet"><a href="#internet">Does it need the internet?</a></h2><div class="a"><p><strong>Not day to day.</strong> Your data stays on your server, nothing loads from a CDN, and the app makes no background downloads.</p><p>It goes online only when someone asks it to: an admin importing the catalog, a cover fetched for a set you add from the catalog, or a PDF you ask it to save from a web address.</p></div></li>
+      <li class="faq-item"><h2 id="catalog"><a href="#catalog">Where does the catalog come from?</a></h2><div class="a"><p><strong><a href="https://rebrickable.com">Rebrickable</a>.</strong> You import their data yourself, onto your own server.</p><p>Nothing is fetched on a schedule. An admin presses the button, at most once every 48 hours. <a href="tutorial-import-catalog.html">The import tutorial</a> walks through it.</p></div></li>
+      <li class="faq-item"><h2 id="kids"><a href="#kids">Can my kids see prices?</a></h2><div class="a"><p><strong>No.</strong> Kid profiles are read-only, with no prices and no shopping list. They can still manage their own wishlist.</p><p>Sets you mark as hidden look, to a kid profile, as if they don't exist. That rule lives on the server and is covered by tests, so it doesn't depend on a button being tucked out of sight. Birthday presents are safe.</p></div></li>
+      <li class="faq-item"><h2 id="tailscale"><a href="#tailscale">Can I run it without Tailscale?</a></h2><div class="a"><p><strong>Yes.</strong> Run the production compose file and open port 3000.</p><p>We recommend <a href="https://tailscale.com">Tailscale</a> because it gives you HTTPS and a tidy address with very little work. <a href="docs-hosting.html#without">Running without it</a> is covered in the hosting docs.</p></div></li>
+      <li class="faq-item"><h2 id="backup"><a href="#backup">How do I back it up?</a></h2><div class="a"><p><strong>Three things:</strong> database dumps, cover images and instruction PDFs.</p><p>The dumps skip the catalog tables and the downloaded catalog images aren't backed up, because both can be imported again. After a restore, run a catalog import. <a href="docs-hosting.html#backups">Backups in detail</a>.</p></div></li>
+      <li class="faq-item"><h2 id="loose"><a href="#loose">Can I track loose bricks?</a></h2><div class="a"><p><strong>Not yet.</strong> Version 1 tracks sets, the copies you own of them, and the pieces each copy is missing.</p><p>The rest of the &ldquo;not yet&rdquo; list is under <a href="#nv-h">Not in version 1</a>.</p></div></li>
+      <li class="faq-item"><h2 id="cost"><a href="#cost">What does it cost?</a></h2><div class="a"><p><strong>Nothing.</strong> Brick Bin is free and open source under the MIT licence. There's no account with us and no subscription.</p><p>You do supply the server, the disk and the bricks.</p></div></li>
+      <li class="faq-item"><h2 id="wishlist"><a href="#wishlist">Who can see that I bought something off a wishlist?</a></h2><div class="a"><p><strong>Only you.</strong> The &ldquo;I bought this&rdquo; mark is private to the person who made it. Admins can't see it and it never appears in the activity log.</p></div></li>
+      <li class="faq-item"><h2 id="updates"><a href="#updates">Does it update itself?</a></h2><div class="a"><p><strong>The app does. The database doesn't.</strong> Watchtower checks for a new app image every five minutes. Postgres is never updated automatically.</p></div></li>
+    </ol>
+    <aside class="faq-aside" aria-label="More">
+      <section class="aside-box" aria-labelledby="nv-h" data-section="faq">
+        <h2 id="nv-h">Not in version 1</h2>
+        <ul>
+          <li><span class="b1" aria-hidden="true"></span>Loose-brick inventory</li>
+          <li><span class="b1" aria-hidden="true"></span>Owned minifigures</li>
+          <li><span class="b1" aria-hidden="true"></span>A build log</li>
+          <li><span class="b1" aria-hidden="true"></span>Loans</li>
+          <li><span class="b1" aria-hidden="true"></span>Ratings</li>
+          <li><span class="b1" aria-hidden="true"></span>Guest share links</li>
+          <li><span class="b1" aria-hidden="true"></span>Price-guide integrations</li>
+          <li><span class="b1" aria-hidden="true"></span>Currencies other than US dollars</li>
+        </ul>
+        <p>If one of these is the thing you need, Brick Bin isn't ready for you yet. Better to hear it now than after the catalog download.</p>
+      </section>
+      <section class="aside-box" aria-labelledby="la-h">
+        <h2 id="la-h">Longer answers</h2>
+        <ul>
+          <li data-section="setup"><span class="b1" aria-hidden="true"></span><a href="docs-setup.html">Setup</a></li>
+          <li data-section="hosting"><span class="b1" aria-hidden="true"></span><a href="docs-hosting.html">Hosting and backups</a></li>
+          <li data-section="config"><span class="b1" aria-hidden="true"></span><a href="docs-configuration.html">Configuration</a></li>
+          <li data-section="tutorials"><span class="b1" aria-hidden="true"></span><a href="tutorials.html">Tutorials</a></li>
+        </ul>
+      </section>
+    </aside>
+  </div>
+</div>
