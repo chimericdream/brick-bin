@@ -256,3 +256,6 @@ Design A / Design B mapping for Phase 1.5.
 - Restore order: tested with PGlite `pg_dump` and `scripts/backup.sh`'s options. Migrate-then-restore
   gives 167 errors and loses brands, sets and copies; empty-database-first restores everything. The
   docs keep empty-database-first. The README still says the other order; awaiting the human's decision.
+- The human approved fixing the README's restore order (empty database first) in PR #5.
+- README restore fix landed in PR #5 (4868b33). PR #4 CI was green at 72bd0ef before this log
+  update. Merge order: #5, then squash-merge #4.
