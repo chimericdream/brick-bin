@@ -92,3 +92,14 @@ Design A / Design B mapping for Phase 1.5.
   a stamping script is not included), and A's `.taste-skill/` row. A scan for designer numbers, model
   names and tool paths came back clean.
 - Designer 3: Opus 5.5. Receives briefs 01 + 03, its directory path, and the one-browser process limit.
+
+### Human answers to the Phase 1 questions (2026-11-17), relayed to Designer 3
+
+- Repo: https://github.com/chimericdream/brick-bin. Licence: MIT. Copyright: Bill Parrott.
+- Rebrickable: no specific credit wording found, so a plain link is fine. Linking straight to the
+  downloads page is fine.
+- Tailscale may be named and linked (tailscale.com).
+- Real screenshots: likely some in both themes, possibly not all.
+- Theme toggle: add a third "System" setting.
+- "Mixed" build state: no longer a coherent set; its parts are mixed into everything else.
+- Section colours are not compared with the app's palette.
