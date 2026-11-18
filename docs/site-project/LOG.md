@@ -72,3 +72,23 @@ Design A / Design B mapping for Phase 1.5.
 - Open questions (held for the human): repo URL and licence; who the copyright line credits; whether
   it may name and link Tailscale and link Rebrickable's downloads page directly; whether the section
   colours should be re-checked against the app's palette.
+
+### Gate 1 outcome (2026-11-17)
+
+- The human approved both designs as they stand and told the PM to go with its recommendations.
+- Section colours are not to be compared with the app's palette: the site keeps its own identity.
+- Still pending from the human: repo URL and licence, copyright holder, Rebrickable credit wording and
+  direct links, naming and linking Tailscale, light and dark screenshots, a "System" theme setting, the
+  meaning of "Mixed".
+
+## Phase 1.5: synthesis
+
+- **Mapping (PM only, never shown to Designer 3): Design A = Designer 2, Design B = Designer 1.**
+  Chosen by a random byte (195, odd, so Designer 2 became A).
+- Copied each design into `design/designer-3/inputs/design-a/` and `inputs/design-b/`, leaving out
+  `tools/` and `.taste-skill/`.
+- Authorship removed from the copies: "(Designer N)" in the titles of DESIGN-NOTES, TOKENS and
+  PLACEHOLDERS, "Designer 1" in B's `site.css` header, B's paragraph about `tools/` (reworded to say
+  a stamping script is not included), and A's `.taste-skill/` row. A scan for designer numbers, model
+  names and tool paths came back clean.
+- Designer 3: Opus 5.5. Receives briefs 01 + 03, its directory path, and the one-browser process limit.

@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Setup · Docs · Brick Bin</title>
+<meta name="description" content="Set up Brick Bin: what you need, a quick try-out on port 3000, the recommended route, your first visit and the first catalog import.">
+<link rel="icon" href="assets/logo/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/site.css">
+<script>(function(){var d=document.documentElement;d.classList.add('js');try{var t=localStorage.getItem('bb-theme');if(t==='light'||t==='dark')d.setAttribute('data-theme',t);}catch(e){}})();</script>
+</head>
+<body style="--sec: var(--brick-setup)">
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header site-header--light">
+  <div class="wrap site-header__row">
+    <a class="brand" href="index.html" aria-label="Brick Bin, home">
+      <svg viewBox="0 0 648 90" aria-hidden="true"><use href="#lockup"/></svg>
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <ul>
+        <li><a href="tutorials.html" style="--brick: var(--brick-tutorials)">Tutorials</a></li>
+        <li><a aria-current="page" href="docs-setup.html" style="--brick: var(--brick-setup)">Docs</a></li>
+        <li><a href="faq.html" style="--brick: var(--brick-faq)">FAQ</a></li>
+        <li><a href="#repo">Source code</a></li>
+      </ul>
+    </nav>
+    <div class="header-tools">
+      <div class="theme-toggle" role="group" aria-label="Colour theme">
+        <button type="button" data-theme-set="auto" aria-pressed="true" aria-label="Match my device"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm0 2v14a7 7 0 0 1 0-14Z"/></svg></button>
+        <button type="button" data-theme-set="light" aria-pressed="false" aria-label="Light theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11 1h2v4h-2zM11 19h2v4h-2zM1 11h4v2H1zM19 11h4v2h-4zM4.2 5.6l1.4-1.4 2.8 2.8-1.4 1.4zM15.6 17l1.4-1.4 2.8 2.8-1.4 1.4zM4.2 18.4 7 15.6 8.4 17l-2.8 2.8zM15.6 7 18.4 4.2l1.4 1.4L17 8.4zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Z"/></svg></button>
+        <button type="button" data-theme-set="dark" aria-pressed="false" aria-label="Dark theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14.5 2.5a9.5 9.5 0 1 0 7 15.9A8 8 0 0 1 14.5 2.5Z"/></svg></button>
+      </div>
+      <a class="btn btn--sm" href="docs-setup.html">Set it up</a>
+    </div>
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu">
+      Menu <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 6h18v2.5H3zM3 11h18v2.5H3zM3 16h18v2.5H3z"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="menu" id="menu" hidden>
+  <div class="menu__scrim" data-close></div>
+  <div class="menu__sheet" role="dialog" aria-modal="true" aria-label="Menu">
+    <div class="menu__top">
+      <a class="brand" href="index.html" aria-label="Brick Bin, home"><svg viewBox="0 0 648 90" aria-hidden="true"><use href="#lockup"/></svg></a>
+      <button class="menu-btn" type="button" data-close style="display:inline-flex">Close <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="m5.6 4.2 6.4 6.4 6.4-6.4 1.4 1.4-6.4 6.4 6.4 6.4-1.4 1.4-6.4-6.4-6.4 6.4-1.4-1.4 6.4-6.4-6.4-6.4z"/></svg></button>
+    </div>
+    <ul class="menu__bricks">
+      <li><a class="studs" href="tutorials.html" style="--brick: var(--brick-tutorials)">Tutorials <span>Walk-throughs</span></a></li>
+      <li><a class="studs" href="docs-setup.html" aria-current="page" style="--brick: var(--brick-setup)">Setup <span>Start here</span></a></li>
+      <li><a class="studs" href="docs-hosting.html" style="--brick: var(--brick-hosting)">Hosting <span>Proxmox, Tailscale</span></a></li>
+      <li><a class="studs" href="docs-configuration.html" style="--brick: var(--brick-config)">Configuration <span>Every setting</span></a></li>
+      <li><a class="studs" href="faq.html" style="--brick: var(--brick-faq)">FAQ <span>Short answers</span></a></li>
+    </ul>
+    <ul class="menu__more">
+      <li><a href="#repo">Source code</a></li>
+      <li><a href="index.html">Home</a></li>
+    </ul>
+    <div class="menu__theme">
+      <p id="menu-theme-label">Theme</p>
+      <div class="theme-toggle theme-toggle--labelled" role="group" aria-labelledby="menu-theme-label">
+        <button type="button" data-theme-set="auto" aria-pressed="true">Auto</button>
+        <button type="button" data-theme-set="light" aria-pressed="false">Light</button>
+        <button type="button" data-theme-set="dark" aria-pressed="false">Dark</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap docs">
+  <aside class="docs-nav" aria-label="Documentation">
+    <div class="docs-nav__group"><h2>Docs</h2><ul>
+      <li><a href="docs-setup.html" aria-current="page" style="--brick: var(--brick-setup)"><span class="b1" style="--brick: var(--brick-setup)"></span>Setup</a></li>
+      <li><a href="docs-hosting.html"><span class="b1" style="--brick: var(--brick-hosting)"></span>Hosting</a></li>
+      <li><a href="docs-configuration.html"><span class="b1" style="--brick: var(--brick-config)"></span>Configuration</a></li>
+    </ul></div>
+    <div class="docs-nav__group"><h2>Also</h2><ul>
+      <li><a href="tutorials.html"><span class="b1" style="--brick: var(--brick-tutorials)"></span>Tutorials</a></li>
+      <li><a href="faq.html"><span class="b1" style="--brick: var(--brick-faq)"></span>FAQ</a></li>
+    </ul></div>
+  </aside>
+
+  <main id="main" class="docs-main">
+    <nav aria-label="Documentation sections"><ul class="docs-switch">
+      <li><a href="docs-setup.html" aria-current="page"><span class="b1" style="--brick: var(--brick-setup)"></span>Setup</a></li>
+      <li><a href="docs-hosting.html"><span class="b1" style="--brick: var(--brick-hosting)"></span>Hosting</a></li>
+      <li><a href="docs-configuration.html"><span class="b1" style="--brick: var(--brick-config)"></span>Config&shy;uration</a></li>
+    </ul></nav>
+
+    <header class="page-head studs" style="--brick: var(--brick-setup)">
+      <ol class="crumbs" aria-label="Breadcrumb"><li><a href="index.html">Home</a></li><li>Docs</li><li aria-current="page">Setup</li></ol>
+      <h1 class="page-head__title rise">Setup</h1>
+      <p class="page-head__lede rise" style="--d:1">From an empty server to a household with a catalog. Try it out on port 3000 first if you like, then move to the recommended setup.</p>
+    </header>
+
+    <details class="toc-m">
+      <summary>On this page <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="m6 9 6 6 6-6 1.4 1.4L12 17.8 4.6 10.4z"/></svg></summary>
+      <ul>
+        <li><a href="#before">Before you start</a></li><li><a href="#try">Quick try-out</a></li><li><a href="#recommended">The recommended setup</a></li><li><a href="#first-visit">Your first visit</a></li><li><a href="#catalog">Import the catalog</a></li><li><a href="#https">Once you're on HTTPS</a></li>
+      </ul>
+    </details>
+
+    <div class="docs-body prose">
+      <h2 id="before">Before you start</h2>
+      <p>Brick Bin runs in Docker on a machine you look after. The recommended home is a Proxmox VM or LXC container, but anything that runs Docker will do for a try-out.</p>
+      <dl class="facts">
+        <div><dt>Catalog</dt><dd>Several GB. The first import downloads about 6&nbsp;GB of part images plus a data archive.</dd></div>
+        <div><dt>Database</dt><dd>A few hundred MB.</dd></div>
+        <div><dt>Instruction PDFs</dt><dd>Tens of GB over time, depending on how many you keep.</dd></div>
+      </dl>
+      <p>For the recommended setup you'll also want a <a href="https://tailscale.com/">Tailscale</a> account and an auth key for the sidecar.</p>
+
+      <h2 id="try">Quick try-out</h2>
+      <p>To see Brick Bin before you commit to anything, skip Tailscale. Run the production compose file and open port 3000.</p>
+      <div class="codeblock">
+        <div class="codeblock__bar"><span>Terminal</span><button class="copy-btn" type="button">Copy</button></div>
+        <pre><code># in a folder with the production compose file
+echo "POSTGRES_PASSWORD=pick-a-long-one" &gt; .env
+docker compose up -d
+# then open http://&lt;your-server&gt;:3000</code></pre>
+      </div>
+      <p>The try-out speaks plain HTTP, so keep it on your home network. <code>APP_PORT</code> changes the port if 3000 is taken.</p>
+
+      <h2 id="recommended">The recommended setup</h2>
+      <p>For everyday use, run the full stack: the app, its own Postgres 17, a Tailscale sidecar that serves HTTPS at <code>https://brick-bin.&lt;your-tailnet&gt;.ts.net</code>, and Watchtower for app updates. <a href="docs-hosting.html">Hosting</a> walks through it.</p>
+      <ol>
+        <li>Create a Proxmox VM or LXC container and install Docker.</li>
+        <li>Put the compose file and a <code>.env</code> next to each other. Set <code>POSTGRES_PASSWORD</code> and <code>TS_AUTHKEY</code>.</li>
+        <li>Start the stack with <code>docker compose up -d</code>.</li>
+        <li>Open the tailnet address from any device on your tailnet.</li>
+      </ol>
+
+      <h2 id="first-visit">Your first visit</h2>
+      <p>The first time anyone opens Brick Bin, it asks you to create the household and the admin account. Whoever does this is the admin, so it's worth being the grown-up in the room.</p>
+      <figure class="shot" data-shot="SET-01"><div class="shot__frame studs" style="--ratio: 16 / 10" role="img" aria-label="Brick Bin's first-run screen asking for a household name, then the admin's name, email and password."><div class="shot__id">SET-01 <span>Desktop · light · 16:10</span></div><div class="shot__name">First-run setup</div><svg class="shot__glyph" viewBox="0 0 44 32" aria-hidden="true"><rect x="2" y="4" width="40" height="24" rx="2" fill="currentColor"/><rect x="6" y="8" width="32" height="16" fill="var(--brick)"/></svg></div><figcaption><dl><dt>Screen</dt><dd>First-run setup</dd><dt>State</dt><dd>Fresh install, nothing filled in.</dd><dt>Viewport</dt><dd>Desktop, light theme</dd><dt>Focus</dt><dd>Both steps on one screen, household then admin. Crop to the form card.</dd></dl></figcaption></figure>
+
+      <h2 id="catalog">Import the catalog</h2>
+      <p>The catalog is optional, but it's what lets you add LEGO sets by number and pick missing pieces from a set's own inventory. An admin imports it by hand, at most once every 48 hours. Nothing is fetched on a schedule.</p>
+      <div class="note"><span class="b1"></span><div><p><strong>For now, you paste the page.</strong> Until Rebrickable confirms automated page reads are fine, an admin copies the source of Rebrickable's downloads page and pastes it into Brick Bin, which reads the links from it. The <a href="tutorial-import-catalog.html">catalog tutorial</a> shows each step.</p></div></div>
+      <figure class="shot" data-shot="SET-02"><div class="shot__frame studs" style="--ratio: 16 / 10" role="img" aria-label="The Admin catalog page after a successful import, showing the import time and when the next import is allowed."><div class="shot__id">SET-02 <span>Desktop · light · 16:10</span></div><div class="shot__name">Catalog page after an import</div><svg class="shot__glyph" viewBox="0 0 44 32" aria-hidden="true"><rect x="2" y="4" width="40" height="24" rx="2" fill="currentColor"/><rect x="6" y="8" width="32" height="16" fill="var(--brick)"/></svg></div><figcaption><dl><dt>Screen</dt><dd>Catalog page after an import</dd><dt>State</dt><dd>Catalog imported 1 hour ago; next import allowed in 47 hours.</dd><dt>Viewport</dt><dd>Desktop, light theme</dd><dt>Focus</dt><dd>The last-import time and the countdown. Crop to the status block.</dd></dl></figcaption></figure>
+      <p class="credit">Catalog data comes from <a href="https://rebrickable.com/">Rebrickable</a>.</p>
+
+      <h2 id="https">Once you're on HTTPS</h2>
+      <p>When Brick Bin is served over HTTPS, set <a href="docs-configuration.html#COOKIE_SECURE"><code>COOKIE_SECURE=true</code></a> so sign-in cookies only travel over secure connections. The Tailscale route gives you HTTPS; the port 3000 try-out doesn't.</p>
+
+      <nav class="pager" aria-label="Next and previous">
+        <a class="studs" href="tutorials.html" style="--brick: var(--brick-tutorials)"><small>Then try</small><strong>Tutorials</strong></a>
+        <a class="next studs" href="docs-hosting.html" style="--brick: var(--brick-hosting)"><small>Next in docs</small><strong>Hosting</strong></a>
+      </nav>
+    </div>
+  </main>
+
+  <nav class="toc" aria-labelledby="toc-h">
+    <h2 id="toc-h">On this page</h2>
+    <ul>
+      <li><a href="#before"><span class="b1"></span>Before you start</a></li><li><a href="#try"><span class="b1"></span>Quick try-out</a></li><li><a href="#recommended"><span class="b1"></span>The recommended setup</a></li><li><a href="#first-visit"><span class="b1"></span>Your first visit</a></li><li><a href="#catalog"><span class="b1"></span>Import the catalog</a></li><li><a href="#https"><span class="b1"></span>Once you're on HTTPS</a></li>
+    </ul>
+  </nav>
+</div>
+
+<footer class="site-footer" id="footer">
+  <div class="wrap">
+    <div class="mark-wall" aria-hidden="true">
+      <span class="studs" style="--brick: var(--brick-tutorials); --h: 92%">B</span>
+      <span class="studs" style="--brick: var(--brick-setup); --h: 70%">R</span>
+      <span class="studs" style="--brick: var(--brick-hosting); --h: 100%">I</span>
+      <span class="studs" style="--brick: var(--brick-config); --h: 78%">C</span>
+      <span class="studs" style="--brick: var(--brick-faq); --h: 86%">K</span>
+      <span class="gap"></span>
+      <span class="studs" style="--brick: var(--brick-hosting); --h: 74%">B</span>
+      <span class="studs" style="--brick: var(--brick-tutorials); --h: 96%">I</span>
+      <span class="studs" style="--brick: var(--brick-setup); --h: 82%">N</span>
+    </div>
+    <p class="vh">Brick Bin</p>
+    <div class="footer-cols">
+      <nav aria-labelledby="f-learn"><h2 id="f-learn">Learn</h2><ul>
+        <li><a href="tutorials.html">Tutorials</a></li><li><a href="tutorial-import-catalog.html">Import the catalog</a></li><li><a href="faq.html">FAQ</a></li></ul></nav>
+      <nav aria-labelledby="f-docs"><h2 id="f-docs">Docs</h2><ul>
+        <li><a href="docs-setup.html">Setup</a></li><li><a href="docs-hosting.html">Hosting</a></li><li><a href="docs-configuration.html">Configuration</a></li></ul></nav>
+      <nav aria-labelledby="f-proj"><h2 id="f-proj">Project</h2><ul>
+        <li><a href="#repo" id="repo">Source code</a></li><li><a href="#repo-issues">Report a problem</a></li><li><a href="#repo-licence">Licence</a></li></ul></nav>
+      <div><h2>Theme</h2>
+        <div class="theme-toggle" role="group" aria-label="Colour theme" style="margin-top:4px">
+          <button type="button" data-theme-set="auto" aria-pressed="true" aria-label="Match my device"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm0 2v14a7 7 0 0 1 0-14Z"/></svg></button>
+          <button type="button" data-theme-set="light" aria-pressed="false" aria-label="Light theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11 1h2v4h-2zM11 19h2v4h-2zM1 11h4v2H1zM19 11h4v2h-4zM4.2 5.6l1.4-1.4 2.8 2.8-1.4 1.4zM15.6 17l1.4-1.4 2.8 2.8-1.4 1.4zM4.2 18.4 7 15.6 8.4 17l-2.8 2.8zM15.6 7 18.4 4.2l1.4 1.4L17 8.4zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Z"/></svg></button>
+          <button type="button" data-theme-set="dark" aria-pressed="false" aria-label="Dark theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14.5 2.5a9.5 9.5 0 1 0 7 15.9A8 8 0 0 1 14.5 2.5Z"/></svg></button>
+        </div>
+      </div>
+      <div class="footer-notes">
+        <p>Catalog data comes from <a href="https://rebrickable.com/">Rebrickable</a>, imported by you. Thank you, Rebrickable.</p>
+        <p>Brick Bin is an independent project. It is not affiliated with, sponsored or endorsed by the LEGO Group or any other brick maker. LEGO is a trademark of the LEGO Group.</p>
+      </div>
+    </div>
+    <div class="footer-last">
+      <span>Brick Bin is free and open source. Nothing on this site tracks you.</span>
+      <a class="btn btn--sm" href="#main">Back to top <span aria-hidden="true">↑</span></a>
+    </div>
+  </div>
+</footer>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="lockup" viewBox="0 0 648 90"><g fill="currentColor"><g transform="translate(0 -18.53) scale(1.3235)"><path d="M11 14h28v10H11zM57 14h28v10H57z"/><path fill-rule="evenodd" d="M6 24h84a4 4 0 0 1 4 4v50a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V28a4 4 0 0 1 4-4zm16 18v20h52V42z"/></g><g transform="translate(153 0)"><path fill-rule="evenodd" d="M0 0H18V30H36A30 30 0 0 1 66 60A30 30 0 0 1 36 90H0ZM18 48V72H36A12 12 0 0 0 48 60A12 12 0 0 0 36 48Z"/><path d="M76 90V60A30 30 0 0 1 106 30H124V48H106A12 12 0 0 0 94 60V90Z"/><path d="M134 30H152V90H134ZM134 10H152V22H134Z"/><path d="M222 30V48H192A12 12 0 0 0 180 60A12 12 0 0 0 192 72H222V90H192A30 30 0 0 1 162 60A30 30 0 0 1 192 30Z"/><path d="M232 0H250V90H232ZM250 51L274 30H301L250 74ZM256 64L270 52L297 90H275Z"/><path fill-rule="evenodd" d="M331 0H349V30H367A30 30 0 0 1 397 60A30 30 0 0 1 367 90H331ZM349 48V72H367A12 12 0 0 0 379 60A12 12 0 0 0 367 48Z"/><path d="M407 30H425V90H407ZM407 10H425V22H407Z"/><path d="M435 90V30H465A30 30 0 0 1 495 60V90H477V60A12 12 0 0 0 465 48H453V90Z"/></g></g></symbol>
+</svg>
+<script src="assets/js/site.js"></script>
+</body>
+</html>
