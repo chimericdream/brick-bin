@@ -1,0 +1,76 @@
+.head {
+  --brick: var(--sec);
+  --pitch: 40px;
+  --stud-h: 11px;
+  --stud-inset: 20px;
+  --focus: var(--brick-focus);
+  --btn: var(--on-brick-btn);
+  --btn-ink: var(--on-brick-btn-ink);
+  --btn-hover: var(--on-brick-btn-hover);
+  color: var(--brick-ink);
+  border-radius: var(--r);
+  padding: var(--s5) var(--s4) var(--s6);
+  margin-top: calc(var(--s2) + 11px);
+}
+.head h1 {
+  font-size: var(--step-head);
+  margin-top: var(--s4);
+}
+.head :global(.lead) {
+  margin-top: var(--s4);
+  max-width: 34em;
+}
+.crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  font-size: var(--step-small);
+  font-weight: 500;
+  line-height: 1.4;
+  list-style: none;
+  padding: 0;
+}
+.crumbs li {
+  display: flex;
+  align-items: baseline;
+}
+/* the separator is drawn, not typed, so the space on each side is always equal */
+.crumbs li + li::before {
+  content: '';
+  flex: none;
+  align-self: center;
+  width: 1.5px;
+  height: 0.95em;
+  margin-inline: 10px;
+  background: currentColor;
+  opacity: 0.55;
+  transform: skewX(-18deg);
+}
+.crumbs a {
+  /* inline, so the link shares the row's baseline; the padding only enlarges the tap area */
+  padding-block: 6px;
+  margin-block: -6px;
+  text-underline-offset: 0.22em;
+}
+.crumbs [aria-current] {
+  font-weight: 750;
+}
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2) var(--s5);
+  margin-top: var(--s5);
+  font-size: var(--step-small);
+  font-weight: 650;
+  list-style: none;
+  padding: 0;
+}
+@media (min-width: $mantine-breakpoint-sm) {
+  .head {
+    --pitch: 48px;
+    --stud-h: 13px;
+    --stud-inset: 24px;
+    padding: var(--s6) var(--s6) var(--s7);
+    margin-top: calc(var(--s2) + 13px);
+  }
+}

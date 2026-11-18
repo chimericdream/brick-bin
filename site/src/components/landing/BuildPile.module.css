@@ -1,0 +1,85 @@
+/* The hero's pile panel (SPEC 6.7) */
+.toy {
+  background: var(--field-2);
+  margin: 0 var(--s2) var(--s2);
+  border-radius: var(--r);
+  padding: var(--s3);
+  display: flex;
+  flex-direction: column;
+  container: toy / inline-size;
+}
+.toy svg {
+  width: 100%;
+  height: auto;
+  margin-block: auto;
+  overflow: visible;
+}
+.part {
+  transition:
+    transform var(--t-slow) var(--snap),
+    opacity var(--t-med) var(--ease);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.note {
+  min-height: 3.2em;
+  margin-top: var(--s3);
+}
+.note b {
+  font-weight: 750;
+}
+/* Two rows of three at every width. A single row of six would need a panel about 760px wide,
+   which the hero never gives it, so there is no six-across layout. */
+.states {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  margin: var(--s3) 0 0;
+  border: 0;
+  padding: 0;
+  min-width: 0;
+}
+.states button {
+  min-height: 44px;
+  padding: 0 4px;
+  font-size: var(--step-small);
+  font-weight: 650;
+  white-space: nowrap;
+  background: var(--field);
+  color: var(--field-ink);
+  border-radius: var(--r);
+  transition: transform var(--t-fast) var(--ease);
+}
+/* under 306px of panel, "Disassembled" no longer fits a third: three rows of two */
+@container toy (max-width: 305px) {
+  .states {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.states button:hover {
+  transform: translateY(-2px);
+}
+.states button[aria-pressed='true'] {
+  background: var(--field-ink);
+  color: var(--field);
+}
+.hint {
+  margin-top: var(--s3);
+  font-size: var(--step-small);
+  color: var(--field-muted);
+}
+@media (min-width: $mantine-breakpoint-xs) {
+  .toy {
+    padding: var(--s5);
+  }
+}
+@media (min-width: 60em) {
+  .toy {
+    margin: var(--s2) var(--s2) var(--s2) 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .states button:hover {
+    transform: none;
+  }
+}

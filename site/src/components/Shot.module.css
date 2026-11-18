@@ -1,0 +1,152 @@
+/* Screenshot placeholders (SPEC 6.14). The frame keeps a fixed ratio. Everything about a placeholder
+   (baseplate, label, shot notes) lives inside the frame and leaves with it when the image arrives. */
+.shot {
+  min-width: 0;
+}
+.frame {
+  position: relative;
+  aspect-ratio: var(--ar, 16 / 10);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  overflow: hidden;
+  /* a size container: the contents can never stretch the frame, and they adapt to it */
+  container: shot / size;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+}
+.art {
+  position: absolute;
+  inset: 0;
+}
+.frame img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.label {
+  position: relative;
+  place-self: center;
+  margin: var(--s3);
+  background: var(--ground);
+  border-radius: var(--r);
+  padding: 10px 14px;
+  text-align: center;
+  font-size: var(--step-small);
+  line-height: 1.35;
+}
+.label b,
+.notes > b {
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+.label strong {
+  display: block;
+  font-size: 1rem;
+  font-weight: 700;
+}
+/* shot notes: for whoever takes the screenshot, never for readers */
+.notes {
+  position: relative;
+  grid-row: 2;
+  align-self: end;
+  max-height: 100cqh;
+  overflow-y: auto;
+  padding: var(--s3) var(--s4);
+  background: color-mix(in srgb, var(--ground) 90%, transparent);
+  border-top: 1px solid var(--line);
+  font-size: var(--step-small);
+  line-height: 1.45;
+  color: var(--muted);
+}
+.notes > b {
+  display: none;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.notes dl {
+  display: grid;
+  gap: 6px;
+}
+.notes dt {
+  font-weight: 700;
+  color: var(--ink);
+}
+/* a wide frame: labels in a column beside their lines */
+@container shot (min-width: 600px) {
+  .notes dl {
+    gap: 2px;
+  }
+  .notes dl > div {
+    display: grid;
+    grid-template-columns: 10.5em 1fr;
+    gap: var(--s3);
+  }
+}
+/* a short frame: the center label gives way to one line in the notes, and each label runs into
+   its line */
+@container shot (max-height: 400px) and (max-width: 599px) {
+  .label {
+    display: none;
+  }
+  .notes {
+    border-top: 0;
+    padding: 10px var(--s3);
+  }
+  .notes > b {
+    display: block;
+  }
+  .notes dl {
+    gap: 2px;
+  }
+  .notes dt,
+  .notes dd {
+    display: inline;
+  }
+  .notes dt::after {
+    content: ': ';
+  }
+}
+.phone .frame {
+  --ar: 9 / 19.5;
+  max-width: 280px;
+}
+.crop .frame {
+  --ar: 4 / 5;
+  max-width: 320px;
+}
+/* under a real image: one caption line (plus the theme note when it applies) */
+.shot figcaption {
+  margin-top: var(--s2);
+  font-size: var(--step-small);
+  line-height: 1.45;
+  color: var(--muted);
+}
+.phone figcaption {
+  max-width: 280px;
+}
+.crop figcaption {
+  max-width: 320px;
+}
+
+/* one image per theme, or a theme note that only shows in the other theme */
+.onlyDark {
+  display: none;
+}
+:global(:root[data-mantine-color-scheme='dark']) .onlyDark {
+  display: revert;
+}
+:global(:root[data-mantine-color-scheme='dark']) .onlyLight {
+  display: none;
+}
+@media (prefers-color-scheme: dark) {
+  :global(:root:not([data-mantine-color-scheme])) .onlyDark {
+    display: revert;
+  }
+  :global(:root:not([data-mantine-color-scheme])) .onlyLight {
+    display: none;
+  }
+}

@@ -1,0 +1,68 @@
+/* Buttons (SPEC 6.5). A parent on a bright brick or on the field changes --btn, --btn-ink and
+   --btn-hover for the buttons inside it. */
+.btn {
+  --brick: var(--btn);
+  --stud-inset: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s2);
+  min-height: 48px;
+  padding: 0 20px;
+  border-radius: var(--r);
+  background: var(--brick);
+  color: var(--btn-ink);
+  font-weight: 650;
+  line-height: 1.2;
+  text-decoration: none;
+  transition:
+    transform var(--t-fast) var(--ease),
+    background-color var(--t-fast) var(--ease);
+}
+.btn:hover {
+  --brick: var(--btn-hover);
+  text-decoration: none;
+  transform: translateY(-2px);
+}
+.btn:active {
+  transform: translateY(2px);
+}
+.btn:active::before {
+  transform: scaleY(0.5);
+}
+.start {
+  --brick: var(--brick-setup);
+  --focus: var(--field-ink);
+  color: var(--brick-ink);
+}
+.start:hover {
+  --brick: var(--brick-setup-hover);
+}
+.quiet {
+  --brick: var(--surface-2);
+  color: var(--ink);
+}
+.quiet:hover {
+  --brick: var(--line);
+}
+.small {
+  --pitch: 16px;
+  --stud-h: 5px;
+  min-height: 44px;
+  padding: 0 14px;
+  font-size: 0.9375rem;
+}
+.arrow {
+  transition: transform var(--t-fast) var(--ease);
+}
+.btn:hover .arrow {
+  transform: translateX(3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn:hover,
+  .btn:active,
+  .btn:hover .arrow {
+    transform: none;
+  }
+}
