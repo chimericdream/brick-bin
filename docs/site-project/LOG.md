@@ -230,3 +230,17 @@ Design A / Design B mapping for Phase 1.5.
 - For the human: compose pass-through for six variables and a missing `deploy/.env.example`; whether
   the GHCR image is public; database restore order; app bug where the phone "More" tab links to the
   missing `/more` route; whether `docs/site-project/` (147 MB) stays in the PR.
+
+### Human answers to the developer's questions (2026-11-18)
+
+- Compose pass-through of the six variables plus `deploy/.env.example`: yes, in a separate PR
+  (`fix/compose-env-passthrough`). PR #4 then drops the per-row notes that no longer apply and merges
+  after it.
+- `ghcr.io/chimericdream/brick-bin` is public.
+- Restore order: untested, but the human thinks migrations must run first. The developer verifies it
+  against the real dump format.
+- The phone "More" tab bug (`/more` has no route): fix it in PR #4.
+- Designer folders: out of the PR, kept on disk. The PM ran `git rm --cached` on
+  `docs/site-project/design/` and added it to `.gitignore` (0c1f7ec). They stay in the branch history
+  until a squash merge.
+- The designer accepted a 900px width for the social card's descriptor line (SPEC 6.28).
