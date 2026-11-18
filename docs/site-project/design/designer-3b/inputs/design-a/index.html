@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brick Bin: your household's brick sets, on your own server</title>
+<meta name="description" content="Brick Bin is a free, self-hosted web app for a household's collection of building-brick sets: every box, its build state and its missing pieces.">
+<link rel="icon" href="assets/logo/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/site.css">
+<script>(function(){var d=document.documentElement;d.classList.add('js');try{var t=localStorage.getItem('bb-theme');if(t==='light'||t==='dark')d.setAttribute('data-theme',t);}catch(e){}})();</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header site-header--dark">
+  <div class="wrap site-header__row">
+    <a class="brand" href="index.html" aria-label="Brick Bin, home">
+      <svg viewBox="0 0 648 90" aria-hidden="true"><use href="#lockup"/></svg>
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <ul>
+        <li><a href="tutorials.html" style="--brick: var(--brick-tutorials)">Tutorials</a></li>
+        <li><a href="docs-setup.html" style="--brick: var(--brick-setup)">Docs</a></li>
+        <li><a href="faq.html" style="--brick: var(--brick-faq)">FAQ</a></li>
+        <li><a href="#repo">Source code</a></li>
+      </ul>
+    </nav>
+    <div class="header-tools">
+      <div class="theme-toggle" role="group" aria-label="Colour theme">
+        <button type="button" data-theme-set="auto" aria-pressed="true" aria-label="Match my device"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm0 2v14a7 7 0 0 1 0-14Z"/></svg></button>
+        <button type="button" data-theme-set="light" aria-pressed="false" aria-label="Light theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11 1h2v4h-2zM11 19h2v4h-2zM1 11h4v2H1zM19 11h4v2h-4zM4.2 5.6l1.4-1.4 2.8 2.8-1.4 1.4zM15.6 17l1.4-1.4 2.8 2.8-1.4 1.4zM4.2 18.4 7 15.6 8.4 17l-2.8 2.8zM15.6 7 18.4 4.2l1.4 1.4L17 8.4zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Z"/></svg></button>
+        <button type="button" data-theme-set="dark" aria-pressed="false" aria-label="Dark theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14.5 2.5a9.5 9.5 0 1 0 7 15.9A8 8 0 0 1 14.5 2.5Z"/></svg></button>
+      </div>
+      <a class="btn btn--sm" href="docs-setup.html" style="--brick: var(--hero-ink); color: var(--hero)">Set it up</a>
+    </div>
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu">
+      Menu <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 6h18v2.5H3zM3 11h18v2.5H3zM3 16h18v2.5H3z"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="menu" id="menu" hidden>
+  <div class="menu__scrim" data-close></div>
+  <div class="menu__sheet" role="dialog" aria-modal="true" aria-label="Menu">
+    <div class="menu__top">
+      <a class="brand" href="index.html" aria-label="Brick Bin, home"><svg viewBox="0 0 648 90" aria-hidden="true"><use href="#lockup"/></svg></a>
+      <button class="menu-btn" type="button" data-close style="display:inline-flex">Close <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="m5.6 4.2 6.4 6.4 6.4-6.4 1.4 1.4-6.4 6.4 6.4 6.4-1.4 1.4-6.4-6.4-6.4 6.4-1.4-1.4 6.4-6.4-6.4-6.4z"/></svg></button>
+    </div>
+    <ul class="menu__bricks">
+      <li><a class="studs" href="tutorials.html" style="--brick: var(--brick-tutorials)">Tutorials <span>Walk-throughs</span></a></li>
+      <li><a class="studs" href="docs-setup.html" style="--brick: var(--brick-setup)">Setup <span>Start here</span></a></li>
+      <li><a class="studs" href="docs-hosting.html" style="--brick: var(--brick-hosting)">Hosting <span>Proxmox, Tailscale</span></a></li>
+      <li><a class="studs" href="docs-configuration.html" style="--brick: var(--brick-config)">Configuration <span>Every setting</span></a></li>
+      <li><a class="studs" href="faq.html" style="--brick: var(--brick-faq)">FAQ <span>Short answers</span></a></li>
+    </ul>
+    <ul class="menu__more">
+      <li><a href="#repo">Source code</a></li>
+      <li><a href="index.html">Home</a></li>
+    </ul>
+    <div class="menu__theme">
+      <p id="menu-theme-label">Theme</p>
+      <div class="theme-toggle theme-toggle--labelled" role="group" aria-labelledby="menu-theme-label">
+        <button type="button" data-theme-set="auto" aria-pressed="true">Auto</button>
+        <button type="button" data-theme-set="light" aria-pressed="false">Light</button>
+        <button type="button" data-theme-set="dark" aria-pressed="false">Dark</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main id="main">
+  <!-- 1. What it is, and who for. The section bricks are the way in. -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="wrap hero__head">
+      <h1 class="hero__title rise" id="hero-title"><span>Brick</span> <span>Bin</span></h1>
+      <p class="hero__lede rise" style="--d:1">Track your household's building-brick sets, box by box, on a server you run yourself. Free, open source, and happy with any brand.</p>
+    </div>
+    <nav aria-label="Where to go next" class="stack-nav" style="display:contents">
+      <ul class="stack">
+        <li><a class="stack__brick studs" href="faq.html" style="--brick: var(--brick-faq)"><strong>FAQ</strong><span>Short answers to fair questions</span><span class="arrow" aria-hidden="true">→</span></a></li>
+        <li><a class="stack__brick studs" href="docs-configuration.html" style="--brick: var(--brick-config)"><strong>Configuration</strong><span>Every setting, with its default</span><span class="arrow" aria-hidden="true">→</span></a></li>
+        <li><a class="stack__brick studs" href="docs-hosting.html" style="--brick: var(--brick-hosting)"><strong>Hosting</strong><span>Proxmox, Docker, Tailscale and backups</span><span class="arrow" aria-hidden="true">→</span></a></li>
+        <li><a class="stack__brick studs" href="tutorials.html" style="--brick: var(--brick-tutorials)"><strong>Tutorials</strong><span>Ten walk-throughs, from first run to collection value</span><span class="arrow" aria-hidden="true">→</span></a></li>
+        <li class="stack__front">
+          <div class="stack__open studs" style="--brick: var(--brick-setup)">
+            <h2>Setup</h2>
+            <p>Start here. The guide covers a quick try-out on port 3000 and the recommended Proxmox and Tailscale route.</p>
+            <a class="btn" href="docs-setup.html">Start the setup guide <span class="arrow" aria-hidden="true">→</span></a>
+          </div>
+        </li>
+      </ul>
+    </nav>
+  </section>
+
+  <!-- 2. Set vs copy -->
+  <section class="statement" aria-labelledby="sets-title">
+    <div class="wrap statement__inner">
+      <h2 class="h-section rise" id="sets-title">A set is the design. A copy is the box.</h2>
+      <p class="statement__text rise" style="--d:1">You might own five of one polybag: one sealed <span class="thumb" aria-hidden="true"><svg viewBox="0 0 30 20"><rect x="5" y="6" width="20" height="12" rx="1" fill="currentColor"/><rect x="4" y="3" width="22" height="4" rx="1" fill="currentColor"/><rect x="14" y="3" width="2.5" height="15" fill="var(--surface-2)"/></svg></span>, one built on a shelf <span class="thumb" aria-hidden="true"><svg viewBox="0 0 30 20"><rect x="5" y="13" width="14" height="5" rx=".6" fill="currentColor"/><rect x="9" y="8" width="14" height="5" rx=".6" fill="currentColor" opacity=".75"/><rect x="12" y="3" width="9" height="5" rx=".6" fill="currentColor"/></svg></span>, three in a tub and missing four pieces <span class="thumb" aria-hidden="true"><svg viewBox="0 0 30 20"><rect x="8" y="4" width="6" height="5" rx=".6" fill="currentColor" opacity=".75"/><rect x="15" y="3" width="7" height="6" rx=".6" fill="currentColor"/><path d="M4 8h22l-3 10H7z" fill="currentColor"/></svg></span>. Brick Bin keeps every box apart.</p>
+    </div>
+  </section>
+
+  <!-- 3. Features: close-ups on a board -->
+  <section class="board-wrap" aria-labelledby="board-title">
+    <div class="wrap">
+      <div class="board">
+        <div class="tile tile--head g-head">
+          <h2 class="h-section rise" id="board-title">What it keeps track of</h2>
+          <p class="rise" style="--d:1">Sets, the boxes you own of each, and everything that goes missing from them.</p>
+        </div>
+
+        <article class="tile tile--dark tile--wide g-copies rise" style="--d:1">
+          <div class="tile__ui" data-ui style="top: 22px; left: 20px; right: -60px;" aria-hidden="true">
+            <div class="ui-rows" style="font-size:max(0.5em, 14px)">
+              <div class="ui-row"><b>Copy 1</b> Sealed <span class="dim">Hall cupboard</span></div>
+              <div class="ui-row"><b>Copy 2</b> Built <span class="dim">Living-room shelf</span></div>
+              <div class="ui-row"><b>Copy 3</b> Disassembled <span class="dim">Blue tub</span></div>
+              <div class="ui-row"><b>Copy 4</b> Disassembled <span class="dim">Blue tub · 4 missing</span></div>
+              <div class="ui-row"><b>Copy 5</b> Disassembled <span class="dim">Blue tub</span></div>
+            </div>
+          </div>
+          <div class="tile__cap"><h3>Copies</h3><p>One set, as many boxes as you own. Each has its own build state, place, owner, price and value.</p></div>
+        </article>
+
+        <article class="tile g-missing tile--sm rise" style="--d:2">
+          <div class="tile__ui" data-ui style="top: 16px; left: 18px;" aria-hidden="true"><span class="chip"><span class="swatch"></span>× 4</span></div>
+          <div class="tile__cap"><h3>Missing pieces</h3><p>Real catalog parts: part, colour and quantity, with pictures.</p></div>
+        </article>
+
+        <article class="tile tile--t2 g-catalog rise" style="--d:3">
+          <div class="tile__ui" data-ui style="top: 10px; left: 18px;" aria-hidden="true"><span class="big-figure" style="font-size:1.7em">48 h</span></div>
+          <div class="tile__cap"><h3>Catalog lookup</h3><p>From Rebrickable data you import yourself, at most once every 48 hours.</p></div>
+        </article>
+
+        <article class="tile tile--dark tile--tall g-state rise" style="--d:1">
+          <div class="tile__ui" data-ui style="top: 26px; left: 20px; right: -80px;" aria-hidden="true">
+            <span class="chip">In progress <svg viewBox="0 0 12 12"><path fill="currentColor" d="M1 4h10L6 9z"/></svg></span>
+            <div class="ui-rows" style="margin-top:.3em; font-size:max(.42em, 14px); opacity:.85">
+              <div class="ui-row">Sealed</div><div class="ui-row">Opened</div><div class="ui-row">Built</div><div class="ui-row">Disassembled</div><div class="ui-row">Mixed</div>
+            </div>
+          </div>
+          <div class="tile__cap"><h3>Build state</h3><p>Sealed, opened, in progress, built, disassembled or mixed. One tap to change.</p></div>
+        </article>
+
+        <article class="tile tile--wide g-shop rise" style="--d:2">
+          <div class="tile__ui" data-ui style="top: 18px; left: 20px; right: -120px;" aria-hidden="true">
+            <div class="ui-row" style="font-size:.62em"><span class="tick"><svg viewBox="0 0 16 16" aria-hidden="true" style="width:.8em;height:.8em"><path fill="currentColor" d="M6 11.2 2.4 7.6 1 9l5 5L15 5l-1.4-1.4z"/></svg></span><span class="swatch" style="background: var(--part-reddish-brown)"></span><b>Plate 2 × 4</b> Reddish brown <b>× 3</b></div>
+          </div>
+          <div class="tile__cap"><h3>Shopping list</h3><p>Everything missing, grouped by part and colour, with a store-trip mode for phones. Exports to BrickLink, Rebrickable and plain CSV.</p></div>
+        </article>
+
+        <article class="tile tile--t2 tile--tall g-kids rise" style="--d:3">
+          <div class="tile__ui" data-ui style="top: 22px; left: 20px; right: -70px; font-size: 1.6em" aria-hidden="true">
+            <div style="font-size:max(.3em, 14px); font-weight:600">Price</div>
+            <div class="big-figure" style="display:flex; align-items:center; gap:.08em">$<span style="display:inline-block; width:3em; height:.7em; background: var(--ink); border-radius:.05em"></span></div>
+            <div style="font-size:max(.3em, 14px); font-weight:600; margin-top:.6em">Shopping list</div>
+            <div class="big-figure" style="display:flex; align-items:center; gap:.08em; font-size:.6em"><span style="display:inline-block; width:4em; height:.7em; background: var(--ink); border-radius:.05em"></span></div>
+          </div>
+          <div class="tile__cap"><h3>Kid profiles</h3><p>Read-only, no prices, no shopping list. Hidden sets look as if they don't exist. Kids still run their own wishlist.</p></div>
+        </article>
+
+        <article class="tile tile--t2 g-pdf rise" style="--d:1">
+          <div class="tile__ui" data-ui style="top: 10px; left: 18px;" aria-hidden="true"><span class="big-figure" style="font-size:1.5em">p. 37<small> / 112</small></span></div>
+          <div class="tile__cap"><h3>Instructions</h3><p>Upload a PDF, save a link, or save a PDF from a web address.</p></div>
+        </article>
+
+        <article class="tile g-csv rise" style="--d:2; background: var(--surface-3, #c9c9c1)">
+          <div class="tile__ui" data-ui style="top: 18px; left: 18px; right: -90px;" aria-hidden="true"><span class="chip" style="font-size:.62em">brickset-export.csv</span></div>
+          <div class="tile__cap"><h3>CSV import</h3><p>Rebrickable set lists, Brickset exports, any spreadsheet.</p></div>
+        </article>
+
+        <article class="tile tile--wide g-wish rise" style="--d:1">
+          <div class="tile__ui" data-ui style="top: 20px; left: 20px;" aria-hidden="true">
+            <span class="toggle" style="font-size:.7em"><span class="toggle__track"></span>I bought this</span>
+            <div style="font-size:max(.36em, 14px); margin-top:.4em; font-weight:500">Only you can see this mark.</div>
+          </div>
+          <div class="tile__cap"><h3>Wishlists</h3><p>Anyone can mark a wish as bought, privately. When it arrives, “We got it” turns it into a set.</p></div>
+        </article>
+
+        <article class="tile tile--dark tile--wide g-value rise" style="--d:2">
+          <div class="tile__ui" data-ui style="top: 14px; left: 20px; right: -40px;" aria-hidden="true">
+            <span class="big-figure" style="font-size:1.4em">$1,284<small> estimated</small></span>
+            <span class="chip" style="font-size:max(.4em, 14px); margin-left:.6em; vertical-align: .9em">3 values stale</span>
+          </div>
+          <div class="tile__cap"><h3>Collection value</h3><p>What you paid against what it's worth now, sealed sets, and the values that have gone stale.</p></div>
+        </article>
+      </div>
+      <p class="board-more rise">Also in the box: an activity trail, a trash you can restore from, light and dark themes, and layouts made for phones first.</p>
+
+      <div class="screens">
+        <figure class="shot rise" data-shot-id="LND-01">
+          <div class="shot__frame studs" style="--ratio: 16 / 10" role="img" aria-label="Brick Bin's set detail page for a polybag set with five copies: one sealed, one built on the living-room shelf, three disassembled in a blue tub, one of them missing four pieces.">
+            <div class="shot__id">LND-01 <span>Desktop · light · 16:10</span></div>
+            <div class="shot__name">Set detail page</div>
+            <svg class="shot__glyph" viewBox="0 0 44 32" aria-hidden="true"><rect x="2" y="4" width="40" height="24" rx="2" fill="currentColor"/><rect x="6" y="8" width="32" height="16" fill="var(--brick)"/></svg>
+          </div>
+          <figcaption><dl>
+            <dt>Screen</dt><dd>Set detail page</dd>
+            <dt>State</dt><dd>One polybag set with five copies: one sealed, one built, three disassembled, one of those missing 4 pieces.</dd>
+            <dt>Viewport</dt><dd>Desktop, light theme</dd>
+            <dt>Focus</dt><dd>The copies list, each with its own state and place. Crop to the set header and the list.</dd>
+          </dl></figcaption>
+        </figure>
+        <figure class="shot shot--phone rise" style="--d:1" data-shot-id="LND-02">
+          <div class="shot__frame studs" style="--ratio: 9 / 16" role="img" aria-label="The shopping list in store-trip mode on a phone: twelve missing parts grouped by part and colour, three ticked off.">
+            <div class="shot__id">LND-02 <span>Phone · dark</span></div>
+            <div class="shot__name">Shopping list, store-trip mode</div>
+            <svg class="shot__glyph" viewBox="0 0 44 32" aria-hidden="true"><rect x="14" y="1" width="16" height="30" rx="3" fill="currentColor"/><rect x="16" y="5" width="12" height="22" fill="var(--brick)"/></svg>
+          </div>
+          <figcaption><dl>
+            <dt>Screen</dt><dd>Shopping list, store-trip mode</dd>
+            <dt>State</dt><dd>12 missing parts across 3 sets; 3 ticked off.</dd>
+            <dt>Viewport</dt><dd>Phone, dark theme</dd>
+            <dt>Focus</dt><dd>Tick boxes and part pictures. Crop below the status bar.</dd>
+          </dl></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. The live thing: one control, blown up -->
+  <section class="showcase" aria-labelledby="state-title">
+    <div class="wrap">
+      <div class="showcase__text">
+        <h2 class="showcase__title rise" id="state-title">This copy is <span class="w w--sealed">sealed.</span><span class="w w--opened">opened.</span><span class="w w--progress">in progress.</span><span class="w w--built">built.</span><span class="w w--dis">disassembled.</span><span class="w w--mixed">mixed.</span></h2>
+        <p class="showcase__desc rise" style="--d:1" aria-live="polite">
+          <span class="w w--sealed">Still in the wrapper. It counts toward your sealed sets on the value page.</span>
+          <span class="w w--opened">The box is open and nothing is built yet. The bags could be anywhere.</span>
+          <span class="w w--progress">Half a spaceship on the dining table. Its instructions are a tap away.</span>
+          <span class="w w--built">Finished and on display. Give it a place, like “Living-room shelf”, and you can find it again.</span>
+          <span class="w w--dis">Back in pieces. Note anything that went missing on the way and it joins the shopping list.</span>
+          <span class="w w--mixed">Some of it is built and some of it isn't. Mixed is a real answer.</span>
+        </p>
+        <p class="showcase__note rise" style="--d:2">Try the menu. Each copy keeps its own state, so five copies can give five answers.</p>
+      </div>
+    </div>
+    <fieldset class="statemenu rise" style="--d:2; border:0; margin:0" data-ui>
+      <legend class="vh">Build state for copy 2</legend>
+      <div class="statemenu__head" aria-hidden="true"><span>Build state</span><span>Copy 2 of 5</span></div>
+      <label><input type="radio" name="state" id="st-sealed"><svg class="check" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M6 11.2 2.4 7.6 1 9l5 5L15 5l-1.4-1.4z"/></svg>Sealed</label>
+      <label><input type="radio" name="state" id="st-opened"><svg class="check" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M6 11.2 2.4 7.6 1 9l5 5L15 5l-1.4-1.4z"/></svg>Opened</label>
+      <label><input type="radio" name="state" id="st-progress"><svg class="check" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M6 11.2 2.4 7.6 1 9l5 5L15 5l-1.4-1.4z"/></svg>In progress</label>
+      <label><input type="radio" name="state" id="st-built" checked><svg class="check" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M6 11.2 2.4 7.6 1 9l5 5L15 5l-1.4-1.4z"/></svg>Built</label>
+      <label><input type="radio" name="state" id="st-dis"><svg class="check" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M6 11.2 2.4 7.6 1 9l5 5L15 5l-1.4-1.4z"/></svg>Disassembled</label>
+      <label><input type="radio" name="state" id="st-mixed"><svg class="check" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M6 11.2 2.4 7.6 1 9l5 5L15 5l-1.4-1.4z"/></svg>Mixed</label>
+    </fieldset>
+  </section>
+
+  <!-- 5. Self-hosting at a glance -->
+  <section class="stages" aria-labelledby="host-title" data-stages>
+    <div class="stages__text">
+      <h2 class="stages__h2" id="host-title">How self-hosting works</h2>
+      <div class="stage is-current">
+        <h3>First, a home</h3>
+        <p>A Proxmox VM or LXC container with Docker is the recommended home. Any machine that runs Docker will do for a try-out.</p>
+      </div>
+      <div class="stage">
+        <h3>Then the stack</h3>
+        <p>One compose file runs four containers: the app, its own Postgres 17, a Tailscale sidecar for HTTPS and Watchtower for updates.</p>
+      </div>
+      <div class="stage">
+        <h3>Next, the address</h3>
+        <p>The sidecar serves Brick Bin over HTTPS at <code>brick-bin.&lt;your-tailnet&gt;.ts.net</code>. Trying it first? Skip Tailscale and open port 3000.</p>
+      </div>
+      <div class="stage">
+        <h3>Last, your household</h3>
+        <p>The first visit asks you to create the household and the admin account. Then import the catalog and add a set.</p>
+      </div>
+    </div>
+    <div class="stages__fig" aria-hidden="true">
+      <div class="frag is-current" data-ui>
+        <ul class="frag-stack"><li class="is-base studs">Proxmox VM or LXC <span>with Docker</span></li></ul>
+        <p class="frag-cap">Any machine with Docker works for a try-out.</p>
+      </div>
+      <div class="frag" data-ui>
+        <ul class="frag-stack">
+          <li class="is-base studs">Proxmox VM or LXC <span>with Docker</span></li>
+          <li class="studs" style="--brick: var(--ground)">Postgres 17 <span>never auto-updated</span></li>
+          <li class="studs" style="--brick: var(--ground)">Brick Bin <span>the app</span></li>
+          <li class="studs" style="--brick: var(--ground)">Tailscale <span>HTTPS on your tailnet</span></li>
+          <li class="studs" style="--brick: var(--ground)">Watchtower <span>new app image every 5 min</span></li>
+        </ul>
+      </div>
+      <div class="frag" data-ui>
+        <div class="frag-url"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M7 10V8a5 5 0 0 1 10 0v2h2v12H5V10Zm2 0h6V8a3 3 0 0 0-6 0Z"/></svg>https://brick-bin.your-tailnet.ts.net</div>
+        <p class="frag-cap">Devices on your tailnet open it like any other website.</p>
+      </div>
+      <div class="frag" data-ui>
+        <ul class="frag-list">
+          <li class="done"><span class="tick"><svg viewBox="0 0 16 16" aria-hidden="true" style="width:.8em;height:.8em"><path fill="currentColor" d="M6 11.2 2.4 7.6 1 9l5 5L15 5l-1.4-1.4z"/></svg></span>Household: Harbour Road</li>
+          <li class="done"><span class="tick"><svg viewBox="0 0 16 16" aria-hidden="true" style="width:.8em;height:.8em"><path fill="currentColor" d="M6 11.2 2.4 7.6 1 9l5 5L15 5l-1.4-1.4z"/></svg></span>Admin account: Sam</li>
+          <li><span class="b1" style="--brick: var(--brick-hosting)"></span>Import the catalog</li>
+          <li><span class="b1" style="--brick: var(--brick-hosting)"></span>Add your first set</li>
+        </ul>
+      </div>
+    </div>
+    <div class="stages__control">
+      <div class="range">
+        <span class="range__track"></span><span class="range__fill"></span>
+        <input type="range" min="0" max="3" step="1" value="0" aria-label="Self-hosting stage">
+      </div>
+      <ul class="stage-names">
+        <li><button type="button" aria-pressed="true">A home</button></li>
+        <li><button type="button" aria-pressed="false">The stack</button></li>
+        <li><button type="button" aria-pressed="false">The address</button></li>
+        <li><button type="button" aria-pressed="false">Your household</button></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 6. The one plate: what you won't find here -->
+  <section class="band studs" aria-labelledby="none-title">
+    <div class="wrap">
+      <h2 class="h-section rise" id="none-title">What you won't find here</h2>
+      <div class="band__grid">
+        <div class="band__item rise" style="--d:1"><h3><span class="b1" style="--brick: var(--ink)"></span>An account with us</h3><p>You create the only account, on your own server. There is no Brick Bin cloud to sign up to.</p></div>
+        <div class="band__item rise" style="--d:2"><h3><span class="b1" style="--brick: var(--ink)"></span>A subscription</h3><p>Brick Bin is free and open source. Nothing to renew, no tier to upgrade to.</p></div>
+        <div class="band__item rise" style="--d:3"><h3><span class="b1" style="--brick: var(--ink)"></span>Tracking</h3><p>No analytics, nothing loaded from a CDN, no background downloads. It goes online only when someone asks it to.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. First step -->
+  <section class="cta" aria-labelledby="cta-title">
+    <div class="wrap cta__grid">
+      <div class="cta__copy">
+        <h2 class="cta__title rise" id="cta-title">Your sets, your server.</h2>
+        <p class="rise" style="--d:1">The setup guide covers a quick try-out on port 3000 and the recommended Proxmox, Docker and Tailscale setup, one step at a time.</p>
+        <a class="btn rise" style="--d:2" href="docs-setup.html">Start the setup guide <span class="arrow" aria-hidden="true">→</span></a>
+      </div>
+      <figure class="shot shot--phone cta__visual rise" style="--d:2" data-shot-id="LND-03">
+        <div class="shot__frame studs" style="--ratio: 4 / 5" role="img" aria-label="Brick Bin's first-run screen on a phone, asking for a household name, filled in as Harbour Road, and then for the admin account.">
+          <div class="shot__id">LND-03 <span>Phone · light · 4:5 crop</span></div>
+          <div class="shot__name">First visit: create your household</div>
+          <svg class="shot__glyph" viewBox="0 0 44 32" aria-hidden="true"><rect x="14" y="1" width="16" height="30" rx="3" fill="currentColor"/><rect x="16" y="5" width="12" height="22" fill="var(--brick)"/></svg>
+        </div>
+        <figcaption><dl>
+          <dt>Screen</dt><dd>First-run setup</dd>
+          <dt>State</dt><dd>Fresh install. Household name filled in as “Harbour Road”, admin fields empty.</dd>
+          <dt>Viewport</dt><dd>Phone, light theme, cropped to 4:5</dd>
+          <dt>Focus</dt><dd>The two steps, household then admin. Crop from the title to the button.</dd>
+        </dl></figcaption>
+      </figure>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer" id="footer">
+  <div class="wrap">
+    <div class="mark-wall" aria-hidden="true">
+      <span class="studs" style="--brick: var(--brick-tutorials); --h: 92%">B</span>
+      <span class="studs" style="--brick: var(--brick-setup); --h: 70%">R</span>
+      <span class="studs" style="--brick: var(--brick-hosting); --h: 100%">I</span>
+      <span class="studs" style="--brick: var(--brick-config); --h: 78%">C</span>
+      <span class="studs" style="--brick: var(--brick-faq); --h: 86%">K</span>
+      <span class="gap"></span>
+      <span class="studs" style="--brick: var(--brick-hosting); --h: 74%">B</span>
+      <span class="studs" style="--brick: var(--brick-tutorials); --h: 96%">I</span>
+      <span class="studs" style="--brick: var(--brick-setup); --h: 82%">N</span>
+    </div>
+    <p class="vh">Brick Bin</p>
+    <div class="footer-cols">
+      <nav aria-labelledby="f-learn"><h2 id="f-learn">Learn</h2><ul>
+        <li><a href="tutorials.html">Tutorials</a></li><li><a href="tutorial-import-catalog.html">Import the catalog</a></li><li><a href="faq.html">FAQ</a></li></ul></nav>
+      <nav aria-labelledby="f-docs"><h2 id="f-docs">Docs</h2><ul>
+        <li><a href="docs-setup.html">Setup</a></li><li><a href="docs-hosting.html">Hosting</a></li><li><a href="docs-configuration.html">Configuration</a></li></ul></nav>
+      <nav aria-labelledby="f-proj"><h2 id="f-proj">Project</h2><ul>
+        <li><a href="#repo" id="repo">Source code</a></li><li><a href="#repo-issues">Report a problem</a></li><li><a href="#repo-licence">Licence</a></li></ul></nav>
+      <div><h2>Theme</h2>
+        <div class="theme-toggle" role="group" aria-label="Colour theme" style="margin-top:4px">
+          <button type="button" data-theme-set="auto" aria-pressed="true" aria-label="Match my device"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm0 2v14a7 7 0 0 1 0-14Z"/></svg></button>
+          <button type="button" data-theme-set="light" aria-pressed="false" aria-label="Light theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11 1h2v4h-2zM11 19h2v4h-2zM1 11h4v2H1zM19 11h4v2h-4zM4.2 5.6l1.4-1.4 2.8 2.8-1.4 1.4zM15.6 17l1.4-1.4 2.8 2.8-1.4 1.4zM4.2 18.4 7 15.6 8.4 17l-2.8 2.8zM15.6 7 18.4 4.2l1.4 1.4L17 8.4zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Z"/></svg></button>
+          <button type="button" data-theme-set="dark" aria-pressed="false" aria-label="Dark theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14.5 2.5a9.5 9.5 0 1 0 7 15.9A8 8 0 0 1 14.5 2.5Z"/></svg></button>
+        </div>
+      </div>
+      <div class="footer-notes">
+        <p>Catalog data comes from <a href="https://rebrickable.com/">Rebrickable</a>, imported by you. Thank you, Rebrickable.</p>
+        <p>Brick Bin is an independent project. It is not affiliated with, sponsored or endorsed by the LEGO Group or any other brick maker. LEGO is a trademark of the LEGO Group.</p>
+      </div>
+    </div>
+    <div class="footer-last">
+      <span>Brick Bin is free and open source. Nothing on this site tracks you.</span>
+      <a class="btn btn--sm" href="#main">Back to top <span aria-hidden="true">↑</span></a>
+    </div>
+  </div>
+</footer>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="lockup" viewBox="0 0 648 90"><g fill="currentColor"><g transform="translate(0 -18.53) scale(1.3235)"><path d="M11 14h28v10H11zM57 14h28v10H57z"/><path fill-rule="evenodd" d="M6 24h84a4 4 0 0 1 4 4v50a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V28a4 4 0 0 1 4-4zm16 18v20h52V42z"/></g><g transform="translate(153 0)"><path fill-rule="evenodd" d="M0 0H18V30H36A30 30 0 0 1 66 60A30 30 0 0 1 36 90H0ZM18 48V72H36A12 12 0 0 0 48 60A12 12 0 0 0 36 48Z"/><path d="M76 90V60A30 30 0 0 1 106 30H124V48H106A12 12 0 0 0 94 60V90Z"/><path d="M134 30H152V90H134ZM134 10H152V22H134Z"/><path d="M222 30V48H192A12 12 0 0 0 180 60A12 12 0 0 0 192 72H222V90H192A30 30 0 0 1 162 60A30 30 0 0 1 192 30Z"/><path d="M232 0H250V90H232ZM250 51L274 30H301L250 74ZM256 64L270 52L297 90H275Z"/><path fill-rule="evenodd" d="M331 0H349V30H367A30 30 0 0 1 397 60A30 30 0 0 1 367 90H331ZM349 48V72H367A12 12 0 0 0 379 60A12 12 0 0 0 367 48Z"/><path d="M407 30H425V90H407ZM407 10H425V22H407Z"/><path d="M435 90V30H465A30 30 0 0 1 495 60V90H477V60A12 12 0 0 0 465 48H453V90Z"/></g></g></symbol>
+</svg>
+<script src="assets/js/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Import the LEGO catalog · Tutorials · Brick Bin</title>
+<meta name="description" content="Fill Brick Bin's catalog with LEGO sets and parts from Rebrickable: paste the downloads page, start the import, and mind the 48-hour limit.">
+<link rel="icon" href="assets/logo/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/site.css">
+<script>(function(){var d=document.documentElement;d.classList.add('js');try{var t=localStorage.getItem('bb-theme');if(t==='light'||t==='dark')d.setAttribute('data-theme',t);}catch(e){}})();</script>
+</head>
+<body style="--sec: var(--brick-tutorials)">
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header site-header--light">
+  <div class="wrap site-header__row">
+    <a class="brand" href="index.html" aria-label="Brick Bin, home">
+      <svg viewBox="0 0 648 90" aria-hidden="true"><use href="#lockup"/></svg>
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <ul>
+        <li><a aria-current="page" href="tutorials.html" style="--brick: var(--brick-tutorials)">Tutorials</a></li>
+        <li><a href="docs-setup.html" style="--brick: var(--brick-setup)">Docs</a></li>
+        <li><a href="faq.html" style="--brick: var(--brick-faq)">FAQ</a></li>
+        <li><a href="#repo">Source code</a></li>
+      </ul>
+    </nav>
+    <div class="header-tools">
+      <div class="theme-toggle" role="group" aria-label="Colour theme">
+        <button type="button" data-theme-set="auto" aria-pressed="true" aria-label="Match my device"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm0 2v14a7 7 0 0 1 0-14Z"/></svg></button>
+        <button type="button" data-theme-set="light" aria-pressed="false" aria-label="Light theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11 1h2v4h-2zM11 19h2v4h-2zM1 11h4v2H1zM19 11h4v2h-4zM4.2 5.6l1.4-1.4 2.8 2.8-1.4 1.4zM15.6 17l1.4-1.4 2.8 2.8-1.4 1.4zM4.2 18.4 7 15.6 8.4 17l-2.8 2.8zM15.6 7 18.4 4.2l1.4 1.4L17 8.4zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Z"/></svg></button>
+        <button type="button" data-theme-set="dark" aria-pressed="false" aria-label="Dark theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14.5 2.5a9.5 9.5 0 1 0 7 15.9A8 8 0 0 1 14.5 2.5Z"/></svg></button>
+      </div>
+      <a class="btn btn--sm" href="docs-setup.html">Set it up</a>
+    </div>
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu">
+      Menu <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 6h18v2.5H3zM3 11h18v2.5H3zM3 16h18v2.5H3z"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="menu" id="menu" hidden>
+  <div class="menu__scrim" data-close></div>
+  <div class="menu__sheet" role="dialog" aria-modal="true" aria-label="Menu">
+    <div class="menu__top">
+      <a class="brand" href="index.html" aria-label="Brick Bin, home"><svg viewBox="0 0 648 90" aria-hidden="true"><use href="#lockup"/></svg></a>
+      <button class="menu-btn" type="button" data-close style="display:inline-flex">Close <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="m5.6 4.2 6.4 6.4 6.4-6.4 1.4 1.4-6.4 6.4 6.4 6.4-1.4 1.4-6.4-6.4-6.4 6.4-1.4-1.4 6.4-6.4-6.4-6.4z"/></svg></button>
+    </div>
+    <ul class="menu__bricks">
+      <li><a class="studs" href="tutorials.html" aria-current="page" style="--brick: var(--brick-tutorials)">Tutorials <span>Walk-throughs</span></a></li>
+      <li><a class="studs" href="docs-setup.html" style="--brick: var(--brick-setup)">Setup <span>Start here</span></a></li>
+      <li><a class="studs" href="docs-hosting.html" style="--brick: var(--brick-hosting)">Hosting <span>Proxmox, Tailscale</span></a></li>
+      <li><a class="studs" href="docs-configuration.html" style="--brick: var(--brick-config)">Configuration <span>Every setting</span></a></li>
+      <li><a class="studs" href="faq.html" style="--brick: var(--brick-faq)">FAQ <span>Short answers</span></a></li>
+    </ul>
+    <ul class="menu__more">
+      <li><a href="#repo">Source code</a></li>
+      <li><a href="index.html">Home</a></li>
+    </ul>
+    <div class="menu__theme">
+      <p id="menu-theme-label">Theme</p>
+      <div class="theme-toggle theme-toggle--labelled" role="group" aria-labelledby="menu-theme-label">
+        <button type="button" data-theme-set="auto" aria-pressed="true">Auto</button>
+        <button type="button" data-theme-set="light" aria-pressed="false">Light</button>
+        <button type="button" data-theme-set="dark" aria-pressed="false">Dark</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main id="main">
+  <div class="wrap">
+    <header class="page-head studs" style="--brick: var(--brick-tutorials)">
+      <ol class="crumbs" aria-label="Breadcrumb"><li><a href="index.html">Home</a></li><li><a href="tutorials.html">Tutorials</a></li><li aria-current="page">Import the catalog</li></ol>
+      <h1 class="page-head__title rise">Import the LEGO catalog</h1>
+      <p class="page-head__lede rise" style="--d:1">Fill Brick Bin's catalog with LEGO sets and parts from Rebrickable, so you can find sets by number, pick missing pieces from a set's real inventory and see pictures of both.</p>
+    </header>
+
+    <div class="tut-page">
+      <aside class="parts studs" aria-labelledby="need">
+        <h2 id="need">What you need</h2>
+        <ul>
+          <li><span class="qty">1×</span><span>Admin account on your Brick Bin</span></li>
+          <li><span class="qty">1×</span><span>Computer with a browser. Copying a page's source is easier there than on a phone.</span></li>
+          <li><span class="qty">6&nbsp;GB</span><span>Free disk, plus room for the data archive. Several GB in all.</span></li>
+          <li><span class="qty">48&nbsp;h</span><span>Since the last import, if there was one</span></li>
+        </ul>
+        <p class="goal"><strong>Goal</strong>A catalog you can search, imported by you, on your own disk.</p>
+      </aside>
+
+      <div>
+        <ol class="steps">
+          <li class="step">
+            <div class="step__num studs" aria-hidden="true"></div>
+            <div>
+              <h2>Open the catalog page</h2>
+              <div class="prose">
+                <p>Go to <strong>Admin → Catalog</strong>. The page says when the catalog was last imported and whether the 48-hour wait is over. On a new install it says there's nothing here yet, which is true.</p>
+              </div>
+              <figure class="shot" data-shot="CAT-01"><div class="shot__frame studs" style="--ratio: 16 / 10" role="img" aria-label="The Admin catalog page before any import, showing an empty state and a box for pasting the downloads page."><div class="shot__id">CAT-01 <span>Desktop · light · 16:10</span></div><div class="shot__name">Catalog page, before the first import</div><svg class="shot__glyph" viewBox="0 0 44 32" aria-hidden="true"><rect x="2" y="4" width="40" height="24" rx="2" fill="currentColor"/><rect x="6" y="8" width="32" height="16" fill="var(--brick)"/></svg></div><figcaption><dl><dt>Screen</dt><dd>Catalog page, before the first import</dd><dt>State</dt><dd>Fresh install, no catalog imported, import available.</dd><dt>Viewport</dt><dd>Desktop, light theme</dd><dt>Focus</dt><dd>The empty state and the paste box. Crop to the catalog panel.</dd></dl></figcaption></figure>
+            </div>
+          </li>
+          <li class="step">
+            <div class="step__num studs" aria-hidden="true"></div>
+            <div>
+              <h2>Copy Rebrickable's downloads page</h2>
+              <div class="prose">
+                <p>Open <a href="https://rebrickable.com/downloads/">Rebrickable's downloads page</a> in another tab. View the page source, select all of it and copy it.</p>
+                <ul>
+                  <li>Windows and Linux: <kbd>Ctrl</kbd> + <kbd>U</kbd>, then <kbd>Ctrl</kbd> + <kbd>A</kbd> and <kbd>Ctrl</kbd> + <kbd>C</kbd></li>
+                  <li>Mac: <kbd>⌥</kbd> + <kbd>⌘</kbd> + <kbd>U</kbd>, then <kbd>⌘</kbd> + <kbd>A</kbd> and <kbd>⌘</kbd> + <kbd>C</kbd></li>
+                </ul>
+                <div class="note" style="--sec: var(--brick-tutorials)"><span class="b1"></span><div><p><strong>Why paste instead of fetch?</strong> Until Rebrickable confirms that automated page reads are fine, Brick Bin doesn't fetch that page itself. You copy it, the app reads the download links out of it, and everyone stays polite.</p></div></div>
+              </div>
+            </div>
+          </li>
+          <li class="step">
+            <div class="step__num studs" aria-hidden="true"></div>
+            <div>
+              <h2>Paste it into Brick Bin</h2>
+              <div class="prose">
+                <p>Paste into the box on the catalog page and press <strong>Check page</strong>. Brick Bin lists the files it found and their dates. If it finds none, you probably copied the page itself rather than its source; try the shortcut again.</p>
+              </div>
+              <figure class="shot" data-shot="CAT-02"><div class="shot__frame studs" style="--ratio: 16 / 10" role="img" aria-label="The catalog page after pasting the downloads page, listing the data files found and their dates."><div class="shot__id">CAT-02 <span>Desktop · light · 16:10</span></div><div class="shot__name">Downloads page checked</div><svg class="shot__glyph" viewBox="0 0 44 32" aria-hidden="true"><rect x="2" y="4" width="40" height="24" rx="2" fill="currentColor"/><rect x="6" y="8" width="32" height="16" fill="var(--brick)"/></svg></div><figcaption><dl><dt>Screen</dt><dd>Downloads page checked</dd><dt>State</dt><dd>Source pasted and checked; three files found with dates; Import button enabled.</dd><dt>Viewport</dt><dd>Desktop, light theme</dd><dt>Focus</dt><dd>The found-files list and the enabled Import button.</dd></dl></figcaption></figure>
+            </div>
+          </li>
+          <li class="step">
+            <div class="step__num studs" aria-hidden="true"></div>
+            <div>
+              <h2>Start the import</h2>
+              <div class="prose">
+                <p>Press <strong>Import catalog</strong>. The first run downloads a data archive and about 6&nbsp;GB of part images, so it takes a while on most connections. The page shows how far it has got.</p>
+                <p>Nothing happens until someone presses the button. Brick Bin never imports on a schedule.</p>
+              </div>
+              <figure class="shot" data-shot="CAT-03"><div class="shot__frame studs" style="--ratio: 16 / 10" role="img" aria-label="The catalog import in progress in dark mode, with a progress bar part way through downloading part images."><div class="shot__id">CAT-03 <span>Desktop · dark · 16:10</span></div><div class="shot__name">Import in progress</div><svg class="shot__glyph" viewBox="0 0 44 32" aria-hidden="true"><rect x="2" y="4" width="40" height="24" rx="2" fill="currentColor"/><rect x="6" y="8" width="32" height="16" fill="var(--brick)"/></svg></div><figcaption><dl><dt>Screen</dt><dd>Import in progress</dd><dt>State</dt><dd>First import running, about 40% through the part images.</dd><dt>Viewport</dt><dd>Desktop, dark theme</dd><dt>Focus</dt><dd>The progress bar and the current step label.</dd></dl></figcaption></figure>
+            </div>
+          </li>
+          <li class="step">
+            <div class="step__num studs" aria-hidden="true"></div>
+            <div>
+              <h2>Check it worked</h2>
+              <div class="prose">
+                <p>Open <strong>Add set</strong> and search for a set number you own. You should see it with its picture. The catalog page now shows the import time and when the next one is allowed.</p>
+              </div>
+              <figure class="shot shot--phone shot--narrow" data-shot="CAT-04"><div class="shot__frame studs" style="--ratio: 9 / 16" role="img" aria-label="Add set search on a phone showing a matching set with its picture after the catalog import."><div class="shot__id">CAT-04 <span>Phone · light · 9:16</span></div><div class="shot__name">Add set search after import</div><svg class="shot__glyph" viewBox="0 0 44 32" aria-hidden="true"><rect x="14" y="1" width="16" height="30" rx="3" fill="currentColor"/><rect x="16" y="5" width="12" height="22" fill="var(--brick)"/></svg></div><figcaption><dl><dt>Screen</dt><dd>Add set search after import</dd><dt>State</dt><dd>Catalog imported. Search for a set number returns one match with a picture.</dd><dt>Viewport</dt><dd>Phone, light theme</dd><dt>Focus</dt><dd>The result row with its picture. Crop from the search field to the first two results.</dd></dl></figcaption></figure>
+            </div>
+          </li>
+        </ol>
+
+        <section class="prose" style="margin-top: var(--s10)" aria-labelledby="limit">
+          <h2 id="limit">About the 48-hour limit</h2>
+          <p>An import can run at most once every 48 hours. Until then the button stays off and says when it will be back. So plan the big one for an evening when you won't want another tomorrow.</p>
+          <p>If Rebrickable confirms that automated reads are fine, an admin can set <a href="docs-configuration.html#REBRICKABLE_PAGE_FETCH"><code>REBRICKABLE_PAGE_FETCH</code></a> to <code>true</code> and skip the copy and paste.</p>
+          <p class="credit">Catalog data comes from <a href="https://rebrickable.com/">Rebrickable</a>.</p>
+        </section>
+
+        <a class="next-brick studs" href="tutorials.html">
+          <small>What next</small>
+          <strong>Add your first set</strong>
+          <span>Search the catalog you just imported, scan a barcode, or type in an off-brand set by hand.</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer" id="footer">
+  <div class="wrap">
+    <div class="mark-wall" aria-hidden="true">
+      <span class="studs" style="--brick: var(--brick-tutorials); --h: 92%">B</span>
+      <span class="studs" style="--brick: var(--brick-setup); --h: 70%">R</span>
+      <span class="studs" style="--brick: var(--brick-hosting); --h: 100%">I</span>
+      <span class="studs" style="--brick: var(--brick-config); --h: 78%">C</span>
+      <span class="studs" style="--brick: var(--brick-faq); --h: 86%">K</span>
+      <span class="gap"></span>
+      <span class="studs" style="--brick: var(--brick-hosting); --h: 74%">B</span>
+      <span class="studs" style="--brick: var(--brick-tutorials); --h: 96%">I</span>
+      <span class="studs" style="--brick: var(--brick-setup); --h: 82%">N</span>
+    </div>
+    <p class="vh">Brick Bin</p>
+    <div class="footer-cols">
+      <nav aria-labelledby="f-learn"><h2 id="f-learn">Learn</h2><ul>
+        <li><a href="tutorials.html">Tutorials</a></li><li><a href="tutorial-import-catalog.html">Import the catalog</a></li><li><a href="faq.html">FAQ</a></li></ul></nav>
+      <nav aria-labelledby="f-docs"><h2 id="f-docs">Docs</h2><ul>
+        <li><a href="docs-setup.html">Setup</a></li><li><a href="docs-hosting.html">Hosting</a></li><li><a href="docs-configuration.html">Configuration</a></li></ul></nav>
+      <nav aria-labelledby="f-proj"><h2 id="f-proj">Project</h2><ul>
+        <li><a href="#repo" id="repo">Source code</a></li><li><a href="#repo-issues">Report a problem</a></li><li><a href="#repo-licence">Licence</a></li></ul></nav>
+      <div><h2>Theme</h2>
+        <div class="theme-toggle" role="group" aria-label="Colour theme" style="margin-top:4px">
+          <button type="button" data-theme-set="auto" aria-pressed="true" aria-label="Match my device"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm0 2v14a7 7 0 0 1 0-14Z"/></svg></button>
+          <button type="button" data-theme-set="light" aria-pressed="false" aria-label="Light theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11 1h2v4h-2zM11 19h2v4h-2zM1 11h4v2H1zM19 11h4v2h-4zM4.2 5.6l1.4-1.4 2.8 2.8-1.4 1.4zM15.6 17l1.4-1.4 2.8 2.8-1.4 1.4zM4.2 18.4 7 15.6 8.4 17l-2.8 2.8zM15.6 7 18.4 4.2l1.4 1.4L17 8.4zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Z"/></svg></button>
+          <button type="button" data-theme-set="dark" aria-pressed="false" aria-label="Dark theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14.5 2.5a9.5 9.5 0 1 0 7 15.9A8 8 0 0 1 14.5 2.5Z"/></svg></button>
+        </div>
+      </div>
+      <div class="footer-notes">
+        <p>Catalog data comes from <a href="https://rebrickable.com/">Rebrickable</a>, imported by you. Thank you, Rebrickable.</p>
+        <p>Brick Bin is an independent project. It is not affiliated with, sponsored or endorsed by the LEGO Group or any other brick maker. LEGO is a trademark of the LEGO Group.</p>
+      </div>
+    </div>
+    <div class="footer-last">
+      <span>Brick Bin is free and open source. Nothing on this site tracks you.</span>
+      <a class="btn btn--sm" href="#main">Back to top <span aria-hidden="true">↑</span></a>
+    </div>
+  </div>
+</footer>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="lockup" viewBox="0 0 648 90"><g fill="currentColor"><g transform="translate(0 -18.53) scale(1.3235)"><path d="M11 14h28v10H11zM57 14h28v10H57z"/><path fill-rule="evenodd" d="M6 24h84a4 4 0 0 1 4 4v50a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V28a4 4 0 0 1 4-4zm16 18v20h52V42z"/></g><g transform="translate(153 0)"><path fill-rule="evenodd" d="M0 0H18V30H36A30 30 0 0 1 66 60A30 30 0 0 1 36 90H0ZM18 48V72H36A12 12 0 0 0 48 60A12 12 0 0 0 36 48Z"/><path d="M76 90V60A30 30 0 0 1 106 30H124V48H106A12 12 0 0 0 94 60V90Z"/><path d="M134 30H152V90H134ZM134 10H152V22H134Z"/><path d="M222 30V48H192A12 12 0 0 0 180 60A12 12 0 0 0 192 72H222V90H192A30 30 0 0 1 162 60A30 30 0 0 1 192 30Z"/><path d="M232 0H250V90H232ZM250 51L274 30H301L250 74ZM256 64L270 52L297 90H275Z"/><path fill-rule="evenodd" d="M331 0H349V30H367A30 30 0 0 1 397 60A30 30 0 0 1 367 90H331ZM349 48V72H367A12 12 0 0 0 379 60A12 12 0 0 0 367 48Z"/><path d="M407 30H425V90H407ZM407 10H425V22H407Z"/><path d="M435 90V30H465A30 30 0 0 1 495 60V90H477V60A12 12 0 0 0 465 48H453V90Z"/></g></g></symbol>
+</svg>
+<script src="assets/js/site.js"></script>
+</body>
+</html>

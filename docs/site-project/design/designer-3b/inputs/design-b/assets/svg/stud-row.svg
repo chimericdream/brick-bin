@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 6" preserveAspectRatio="none">
+  <!-- One module of the side-view stud row. Tile horizontally with mask-repeat: round so studs are always whole. -->
+  <rect x="4" width="12" height="6"/>
+</svg>

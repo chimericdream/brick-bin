@@ -1,0 +1,181 @@
+{"title": "States sheet · Brick Bin", "description": "Reference sheet of interactive states. Not a site page.", "section": "setup", "nav": "docs"}
+<div class="wrap sheet">
+  <header class="page-head studs" style="--brick:var(--surface-2);color:var(--ink)">
+    <ol class="crumbs"><li>Reference</li><li aria-current="page">States sheet</li></ol>
+    <h1>Every state, on one sheet</h1>
+    <p class="lead">Not a site page. Forced-state classes (<code>.is-hover</code>, <code>.is-active</code>, <code>.is-focus</code>) share their rules with the real pseudo-classes in <code>site.css</code>.</p>
+  </header>
+
+  <section>
+    <h2>Buttons</h2>
+    <p>Primary buttons carry studs. Hover lifts 2px, press drops 2px and squashes the studs. Quiet buttons are flat.</p>
+    <div class="specimens">
+      <div class="specimen"><small>Primary · rest</small><a class="btn studs" href="#b">Read the docs</a></div>
+      <div class="specimen"><small>Primary · hover</small><a class="btn studs is-hover" href="#b">Read the docs</a></div>
+      <div class="specimen"><small>Primary · active</small><a class="btn studs is-active" href="#b">Read the docs</a></div>
+      <div class="specimen"><small>Primary · focus</small><a class="btn studs is-focus" href="#b">Read the docs</a></div>
+      <div class="specimen"><small>Quiet · rest</small><a class="btn btn--quiet" href="#b">Tutorials</a></div>
+      <div class="specimen"><small>Quiet · hover</small><a class="btn btn--quiet is-hover" href="#b">Tutorials</a></div>
+      <div class="specimen"><small>Quiet · focus</small><a class="btn btn--quiet is-focus" href="#b">Tutorials</a></div>
+      <div class="specimen"><small>Small (header)</small><a class="btn btn--small studs" href="#b">Set it up</a></div>
+      <div class="specimen specimen--field"><small>Start (on a dark field) · rest</small><a class="btn btn--start studs" href="#b">Read the setup guide &rarr;</a></div>
+      <div class="specimen specimen--field"><small>Start · hover</small><a class="btn btn--start studs is-hover" href="#b">Read the setup guide &rarr;</a></div>
+      <div class="specimen specimen--field"><small>Start · focus</small><a class="btn btn--start studs is-focus" href="#b">Read the setup guide &rarr;</a></div>
+      <div class="specimen" style="background:var(--brick-setup);padding:16px;border-radius:3px;color:#121212;--focus:#121212"><small style="color:#121212">On a bright brick: always ink</small><a class="btn studs is-focus" style="--brick:#121212;color:#f5f5f2" href="#b">Start the setup guide</a></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Links</h2>
+    <div class="specimens">
+      <div class="specimen"><small>Rest</small><p>Read the <a href="#l">hosting docs</a>.</p></div>
+      <div class="specimen"><small>Hover: the underline thickens</small><p>Read the <a href="#l" style="text-decoration-thickness:3px">hosting docs</a>.</p></div>
+      <div class="specimen"><small>Focus</small><p>Read the <a href="#l" class="is-focus" style="border-radius:3px">hosting docs</a>.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Header navigation</h2>
+    <p>The current page sits on a small plate in its section's colour. Docs takes the colour of the docs section you are in.</p>
+    <div class="specimens">
+      <div class="specimen"><small>Rest · hover · focus</small><nav class="nav" style="display:flex" aria-label="Specimen"><a href="#n">Tutorials</a><a href="#n" class="is-hover">Docs</a><a href="#n" class="is-focus">FAQ</a></nav></div>
+      <div class="specimen sec-tutorials"><small>Current: Tutorials</small><nav class="nav" style="display:flex" aria-label="Specimen"><a href="#n" aria-current="page">Tutorials</a><a href="#n">Docs</a><a href="#n">FAQ</a></nav></div>
+      <div class="specimen sec-setup"><small>Current: Docs, Setup</small><nav class="nav" style="display:flex" aria-label="Specimen"><a href="#n">Tutorials</a><a href="#n" aria-current="page">Docs</a><a href="#n">FAQ</a></nav></div>
+      <div class="specimen sec-hosting"><small>Current: Docs, Hosting</small><nav class="nav" style="display:flex" aria-label="Specimen"><a href="#n">Tutorials</a><a href="#n" aria-current="page">Docs</a><a href="#n">FAQ</a></nav></div>
+      <div class="specimen sec-config"><small>Current: Docs, Configuration</small><nav class="nav" style="display:flex" aria-label="Specimen"><a href="#n">Tutorials</a><a href="#n" aria-current="page">Docs</a><a href="#n">FAQ</a></nav></div>
+      <div class="specimen sec-faq"><small>Current: FAQ</small><nav class="nav" style="display:flex" aria-label="Specimen"><a href="#n">Tutorials</a><a href="#n">Docs</a><a href="#n" aria-current="page">FAQ</a></nav></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Theme toggle</h2>
+    <p>Three settings. System is the default and follows the device. Icons in the header and footer (each with a tooltip and an accessible name), words in the phone menu.</p>
+    <div class="specimens">
+      <div class="specimen"><small>System selected</small><div class="theme theme--icons" data-static role="group" aria-label="Specimen"><button type="button" aria-pressed="true">{I_SYSTEM}<span>System</span></button><button type="button" aria-pressed="false">{I_LIGHT}<span>Light</span></button><button type="button" aria-pressed="false">{I_DARK}<span>Dark</span></button></div></div>
+      <div class="specimen"><small>Light selected</small><div class="theme theme--icons" data-static role="group" aria-label="Specimen"><button type="button" aria-pressed="false">{I_SYSTEM}<span>System</span></button><button type="button" aria-pressed="true">{I_LIGHT}<span>Light</span></button><button type="button" aria-pressed="false">{I_DARK}<span>Dark</span></button></div></div>
+      <div class="specimen"><small>Dark selected · System hovered</small><div class="theme theme--icons" data-static role="group" aria-label="Specimen"><button type="button" aria-pressed="false" class="is-hover">{I_SYSTEM}<span>System</span></button><button type="button" aria-pressed="false">{I_LIGHT}<span>Light</span></button><button type="button" aria-pressed="true">{I_DARK}<span>Dark</span></button></div></div>
+      <div class="specimen"><small>Focus on Light</small><div class="theme theme--icons" data-static role="group" aria-label="Specimen"><button type="button" aria-pressed="true">{I_SYSTEM}<span>System</span></button><button type="button" aria-pressed="false" class="is-focus">{I_LIGHT}<span>Light</span></button><button type="button" aria-pressed="false">{I_DARK}<span>Dark</span></button></div></div>
+      <div class="specimen" style="justify-items:stretch"><small>Phone menu: words</small><div class="theme theme--words" data-static role="group" aria-label="Specimen" style="display:flex"><button type="button" aria-pressed="true">{I_SYSTEM}<span>System</span></button><button type="button" aria-pressed="false">{I_LIGHT}<span>Light</span></button><button type="button" aria-pressed="false">{I_DARK}<span>Dark</span></button></div></div>
+      <div class="specimen specimen--field site-footer" style="margin:0"><small>Footer (dark field)</small><div class="theme theme--icons" data-static role="group" aria-label="Specimen"><button type="button" aria-pressed="false">{I_SYSTEM}<span>System</span></button><button type="button" aria-pressed="false">{I_LIGHT}<span>Light</span></button><button type="button" aria-pressed="true">{I_DARK}<span>Dark</span></button></div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Docs navigation</h2>
+    <div class="specimens">
+      <div class="specimen" style="justify-items:stretch"><small>Sidebar (1024 and up): rest, hover, current, focus</small>
+        <nav class="sidenav" style="display:block" aria-label="Specimen"><ul>
+          <li><a class="sec-setup" href="#d"><span class="b1"></span>Setup</a></li>
+          <li><a class="sec-hosting is-hover" href="#d"><span class="b1"></span>Hosting (hover)</a></li>
+          <li><a class="sec-config" href="#d" aria-current="page"><span class="b1"></span>Configuration (current)</a></li>
+          <li><a class="sec-faq is-focus" href="#d"><span class="b1"></span>FAQ (focus)</a></li>
+        </ul></nav>
+      </div>
+      <div class="specimen" style="justify-items:stretch"><small>Tutorials sidebar: numbered, current</small>
+        <nav class="sidenav" style="display:block" aria-label="Specimen"><ul>
+          <li><a href="#d"><span class="num">01</span>First run</a></li>
+          <li><a href="#d" aria-current="page"><span class="num">02</span>Import the LEGO catalog</a></li>
+          <li><a href="#d" class="is-hover"><span class="num">03</span>Add your first set (hover)</a></li>
+        </ul></nav>
+      </div>
+      <div class="specimen" style="justify-items:stretch"><small>Phone: section bricks, Hosting current</small>
+        <ul class="doctabs" style="display:flex"><li><a class="sec-setup" href="#d"><span class="b1"></span>Setup</a></li><li><a class="sec-hosting" href="#d" aria-current="page"><span class="b1"></span>Hosting</a></li><li><a class="sec-config" href="#d"><span class="b1"></span>Configuration</a></li></ul>
+      </div>
+      <div class="specimen sec-hosting" style="justify-items:stretch"><small>"On this page" (1280 and up): current heading marked</small>
+        <div class="toc__desk" style="display:block;position:static;margin:0"><nav class="toc" aria-label="Specimen"><h2>On this page</h2><ul>
+          <li><a href="#d"><span class="b1"></span>What runs</a></li>
+          <li><a href="#d" class="is-here"><span class="b1"></span>Storage</a></li>
+          <li><a href="#d"><span class="b1"></span>Backups</a></li>
+        </ul></nav></div>
+      </div>
+      <div class="specimen" style="justify-items:stretch"><small>"On this page" (under 1280): closed</small>
+        <details class="toc" style="margin:0"><summary>On this page</summary></details>
+      </div>
+      <div class="specimen sec-hosting" style="justify-items:stretch"><small>"On this page": open</small>
+        <details class="toc" open style="margin:0"><summary>On this page</summary><ul><li><a href="#d"><span class="b1"></span>What runs</a></li><li><a href="#d" class="is-here"><span class="b1"></span>Storage</a></li></ul></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec-tutorials">
+    <h2>Rows and section bricks</h2>
+    <div class="specimens">
+      <div class="specimen specimen--wide" style="justify-items:stretch"><small>Tutorial rows: rest, hover (ground tone, number brick lifts 3px), focus</small>
+        <ul class="tutlist">
+          <li><a href="#r"><span class="n">1</span><b>First run</b><span>Create your household and the admin account on the first visit.</span><small>4 steps</small></a></li>
+          <li><a href="#r" class="is-hover"><span class="n">2</span><b>Import the LEGO catalog</b><span>Load Rebrickable's catalog by pasting its downloads page.</span><small>7 steps</small></a></li>
+          <li><a href="#r" class="is-focus"><span class="n">3</span><b>Add your first set</b><span>Search the catalog, scan a barcode, or type one in by hand.</span><small>6 steps</small></a></li>
+        </ul>
+      </div>
+      <div class="specimen specimen--wide" style="justify-items:stretch"><small>Section bricks (closing stack, phone menu): rest, hover (lifts 4px), focus (ink ring), current</small>
+        <ul class="stack">
+          <li><a class="studs sec-faq" href="#r"><b>FAQ</b><span>Rest</span><i aria-hidden="true">&rarr;</i></a></li>
+          <li><a class="studs sec-config is-hover" href="#r"><b>Configuration</b><span>Hover</span><i aria-hidden="true">&rarr;</i></a></li>
+          <li><a class="studs sec-hosting is-focus" href="#r"><b>Hosting</b><span>Focus</span><i aria-hidden="true">&rarr;</i></a></li>
+        </ul>
+        <a class="menu__brick studs sec-tutorials" href="#r" aria-current="page" style="margin-top:16px"><b>Tutorials</b><span>Ten walk-throughs</span></a>
+      </div>
+      <div class="specimen specimen--wide" style="justify-items:stretch"><small>"What next" brick: rest and hover (lifts 4px). It takes the colour of the section it leads to.</small>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:24px">
+          <a class="next studs sec-hosting" style="margin-top:9px" href="#r"><small>Next in the docs</small><b>Hosting &rarr;</b><span>Rest</span></a>
+          <a class="next studs sec-config is-hover" style="margin-top:9px" href="#r"><small>Next in the docs</small><b>Configuration &rarr;</b><span>Hover</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec-config">
+    <h2>Reading furniture</h2>
+    <div class="specimens">
+      <div class="specimen" style="justify-items:stretch"><small>Callout: note (flat, section-coloured 1×1)</small>
+        <div class="note"><p class="note__title"><span class="b1"></span>Why the copy and paste?</p><p>For now, you are the fetch.</p></div></div>
+      <div class="specimen" style="justify-items:stretch"><small>Callout: mind this (dashed outline)</small>
+        <div class="note note--mind"><p class="note__title">Catalog images are not backed up</p><p>After a restore, expect to run a catalog import.</p></div></div>
+      <div class="specimen"><small>Tags: solid, and dashed for anything missing or needed</small><p><span class="tag">Admins only</span> <span class="tag tag--missing">Required</span> <span class="tag tag--missing">Not yet</span> <span class="tag tag--missing">× 4</span></p></div>
+      <div class="specimen" style="justify-items:stretch"><small>Code block, Copy hovered</small>
+        <div class="codeblock"><div class="codeblock__bar"><span>.env</span><button type="button" class="is-hover">Copy</button></div><pre><code>COOKIE_SECURE=true</code></pre></div></div>
+      <div class="specimen"><small>Inline code and keys</small><p>Set <code>AUTO_MIGRATE</code> to <code>false</code>. Press <kbd>Ctrl</kbd> + <kbd>U</kbd>.</p></div>
+      <div class="specimen" style="justify-items:stretch"><small>Bullets and step number</small>
+        <div class="prose" style="margin:0"><ul><li>A 1×1 brick at text size</li><li>In the section's colour</li></ul><ol class="steps"><li style="margin-top:16px"><h3>Open the catalog page</h3></li></ol></div></div>
+      <div class="specimen specimen--wide" style="justify-items:stretch"><small>Config table: a row, and a row reached by its link (<code>:target</code>). Under 720px each row becomes a block.</small>
+        <table class="table-stack"><thead><tr><th scope="col">Variable</th><th scope="col">Purpose</th><th scope="col">Default</th></tr></thead><tbody>
+          <tr><th scope="row"><a class="var" href="#t">APP_PORT</a></th><td>Port published by the plain compose file.</td><td class="default" data-label="Default"><code>3000</code></td></tr>
+          <tr style="background:var(--surface);box-shadow:-8px 0 0 var(--surface),8px 0 0 var(--surface)"><th scope="row"><a class="var" href="#t">COOKIE_SECURE</a></th><td>Set <code>true</code> once the app is served over HTTPS.</td><td class="default" data-label="Default"><code>false</code></td></tr>
+          <tr><th scope="row"><a class="var" href="#t">DATABASE_URL</a></th><td>Postgres connection.</td><td class="default" data-label="Default"><span class="tag tag--missing">Required</span></td></tr>
+        </tbody></table>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Screenshots: placeholder, real, and real in one theme only</h2>
+    <p>The frame keeps its ratio, its 1px line and its radius in all three cases. When a screenshot exists in only one theme it is shown as it is, and the caption says which theme it shows.</p>
+    <div class="specimens" style="grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr))">
+      <figure class="shot"><div class="shot__frame baseplate"><div class="shot__label"><b>LND-01</b><strong>Set detail page</strong>desktop · 16:10 · light</div></div><figcaption>1. Placeholder: baseplate and label.</figcaption></figure>
+      <figure class="shot"><div class="shot__frame"><div class="fakeshot fakeshot--match"><b>Set detail page</b><i style="width:70%"></i><i style="width:92%"></i><i style="width:84%"></i><i style="width:60%"></i></div></div><figcaption>2. Real screenshot in the theme being viewed. No note.</figcaption></figure>
+      <figure class="shot"><div class="shot__frame"><div class="fakeshot fakeshot--other"><b>Set detail page</b><i style="width:70%"></i><i style="width:92%"></i><i style="width:84%"></i><i style="width:60%"></i></div></div><figcaption>3. Only the other theme exists. The image is shown as it is, inside the same frame.<span class="shot__theme-note fakeshot-note"></span></figcaption></figure>
+    </div>
+  </section>
+
+  <section>
+    <h2>The motif at its three sizes</h2>
+    <div class="specimens">
+      <div class="specimen sec-tutorials"><small>Text size: the 1×1</small><p><span class="b1"></span> beside words, always</p></div>
+      <div class="specimen" style="justify-items:stretch"><small>Component: pitch 16 to 32px</small><div class="studs" style="--brick:var(--surface-2);--pitch:20px;height:44px;border-radius:3px"></div></div>
+      <div class="specimen" style="justify-items:stretch"><small>Architecture: pitch 40 to 56px, one per screen</small><div class="studs" style="--brick:var(--brick-hosting);--pitch:48px;--stud-h:13px;margin-top:13px;height:56px;border-radius:3px"></div></div>
+      <div class="specimen" style="justify-items:stretch"><small>Baseplate: something is waiting</small><div class="baseplate" style="height:69px;border:1px solid var(--line);border-radius:3px"></div></div>
+    </div>
+    <div class="swatches">
+      <div class="swatch" style="background:var(--brick-tutorials);color:#121212">Tutorials<code>#FF8C1A</code></div>
+      <div class="swatch" style="background:var(--brick-setup);color:#121212">Setup<code>#6CC04A</code></div>
+      <div class="swatch" style="background:var(--brick-hosting);color:#121212">Hosting<code>#4DB3E6</code></div>
+      <div class="swatch" style="background:var(--brick-config);color:#121212">Configuration<code>#D8BC88</code></div>
+      <div class="swatch" style="background:var(--brick-faq);color:#121212">FAQ<code>#F49AC1</code></div>
+      <div class="swatch" style="background:var(--ground)">Ground<code>--ground</code></div>
+      <div class="swatch" style="background:var(--surface)">Surface<code>--surface</code></div>
+      <div class="swatch" style="background:var(--surface-2)">Surface 2<code>--surface-2</code></div>
+      <div class="swatch" style="background:var(--field);color:var(--field-ink)">Field<code>--field</code></div>
+      <div class="swatch" style="background:var(--ink);color:var(--ground)">Ink<code>--ink</code></div>
+    </div>
+  </section>
+</div>

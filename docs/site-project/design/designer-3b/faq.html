@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FAQ · Brick Bin</title>
+<meta name="description" content="Short, honest answers about Brick Bin: brands, internet access, the catalog, kids, Tailscale, backups, loose bricks and cost.">
+<link rel="icon" href="assets/svg/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/AlbertSans-Variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/site.css">
+<script>
+/* Set the saved theme before first paint. No attribute means "System". */
+(function(){var d=document.documentElement;d.classList.remove("no-js");try{var q=new URLSearchParams(location.search).get("theme"),t=q||localStorage.getItem("bb-theme");if(t==="light"||t==="dark")d.setAttribute("data-theme",t)}catch(e){}})();
+</script>
+</head>
+<body id="top" data-section="faq">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="index.html" aria-label="Brick Bin, home"><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path fill="currentColor" d="M10.5 5.5H15V9h2V5.5h4.5V9H23v14H9V9h1.5z"/><path fill="currentColor" d="M3 13h4v13h18V13h4v17H3z"/></svg><span>Brick Bin</span></a>
+    <nav class="nav" aria-label="Main"><a href="tutorials.html">Tutorials</a><a href="docs-setup.html">Docs</a><a href="faq.html" aria-current="page">FAQ</a></nav>
+    <div class="header-tools">
+      <div class="theme theme--icons" role="group" aria-label="Theme"><button type="button" value="system" aria-pressed="false" title="System"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="10" rx="1"/><path d="M7 17h6M10 13.5V17"/></svg><span>System</span></button><button type="button" value="light" aria-pressed="false" title="Light"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2v2M10 16v2M2 10h2M16 10h2M4.3 4.3l1.4 1.4M14.3 14.3l1.4 1.4M4.3 15.7l1.4-1.4M14.3 5.7l1.4-1.4"/></svg><span>Light</span></button><button type="button" value="dark" aria-pressed="false" title="Dark"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 11.8A7 7 0 0 1 8.2 3.5a7 7 0 1 0 8.3 8.3z"/></svg><span>Dark</span></button></div>
+      <a class="btn btn--small studs" href="docs-setup.html">Set it up</a>
+    </div>
+    <button class="menu-btn" type="button" data-open aria-expanded="false" aria-controls="menu">
+      Menu
+      <svg viewBox="0 0 20 20" aria-hidden="true"><path fill="currentColor" d="M2 4h16v2.5H2zM2 8.75h16v2.5H2zM2 13.5h16V16H2z"/></svg>
+    </button>
+  </div>
+</header>
+<div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="menu__bar">
+    <a class="logo" href="index.html" aria-label="Brick Bin, home"><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path fill="currentColor" d="M10.5 5.5H15V9h2V5.5h4.5V9H23v14H9V9h1.5z"/><path fill="currentColor" d="M3 13h4v13h18V13h4v17H3z"/></svg><span>Brick Bin</span></a>
+    <button class="menu-btn" type="button" data-close>
+      Close
+      <svg viewBox="0 0 20 20" aria-hidden="true"><path stroke="currentColor" stroke-width="2.5" d="M4 4l12 12M16 4L4 16"/></svg>
+    </button>
+  </div>
+  <ul class="menu__list"><li><a class="menu__brick studs sec-tutorials" href="tutorials.html"><b>Tutorials</b><span>Ten walk-throughs</span></a></li><li><a class="menu__brick studs sec-setup" href="docs-setup.html"><b>Setup</b><span>Start here</span></a></li><li><a class="menu__brick studs sec-hosting" href="docs-hosting.html"><b>Hosting</b><span>Proxmox, Tailscale, backups</span></a></li><li><a class="menu__brick studs sec-config" href="docs-configuration.html"><b>Configuration</b><span>Every setting</span></a></li><li><a class="menu__brick studs sec-faq" href="faq.html" aria-current="page"><b>FAQ</b><span>Short answers</span></a></li></ul>
+  <div class="menu__links">
+    <a href="index.html">Home</a>
+    <a href="https://github.com/chimericdream/brick-bin">Source code</a>
+  </div>
+  <div class="menu__foot">
+    <span class="theme-label" id="menu-theme">Theme</span>
+    <div class="theme theme--words" role="group" aria-labelledby="menu-theme"><button type="button" value="system" aria-pressed="false" title="System"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="10" rx="1"/><path d="M7 17h6M10 13.5V17"/></svg><span>System</span></button><button type="button" value="light" aria-pressed="false" title="Light"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2v2M10 16v2M2 10h2M16 10h2M4.3 4.3l1.4 1.4M14.3 14.3l1.4 1.4M4.3 15.7l1.4-1.4M14.3 5.7l1.4-1.4"/></svg><span>Light</span></button><button type="button" value="dark" aria-pressed="false" title="Dark"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 11.8A7 7 0 0 1 8.2 3.5a7 7 0 1 0 8.3 8.3z"/></svg><span>Dark</span></button></div>
+    <p class="small muted" style="margin-top:16px">Free and open source. It runs on your server, so there is nothing to sign in to here.</p>
+  </div>
+</div>
+
+<main id="main">
+<div class="wrap">
+  <header class="page-head studs">
+    <ol class="crumbs" aria-label="Breadcrumb"><li><a href="index.html">Home</a></li><li aria-current="page">FAQ</li></ol>
+    <h1>Questions, answered briefly</h1>
+    <p class="lead">The short answer comes first. The reasons follow, for anyone who wants them.</p>
+  </header>
+</div>
+<div class="wrap faq">
+  <div class="faq__list">
+    <section class="faq__item" id="lego">
+      <h2><span class="b1"></span>Is this a LEGO app?</h2>
+      <p><b>No.</b> Brick Bin works with any brand of building brick, including Mould King, CaDA, COBI, BlueBrixx and Lumibricks. It isn't affiliated with the LEGO Group.</p>
+      <p>The catalog lookup covers LEGO sets, because that's what Rebrickable's data describes. Sets from other brands are added by hand.</p>
+    </section>
+    <section class="faq__item" id="internet">
+      <h2><span class="b1"></span>Does it need the internet?</h2>
+      <p><b>Not day to day.</b> Your data stays on your server, nothing loads from a CDN, and the app makes no background downloads.</p>
+      <p>It goes online only when someone asks it to: an admin importing the catalog, a cover being fetched for a set you add from the catalog, or a PDF you ask it to save from a web address.</p>
+    </section>
+    <section class="faq__item" id="catalog">
+      <h2><span class="b1"></span>Where does the catalog come from?</h2>
+      <p><b><a href="https://rebrickable.com/">Rebrickable</a>.</b> You import their data yourself, onto your own server.</p>
+      <p>Nothing is fetched on a schedule. An admin presses the button, and can do so at most once every 48 hours. <a href="tutorial-import-catalog.html">The import tutorial</a> walks through it.</p>
+    </section>
+    <section class="faq__item" id="kids">
+      <h2><span class="b1"></span>Can my kids see prices?</h2>
+      <p><b>No.</b> Kid profiles are read-only, with no prices and no shopping list. They can still manage their own wishlist.</p>
+      <p>Sets you mark as hidden look, to a kid profile, as if they don't exist. That rule lives on the server and is covered by tests, so it doesn't depend on a button being tucked out of sight. Birthday presents are safe.</p>
+    </section>
+    <section class="faq__item" id="tailscale">
+      <h2><span class="b1"></span>Can I run it without Tailscale?</h2>
+      <p><b>Yes.</b> Run the production compose file and open port 3000.</p>
+      <p>Tailscale is what we recommend because it gives you HTTPS and a tidy address with very little work. Running without it is covered in <a href="docs-hosting.html#no-tailscale">the hosting docs</a>.</p>
+    </section>
+    <section class="faq__item" id="backups">
+      <h2><span class="b1"></span>How do I back it up?</h2>
+      <p><b>Three things:</b> database dumps, cover images and instruction PDFs.</p>
+      <p>The downloaded catalog images aren't backed up, and the dumps skip the catalog tables, because both can be imported again. After a restore, run a catalog import. <a href="docs-hosting.html#backups">Backups in detail</a>.</p>
+    </section>
+    <section class="faq__item" id="loose">
+      <h2><span class="b1"></span>Can I track loose bricks?</h2>
+      <p><b>Not yet.</b> Version 1 tracks sets and the copies you own of them, plus the pieces each copy is missing.</p>
+      <p>Also not in version 1: owned minifigures, a build log, loans, ratings, guest share links, price-guide integrations, and currencies other than USD.</p>
+    </section>
+    <section class="faq__item" id="cost">
+      <h2><span class="b1"></span>What does it cost?</h2>
+      <p><b>Nothing.</b> Brick Bin is free and open source, under the MIT licence. There's no account with us and no subscription.</p>
+      <p>You do supply the server, the disk and the bricks.</p>
+    </section>
+  </div>
+  <aside class="faq__aside">
+    <nav aria-labelledby="jump-h">
+      <h2 id="jump-h">Jump to</h2>
+      <ul class="jump">
+        <li><a href="#lego">Is this a LEGO app?</a></li>
+        <li><a href="#internet">Does it need the internet?</a></li>
+        <li><a href="#catalog">Where does the catalog come from?</a></li>
+        <li><a href="#kids">Can my kids see prices?</a></li>
+        <li><a href="#tailscale">Can I run it without Tailscale?</a></li>
+        <li><a href="#backups">How do I back it up?</a></li>
+        <li><a href="#loose">Can I track loose bricks?</a></li>
+        <li><a href="#cost">What does it cost?</a></li>
+      </ul>
+    </nav>
+    <div>
+      <h2>Still stuck?</h2>
+      <p>If it's about getting Brick Bin running, the docs are the place. If you think you've found a bug, the issue tracker is where to say so.</p>
+      <div class="btn-row"><a class="btn studs" href="docs-setup.html">Read the docs</a><a class="btn btn--quiet" href="https://github.com/chimericdream/brick-bin/issues">Report a problem</a></div>
+    </div>
+  </aside>
+</div>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="wall" role="img" aria-label="Brick Bin, spelled out in bricks"><span class="studs sec-tutorials">B</span><span class="studs sec-setup">R</span><span class="studs sec-hosting">I</span><span class="studs sec-config">C</span><span class="studs sec-faq">K</span><span class="wall__gap"></span><span class="studs sec-hosting">B</span><span class="studs sec-tutorials">I</span><span class="studs sec-setup">N</span></div>
+    <div class="footer-grid">
+      <nav aria-labelledby="f1"><h2 id="f1">Get it running</h2><ul>
+        <li><a href="docs-setup.html">Setup</a></li><li><a href="docs-hosting.html">Hosting</a></li><li><a href="docs-configuration.html">Configuration</a></li></ul></nav>
+      <nav aria-labelledby="f2"><h2 id="f2">Use it</h2><ul>
+        <li><a href="tutorials.html">Tutorials</a></li><li><a href="faq.html">FAQ</a></li></ul></nav>
+      <nav aria-labelledby="f3"><h2 id="f3">The project</h2><ul>
+        <li><a href="https://github.com/chimericdream/brick-bin">Source code</a></li><li><a href="https://github.com/chimericdream/brick-bin/issues">Report a problem</a></li><li><a href="https://github.com/chimericdream/brick-bin/blob/main/LICENSE">MIT licence</a></li></ul></nav>
+      <div><h2 class="theme-label" id="f4">Theme</h2><div class="theme theme--icons" role="group" aria-labelledby="f4"><button type="button" value="system" aria-pressed="false" title="System"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="10" rx="1"/><path d="M7 17h6M10 13.5V17"/></svg><span>System</span></button><button type="button" value="light" aria-pressed="false" title="Light"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2v2M10 16v2M2 10h2M16 10h2M4.3 4.3l1.4 1.4M14.3 14.3l1.4 1.4M4.3 15.7l1.4-1.4M14.3 5.7l1.4-1.4"/></svg><span>Light</span></button><button type="button" value="dark" aria-pressed="false" title="Dark"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 11.8A7 7 0 0 1 8.2 3.5a7 7 0 1 0 8.3 8.3z"/></svg><span>Dark</span></button></div></div>
+      <div class="footer-credit">
+        <p>Catalog data comes from <a href="https://rebrickable.com/">Rebrickable</a>. You import it yourself, onto your own server. Thank you, Rebrickable.</p>
+        <p>Brick Bin is an independent project. It is not affiliated with, endorsed by or sponsored by the LEGO Group or any other brick maker. LEGO is a trademark of the LEGO Group.</p>
+      </div>
+    </div>
+    <div class="footer-base">
+      <p>&copy; 2026 Bill Parrott. Free and open source under the MIT licence. Nothing on this site tracks you.</p>
+      <a class="btn btn--small" href="#top">Back to the top</a>
+    </div>
+  </div>
+</footer>
+<script src="assets/js/site.js"></script>
+</body>
+</html>

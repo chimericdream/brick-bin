@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hosting · Docs · Brick Bin</title>
+<meta name="description" content="What Brick Bin runs, how much disk it wants, how to back it up and restore it, and when it goes online.">
+<link rel="icon" href="assets/svg/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/AlbertSans-Variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/site.css">
+<script>
+/* Set the saved theme before first paint. No attribute means "System". */
+(function(){var d=document.documentElement;d.classList.remove("no-js");try{var q=new URLSearchParams(location.search).get("theme"),t=q||localStorage.getItem("bb-theme");if(t==="light"||t==="dark")d.setAttribute("data-theme",t)}catch(e){}})();
+</script>
+</head>
+<body id="top" data-section="hosting">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="index.html" aria-label="Brick Bin, home"><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path fill="currentColor" d="M10.5 5.5H15V9h2V5.5h4.5V9H23v14H9V9h1.5z"/><path fill="currentColor" d="M3 13h4v13h18V13h4v17H3z"/></svg><span>Brick Bin</span></a>
+    <nav class="nav" aria-label="Main"><a href="tutorials.html">Tutorials</a><a href="docs-setup.html" aria-current="page">Docs</a><a href="faq.html">FAQ</a></nav>
+    <div class="header-tools">
+      <div class="theme theme--icons" role="group" aria-label="Theme"><button type="button" value="system" aria-pressed="false" title="System"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="10" rx="1"/><path d="M7 17h6M10 13.5V17"/></svg><span>System</span></button><button type="button" value="light" aria-pressed="false" title="Light"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2v2M10 16v2M2 10h2M16 10h2M4.3 4.3l1.4 1.4M14.3 14.3l1.4 1.4M4.3 15.7l1.4-1.4M14.3 5.7l1.4-1.4"/></svg><span>Light</span></button><button type="button" value="dark" aria-pressed="false" title="Dark"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 11.8A7 7 0 0 1 8.2 3.5a7 7 0 1 0 8.3 8.3z"/></svg><span>Dark</span></button></div>
+      <a class="btn btn--small studs" href="docs-setup.html">Set it up</a>
+    </div>
+    <button class="menu-btn" type="button" data-open aria-expanded="false" aria-controls="menu">
+      Menu
+      <svg viewBox="0 0 20 20" aria-hidden="true"><path fill="currentColor" d="M2 4h16v2.5H2zM2 8.75h16v2.5H2zM2 13.5h16V16H2z"/></svg>
+    </button>
+  </div>
+</header>
+<div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="menu__bar">
+    <a class="logo" href="index.html" aria-label="Brick Bin, home"><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path fill="currentColor" d="M10.5 5.5H15V9h2V5.5h4.5V9H23v14H9V9h1.5z"/><path fill="currentColor" d="M3 13h4v13h18V13h4v17H3z"/></svg><span>Brick Bin</span></a>
+    <button class="menu-btn" type="button" data-close>
+      Close
+      <svg viewBox="0 0 20 20" aria-hidden="true"><path stroke="currentColor" stroke-width="2.5" d="M4 4l12 12M16 4L4 16"/></svg>
+    </button>
+  </div>
+  <ul class="menu__list"><li><a class="menu__brick studs sec-tutorials" href="tutorials.html"><b>Tutorials</b><span>Ten walk-throughs</span></a></li><li><a class="menu__brick studs sec-setup" href="docs-setup.html"><b>Setup</b><span>Start here</span></a></li><li><a class="menu__brick studs sec-hosting" href="docs-hosting.html" aria-current="page"><b>Hosting</b><span>Proxmox, Tailscale, backups</span></a></li><li><a class="menu__brick studs sec-config" href="docs-configuration.html"><b>Configuration</b><span>Every setting</span></a></li><li><a class="menu__brick studs sec-faq" href="faq.html"><b>FAQ</b><span>Short answers</span></a></li></ul>
+  <div class="menu__links">
+    <a href="index.html">Home</a>
+    <a href="https://github.com/chimericdream/brick-bin">Source code</a>
+  </div>
+  <div class="menu__foot">
+    <span class="theme-label" id="menu-theme">Theme</span>
+    <div class="theme theme--words" role="group" aria-labelledby="menu-theme"><button type="button" value="system" aria-pressed="false" title="System"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="10" rx="1"/><path d="M7 17h6M10 13.5V17"/></svg><span>System</span></button><button type="button" value="light" aria-pressed="false" title="Light"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2v2M10 16v2M2 10h2M16 10h2M4.3 4.3l1.4 1.4M14.3 14.3l1.4 1.4M4.3 15.7l1.4-1.4M14.3 5.7l1.4-1.4"/></svg><span>Light</span></button><button type="button" value="dark" aria-pressed="false" title="Dark"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 11.8A7 7 0 0 1 8.2 3.5a7 7 0 1 0 8.3 8.3z"/></svg><span>Dark</span></button></div>
+    <p class="small muted" style="margin-top:16px">Free and open source. It runs on your server, so there is nothing to sign in to here.</p>
+  </div>
+</div>
+
+<main id="main">
+<div class="wrap docs">
+  <nav class="sidenav" aria-label="Documentation"><h2>Documentation</h2><ul><li><a class="sec-setup" href="docs-setup.html"><span class="b1"></span>Setup</a></li><li><a class="sec-hosting" href="docs-hosting.html" aria-current="page"><span class="b1"></span>Hosting</a></li><li><a class="sec-config" href="docs-configuration.html"><span class="b1"></span>Configuration</a></li></ul><h2>Elsewhere</h2><ul><li><a class="sec-tutorials" href="tutorials.html"><span class="b1"></span>Tutorials</a></li><li><a class="sec-faq" href="faq.html"><span class="b1"></span>FAQ</a></li></ul></nav>
+  <article class="docs__main">
+    <nav aria-label="Documentation sections"><ul class="doctabs"><li><a class="sec-setup" href="docs-setup.html"><span class="b1"></span>Setup</a></li><li><a class="sec-hosting" href="docs-hosting.html" aria-current="page"><span class="b1"></span>Hosting</a></li><li><a class="sec-config" href="docs-configuration.html"><span class="b1"></span>Configuration</a></li></ul></nav>
+    <header class="page-head studs">
+      <ol class="crumbs" aria-label="Breadcrumb"><li><a href="index.html">Home</a></li><li>Docs</li><li aria-current="page">Hosting</li></ol>
+      <h1>Hosting</h1>
+      <p class="lead">Brick Bin is built for one household on one small server. This page covers what's running, what it stores, and what to copy somewhere safe.</p>
+    </header>
+    <details class="toc" data-param="toc"><summary>On this page</summary><nav aria-label="On this page"><ul><li><a href="#runs"><span class="b1"></span>What runs</a></li><li><a href="#storage"><span class="b1"></span>Storage</a></li><li><a href="#backups"><span class="b1"></span>Backups</a></li><li><a href="#restoring"><span class="b1"></span>Restoring</a></li><li><a href="#no-tailscale"><span class="b1"></span>Without Tailscale</a></li><li><a href="#downloads"><span class="b1"></span>What it downloads</a></li></ul></nav></details>
+    <div class="prose">
+      <h2 id="runs">What runs</h2>
+      <p>The recommended home is a Proxmox VM or LXC with Docker, reached over <a href="https://tailscale.com/">Tailscale</a>. The compose file starts four containers.</p>
+      <div class="table-wrap">
+        <table class="table-stack">
+          <thead><tr><th scope="col">Container</th><th scope="col">What it does</th><th scope="col">Updates</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">App</th><td>Brick Bin itself.</td><td data-label="Updates">Watchtower, every five minutes</td></tr>
+            <tr><th scope="row">Postgres 17</th><td>The app's own database. It isn't shared with anything else.</td><td data-label="Updates">Never automatic</td></tr>
+            <tr><th scope="row">Tailscale sidecar</th><td>Serves HTTPS at <code>https://brick-bin.&lt;your-tailnet&gt;.ts.net</code>.</td><td data-label="Updates">By you</td></tr>
+            <tr><th scope="row">Watchtower</th><td>Pulls a new app image when one is published.</td><td data-label="Updates">By you</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 id="storage">Storage</h2>
+      <p>Everything the app stores outside the database lives under <a href="docs-configuration.html#DATA_DIR"><code>DATA_DIR</code></a>.</p>
+      <div class="table-wrap">
+        <table class="table-stack">
+          <thead><tr><th scope="col">What</th><th scope="col">Holds</th><th scope="col">Plan for</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Catalog</th><td>Part images and catalog data from Rebrickable.</td><td data-label="Plan for">Several GB. The first import alone downloads about 6 GB of images.</td></tr>
+            <tr><th scope="row">Database</th><td>Sets, copies, people, wishlists, the activity trail.</td><td data-label="Plan for">A few hundred MB</td></tr>
+            <tr><th scope="row">Instruction PDFs</th><td>Whatever you upload or save.</td><td data-label="Plan for">Tens of GB over time</td></tr>
+            <tr><th scope="row">Cover images</th><td>One per set.</td><td data-label="Plan for">Small</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>A single PDF can be up to 200 MB by default. Change that with <a href="docs-configuration.html#INSTRUCTIONS_MAX_MB"><code>INSTRUCTIONS_MAX_MB</code></a>.</p>
+
+      <h2 id="backups">Backups</h2>
+      <p>A backup has three parts:</p>
+      <ul>
+        <li><b>Database dumps.</b> The catalog tables are skipped, because they can be imported again.</li>
+        <li><b>Cover images.</b></li>
+        <li><b>Instruction PDFs.</b></li>
+      </ul>
+      <div class="note note--mind">
+        <p class="note__title">Catalog images are not backed up</p>
+        <p>They're about 6 GB of files you can download again, so the backup leaves them out. After a restore, expect to run a catalog import.</p>
+      </div>
+
+      <h2 id="restoring">Restoring</h2>
+      <ol>
+        <li>Start a fresh stack, as in <a href="docs-setup.html#install">Setup</a>.</li>
+        <li>Restore the database dump, then put the cover images and instruction PDFs back under <code>DATA_DIR</code>.</li>
+        <li>Sign in and <a href="tutorial-import-catalog.html">run a catalog import</a>. Your sets and copies are already there. The import brings back catalog search and the part pictures.</li>
+      </ol>
+
+      <h2 id="no-tailscale">Running without Tailscale</h2>
+      <p>The plain compose file publishes the app on port 3000. Change the port with <a href="docs-configuration.html#APP_PORT"><code>APP_PORT</code></a>. If you put your own reverse proxy in front and serve HTTPS, set <a href="docs-configuration.html#COOKIE_SECURE"><code>COOKIE_SECURE</code></a> to <code>true</code>.</p>
+
+      <h2 id="downloads">What it downloads, and when</h2>
+      <p>Brick Bin makes no background downloads, and nothing in the app loads from a CDN. It reaches out in three cases, each started by a person:</p>
+      <ul>
+        <li>An admin runs a catalog import. Downloads come only from the origins in <a href="docs-configuration.html#REBRICKABLE_ALLOWED_ORIGINS"><code>REBRICKABLE_ALLOWED_ORIGINS</code></a>, over HTTPS.</li>
+        <li>Someone adds a catalog set, and its cover is fetched from <a href="docs-configuration.html#CATALOG_IMAGE_ORIGIN"><code>CATALOG_IMAGE_ORIGIN</code></a>.</li>
+        <li>Someone asks to save an instruction PDF from a web address.</li>
+      </ul>
+      <p class="credit">Catalog data comes from <a href="https://rebrickable.com/">Rebrickable</a>.</p>
+
+      <a class="next studs sec-config" href="docs-configuration.html">
+        <small>Next in the docs</small>
+        <b>Configuration &rarr;</b>
+        <span>Every environment variable, with its default.</span>
+      </a>
+      <div class="pager"><a href="docs-setup.html">&larr; Setup</a><span></span></div>
+    </div>
+  </article>
+  <aside class="toc__desk"><nav class="toc" aria-label="On this page"><h2>On this page</h2><ul><li><a href="#runs"><span class="b1"></span>What runs</a></li><li><a href="#storage"><span class="b1"></span>Storage</a></li><li><a href="#backups"><span class="b1"></span>Backups</a></li><li><a href="#restoring"><span class="b1"></span>Restoring</a></li><li><a href="#no-tailscale"><span class="b1"></span>Without Tailscale</a></li><li><a href="#downloads"><span class="b1"></span>What it downloads</a></li></ul></nav></aside>
+</div>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="wall" role="img" aria-label="Brick Bin, spelled out in bricks"><span class="studs sec-tutorials">B</span><span class="studs sec-setup">R</span><span class="studs sec-hosting">I</span><span class="studs sec-config">C</span><span class="studs sec-faq">K</span><span class="wall__gap"></span><span class="studs sec-hosting">B</span><span class="studs sec-tutorials">I</span><span class="studs sec-setup">N</span></div>
+    <div class="footer-grid">
+      <nav aria-labelledby="f1"><h2 id="f1">Get it running</h2><ul>
+        <li><a href="docs-setup.html">Setup</a></li><li><a href="docs-hosting.html">Hosting</a></li><li><a href="docs-configuration.html">Configuration</a></li></ul></nav>
+      <nav aria-labelledby="f2"><h2 id="f2">Use it</h2><ul>
+        <li><a href="tutorials.html">Tutorials</a></li><li><a href="faq.html">FAQ</a></li></ul></nav>
+      <nav aria-labelledby="f3"><h2 id="f3">The project</h2><ul>
+        <li><a href="https://github.com/chimericdream/brick-bin">Source code</a></li><li><a href="https://github.com/chimericdream/brick-bin/issues">Report a problem</a></li><li><a href="https://github.com/chimericdream/brick-bin/blob/main/LICENSE">MIT licence</a></li></ul></nav>
+      <div><h2 class="theme-label" id="f4">Theme</h2><div class="theme theme--icons" role="group" aria-labelledby="f4"><button type="button" value="system" aria-pressed="false" title="System"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="10" rx="1"/><path d="M7 17h6M10 13.5V17"/></svg><span>System</span></button><button type="button" value="light" aria-pressed="false" title="Light"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2v2M10 16v2M2 10h2M16 10h2M4.3 4.3l1.4 1.4M14.3 14.3l1.4 1.4M4.3 15.7l1.4-1.4M14.3 5.7l1.4-1.4"/></svg><span>Light</span></button><button type="button" value="dark" aria-pressed="false" title="Dark"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 11.8A7 7 0 0 1 8.2 3.5a7 7 0 1 0 8.3 8.3z"/></svg><span>Dark</span></button></div></div>
+      <div class="footer-credit">
+        <p>Catalog data comes from <a href="https://rebrickable.com/">Rebrickable</a>. You import it yourself, onto your own server. Thank you, Rebrickable.</p>
+        <p>Brick Bin is an independent project. It is not affiliated with, endorsed by or sponsored by the LEGO Group or any other brick maker. LEGO is a trademark of the LEGO Group.</p>
+      </div>
+    </div>
+    <div class="footer-base">
+      <p>&copy; 2026 Bill Parrott. Free and open source under the MIT licence. Nothing on this site tracks you.</p>
+      <a class="btn btn--small" href="#top">Back to the top</a>
+    </div>
+  </div>
+</footer>
+<script src="assets/js/site.js"></script>
+</body>
+</html>

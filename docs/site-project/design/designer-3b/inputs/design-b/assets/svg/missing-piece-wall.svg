@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 560 330" role="img" aria-label="A wall of bricks with one brick missing. The gap is outlined and labelled 404.">
+  <defs>
+    <path id="w4" d="M0 0h8v-9h20v9h14v-9h20v9h14v-9h20v9h14v-9h20v9h8v48H0z"/>
+    <path id="w2" d="M0 0h8v-9h20v9h14v-9h20v9h8v48H0z"/>
+  </defs>
+  <g fill="#06525c"><use href="#w4" x="0" y="278"/><use href="#w4" x="420" y="278"/><use href="#w4" x="70" y="226"/><use href="#w4" x="280" y="174"/><use href="#w2" x="0" y="122"/><use href="#w4" x="210" y="122"/><use href="#w4" x="420" y="70"/><use href="#w4" x="70" y="18"/></g>
+  <g fill="#3d8791"><use href="#w4" x="140" y="278"/><use href="#w4" x="210" y="226"/><use href="#w2" x="490" y="226"/><use href="#w4" x="0" y="174"/><use href="#w4" x="420" y="174"/><use href="#w4" x="350" y="122"/><use href="#w4" x="140" y="70"/></g>
+  <g fill="#9fd6c4"><use href="#w4" x="280" y="278"/><use href="#w2" x="0" y="226"/><use href="#w4" x="350" y="226"/><use href="#w4" x="70" y="122"/><use href="#w2" x="490" y="122"/><use href="#w4" x="0" y="70"/></g>
+  <rect x="144" y="169" width="132" height="53" fill="none" stroke="#e4573d" stroke-width="4" stroke-dasharray="10 8"/>
+  <text x="210" y="208" text-anchor="middle" font-family="'Albert Sans', sans-serif" font-weight="700" font-size="34" letter-spacing="-1" fill="#e4573d">404</text>
+</svg>
