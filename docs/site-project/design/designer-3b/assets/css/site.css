@@ -1466,10 +1466,11 @@ html.no-js .toy__hint {
   --ar: 4 / 5;
   max-width: 320px;
 }
-/* under a real image: nothing, unless the image is in the other theme */
+/* under a real image: one caption line (plus the theme note when it applies) */
 .shot figcaption {
   margin-top: var(--s2);
   font-size: var(--step-small);
+  line-height: 1.45;
   color: var(--muted);
 }
 
@@ -1657,12 +1658,12 @@ html.no-js .toy__hint {
     display: none;
   }
   .docs__main {
-    max-width: 720px;
+    max-width: 760px;
   }
 }
 @media (min-width: 1280px) {
   .docs {
-    grid-template-columns: 232px minmax(0, 720px) minmax(0, 200px);
+    grid-template-columns: 232px minmax(0, 760px) minmax(0, 200px);
     justify-content: space-between;
   }
   .docs__main .toc {
@@ -1703,7 +1704,7 @@ html.no-js .toy__hint {
   margin-top: var(--s4);
 }
 /* One measure. Text, callouts, code, tables, figures and the "next" brick all span
-   the article column (720px at most). Nothing inside .prose sets its own max-width. */
+   the article column (760px at most). Nothing inside .prose sets its own max-width. */
 .prose h2 {
   font-size: var(--step-h2);
   line-height: 1.1;
@@ -2155,7 +2156,7 @@ td code,
 }
 .faq__list {
   margin-top: var(--s6);
-  max-width: 720px;
+  max-width: 760px;
 }
 .faq__item {
   padding: var(--s5) 0;

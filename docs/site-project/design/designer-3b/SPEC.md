@@ -147,9 +147,9 @@ Preload Albert Sans only.
 | Navigation | 600; current page 800 | 0 | |
 | Wordmark | 800 | -0.035em | |
 
-Sentence case everywhere. No uppercase, no letter-spaced small caps, no italics except the one
-caption note in 6.14. Headings use `text-wrap: balance`, paragraphs `text-wrap: pretty`. Running
-text is capped at `40em`.
+Sentence case everywhere. No uppercase, no letter-spaced small caps, no italics. Headings use
+`text-wrap: balance`, paragraphs `text-wrap: pretty`. Running text in docs follows the one measure in
+6.17.
 
 ### 2.5 Space
 
@@ -523,7 +523,7 @@ A `.studs` block on `--field`. One column under 960, two above (text 1.05fr, pil
 - The panel's padding is 12px under 640 and 24px above.
 
 **The pile.** `assets/svg/hero-pile.svg`, viewBox `-40 52 560 220`. Nine bricks in the five section
-colors, two gray "strangers", a box with a lid, and a tub outline. One stud is 40 units wide and a
+colors, two gray "strangers", a box with a lid, a tub outline and a floor line. One stud is 40 units wide and a
 brick is 32 high. Each state gives every piece `[x, y, rotation]`. Pieces not in a state sit inside
 the box at opacity 0.
 
@@ -535,6 +535,12 @@ the box at opacity 0.
 | Built | All nine stacked: rows of 3, 3, 2 and 1. | **Built.** Done, on display, and due for dusting. |
 | Disassembled | All nine loose in a tidy heap. No strangers. | **Disassembled.** Back in pieces, on purpose, and still all together. |
 | Mixed | A tub outline appears, with the nine bricks and two strangers jumbled in it. | **Mixed.** No longer a set. Its parts are in the big tub with everything else. |
+
+**Everything rests on the floor line.** The line is 2 units thick with its top edge at y=260. Brick
+bottoms, the box and the outside of the tub all end at exactly y=260, in all six states. The tub's
+stroke is 6 units, so its floor is drawn at y=257 and the bricks inside it rest at y=254. A loose
+brick that is tilted is raised so its lowest corner stays above the line. The SVG scales as one
+piece, so this holds at every width. `tools/shoot.mjs` measures it at every landing capture.
 
 The exact coordinates are the `S` object in `assets/js/site.js`. Disassembled and Mixed must look
 different: the first is still one set, the second is not. That difference is the tub and the
@@ -638,17 +644,29 @@ place only: LND-01 at 360px. Keep notes short and it will not happen.
 **When the real image arrives.** Put an `img` in the frame (`object-fit: cover`, filling it) and
 remove the baseplate layer, the label and the notes. Keep the frame's border and radius.
 
-**Under a real image: nothing.** No caption. The step or section text next to the image already
-says what it shows, and the `alt` text (from `PLACEHOLDERS.md`) describes it for people who cannot
-see it. Do not carry the shot notes over as a caption.
+**Under a real image: one caption line.** A `figcaption`, 8px under the frame: 14px, `--muted`,
+line height 1.45, as wide as the frame. It says what the picture shows, in one short sentence in
+the site's voice ("One set, five copies, each with its own build state and place."). Rules:
 
-**The one exception: the image exists in one theme only.** Show that image in both themes,
-unchanged, in the same frame, and put one line under it in a `figcaption` (14px, `--muted`, 8px
-above): "Shown in the light theme." (or dark). The frame's border is what makes a light screenshot
-look deliberate on a dark page. Do not invert, dim or tint the image. `states.html` shows the three
-cases side by side. A simple build rule: look for `<name>.<current theme>.png`, fall back to the
-other, and add the line when you fell back. With both files present, use `<picture>` or two images
-switched by the theme attribute.
+- One sentence, about 80 characters at most, ending in a period. It may wrap to a second line on a
+  phone. No "Figure 1", no "Screenshot of", no ID.
+- It says what to notice, not what the reader should do. Instructions belong in the step text.
+- Every placeholder has its caption written out in `PLACEHOLDERS.md` ("Caption under the real
+  image"). Use those, and write new ones the same way.
+- The caption is not the alt text. The `alt` (also in `PLACEHOLDERS.md`) describes the picture for
+  someone who cannot see it. The caption is for someone who can.
+- The shot notes are never carried over as a caption.
+- A placeholder has nothing under its frame. The caption appears only with the real image.
+
+**When the image exists in one theme only.** Show that image in both themes, unchanged, in the
+same frame, and add the theme note **to the end of the same caption line, as a second sentence**:
+"One set, five copies, each with its own build state and place. Shown in the light theme." (or
+dark). It is not a separate line and has no different style. The frame's border is what makes a
+light screenshot look deliberate on a dark page. Do not invert, dim or tint the image. A simple
+build rule: look for `<name>.<current theme>.png`, fall back to the other, and append the sentence
+when you fell back. With both files present, use `<picture>` or two images switched by the theme
+attribute. `states.html` shows the three cases side by side: placeholder, real image with caption,
+and real image in the other theme.
 
 A phone-shaped placeholder in prose sits at the left of the column at its 280px maximum, with
 nothing beside it.
@@ -658,8 +676,8 @@ nothing beside it.
 | Width | Columns |
 | --- | --- |
 | Under 1024 | One. Section navigation sits above the page head (6.16). "On this page" is a closed disclosure under the page head. |
-| 1024 to 1279 | Sidebar 232px, article (max 720px). 48px gap. "On this page" stays as the disclosure. |
-| 1280 and up | Sidebar 232px, article 720px, "On this page" up to 200px, spread across the content width. |
+| 1024 to 1279 | Sidebar 232px, article (max 760px). 48px gap. "On this page" stays as the disclosure. |
+| 1280 and up | Sidebar 232px, article 760px, "On this page" up to 200px, spread across the content width. |
 
 The sidebar and the right column are `position: sticky; top: 16px`. The sidebar scrolls inside
 itself if it is taller than the window.
@@ -700,7 +718,7 @@ native `details` or `Collapse` for the disclosures.
 
 Starts 48px below the page head. Blocks are 16px apart.
 
-**One measure.** The article column is the measure: 720px at most (about 40em of body text), and
+**One measure.** The article column is the measure: 760px at most (about 42em of body text), and
 the full width between the gutters on smaller screens. **Every block in the column spans it
 exactly**: paragraphs, lists, callouts, code blocks, tables, placeholders, the "What you need" box,
 the "next" brick and the pager. So does the page head above it. No block sets its own
@@ -712,8 +730,8 @@ There are two deliberate exceptions, and both are narrower for a reason you can 
   item's indent and end at the column's right edge.
 - **Phone-shaped placeholders** (280px) and crops (320px) keep their own width, at the left.
 
-If the column is ever widened, cap paragraphs and lists at 40em and let the boxed blocks follow the
-same cap. Do not let boxes run wider than the text.
+If the column is ever widened past 760px, cap paragraphs and lists at 42em and let the boxed blocks
+follow the same cap. Do not let boxes run wider than the text.
 
 - `h2`: `--step-h2`, 64px above, `scroll-margin-top: 24px`. `h3`: `--step-lead`, 32px above.
 - `ul`: 1×1 bullets in `--sec`, 1.5em indent, 8px between items. `ol`: bold numerals.
@@ -797,7 +815,7 @@ row with a 1px rule beneath:
 
 ### 6.23 FAQ (`.faq`)
 
-Every answer is visible. No accordion. The list column is 720px at most, the same measure as the
+Every answer is visible. No accordion. The list column is 760px at most, the same measure as the
 docs, and every paragraph spans it.
 
 - Each item is a `section` with an `id`: an `h2` (`--step-lead`, weight 750) led by a pink 1×1,
@@ -1052,7 +1070,8 @@ You may change these without asking:
 - Adding a sticky header, if testing shows people want it. Keep it 72px and flat.
 - The number of tutorials and config variables. The layouts take more rows.
 - The 720 and 960 breakpoints, by a few tens of pixels either way.
-- The article measure, between about 680 and 760px, as long as every block still shares it.
+- The article measure, by a few tens of pixels either way from 760px, as long as every block still
+  shares it.
 
 Please do not change these without asking:
 
@@ -1061,8 +1080,7 @@ Please do not change these without asking:
 - Albert Sans for text, sentence case, and the 14px floor.
 - No shadows, one 3px radius, no gradients.
 - The FAQ staying fully open, and the config table's grouping and stacked phone layout.
-- Shot notes staying inside the placeholder frame, and nothing under a real image except the
-  one-theme line.
+- Shot notes staying inside the placeholder frame, and one short caption line under a real image.
 - Build-state labels never wrapping.
 - The Rebrickable credit and the non-affiliation note in the footer of every page.
 - Nothing loading from a third party: no font service, no analytics, no embeds.

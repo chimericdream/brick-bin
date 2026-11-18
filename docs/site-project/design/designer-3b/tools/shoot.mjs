@@ -128,7 +128,7 @@ await send("Runtime.enable");
 const problems = [];
 let done = 0;
 for (const j of jobs) {
-  if (FILTER && !j.name.includes(FILTER)) continue;
+  if (FILTER && !FILTER.split(",").some((f) => j.name.includes(f))) continue;
   await send("Emulation.setDeviceMetricsOverride", { width: j.w, height: j.h, deviceScaleFactor: 1, mobile: j.w < 700 });
   await send("Emulation.setEmulatedMedia", { features: [{ name: "prefers-color-scheme", value: j.scheme || "light" }] });
   const q = [`theme=${j.theme}`, j.q].filter(Boolean).join("&");
@@ -143,6 +143,12 @@ for (const j of jobs) {
     const r = await evaluate(`(() => { const b = [...document.querySelectorAll(".toy__states button")]; const tops = new Set(b.map((x) => Math.round(x.getBoundingClientRect().top))); return { rows: tops.size, clipped: b.filter((x) => x.scrollWidth > x.clientWidth).map((x) => x.textContent), tall: b.filter((x) => x.getBoundingClientRect().height > 46).length, width: Math.round(b[0].getBoundingClientRect().width), spare: Math.min(...b.map((x) => { const r = document.createRange(); r.selectNodeContents(x); return Math.round(x.clientWidth - r.getBoundingClientRect().width); })) }; })()`);
     console.log(j.name, JSON.stringify(r));
     if (r.clipped.length || r.tall) problems.push(`${j.name}: a build-state label does not fit`);
+  }
+  if (j.page === "index.html") {
+    /* everything in the pile must rest on the floor line, never below it */
+    const low = await evaluate(`(() => { const svg = document.querySelector(".toy svg"); const k = svg.getBoundingClientRect().height / 220; const floorTop = svg.getBoundingClientRect().top + (260 - 52) * k; let worst = -99; svg.querySelectorAll("[data-p], .toy__tub, .toy__box rect").forEach((el) => { if (getComputedStyle(el.closest("[style*=opacity]") || el).opacity === "0") return; const b = el.getBoundingClientRect(); worst = Math.max(worst, (b.bottom - floorTop) / k); }); return Math.round(worst * 10) / 10; })()`);
+    console.log(j.name, "lowest point of the pile, relative to the floor line:", low);
+    if (low > 0.6) problems.push(`${j.name}: something in the pile sits ${low} units below the floor line`);
   }
   const notes = await evaluate(`[...document.querySelectorAll(".shot__notes")].filter((n) => n.scrollHeight > n.clientHeight + 1).length`);
   if (notes) console.log(j.name, "shot notes that scroll inside their frame:", notes);

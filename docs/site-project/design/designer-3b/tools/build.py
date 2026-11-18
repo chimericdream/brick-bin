@@ -300,7 +300,8 @@ def write_placeholders():
             f"- **Files:** `{d['file']}.light.png`, `{d['file']}.dark.png` (ratio {kind}; first choice for this spot: {d['theme']})\n"
             f"- **Screen:** {d['screen']}\n- **State:** {d['state']}\n"
             f"- **Viewport and theme:** {d['view']}\n- **Focus:** {d['focus']}\n"
-            f"- **Alt text:** {d['alt']}\n\n"
+            f"- **Alt text:** {d['alt']}\n"
+            f"- **Caption under the real image:** {d['caption']}\n\n"
         )
     head = (SRC / "placeholders-head.md").read_text(encoding="utf-8")
     (ROOT / "PLACEHOLDERS.md").write_text(head + rows + planned, encoding="utf-8", newline="\n")

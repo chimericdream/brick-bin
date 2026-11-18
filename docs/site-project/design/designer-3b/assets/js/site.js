@@ -153,7 +153,7 @@
         lid: "translate(-58px,-34px) rotate(-22deg)",
       },
       progress: {
-        p: [BUILT[0], BUILT[1], BUILT[2], BUILT[3], BUILT[4], BUILT[5], BUILT[6], [-34, 228, 0], [432, 228, 12], OUT, OUT],
+        p: [BUILT[0], BUILT[1], BUILT[2], BUILT[3], BUILT[4], BUILT[5], BUILT[6], [-34, 228, 0], [432, 218, 12], OUT, OUT],
         box: 0,
       },
       built: { p: BUILT.concat([OUT, OUT]), box: 0 },

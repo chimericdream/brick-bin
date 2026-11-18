@@ -189,3 +189,13 @@ Design A / Design B mapping for Phase 1.5.
 - New changes sent to Designer 3b: content max width 760px instead of 720px; on the home hero, the
   bin sits below the floor line in the "Mixed" state (`feedback/11-mixed-bin-below-line.png`), so it
   must sit on the line in every state and at every width.
+
+### Designer 3b round 3 handoff (2026-11-17)
+
+- Done: one-line caption under real images (SPEC 6.14, captions for all 7 mocked + 19 planned
+  placeholders, specimens on the states sheet); content width 760px (SPEC 6.15, 6.17, 6.23); the hero
+  pile sits on the floor line in all six states (it also fixed bricks floating 2 units up and a brick in
+  "In progress" dipping through the floor). 47 screenshots retaken, 87 in total.
+- Still open for Phase 2 (Developer): font glyph coverage, outlining the lockup's live text, the
+  `DATABASE_URL` line in the example `.env`. License path `/blob/main/LICENSE` and "© 2026 Bill
+  Parrott" are confirmed correct by the repo's LICENSE file.
