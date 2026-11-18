@@ -910,7 +910,7 @@ themes. It is rendered from live type, because the lockup's wordmark is live tex
 | Field brick | `#17191C`, 3px radius, x 48 to 1152, y 56 to 486, with a whole-stud row on top (studs flat, inset from both ends) |
 | Lockup | Top left of the brick, in line with the headline's left edge (x 115): the mark with a green (`#6CC04A`) brick in a `#F5F5F2` bin, as on the favicon, then "Brick Bin" in Albert Sans 800, `#F5F5F2` |
 | Headline | "Know what’s in every box." on two lines. Albert Sans 800, 100px, line height 0.96, tracking -0.04em, `#F5F5F2`, top at y=190. Curly apostrophe. |
-| Descriptor | "A free, self-hosted app for your household's building-brick sets." Albert Sans 500, 30px, line height 1.3, `#B8BBBF`, max width 820px, left-aligned with the headline, top at y=406. About 40px of field stays under it. |
+| Descriptor | "A free, self-hosted app for your household's building-brick sets." Albert Sans 500, 30px, line height 1.3, `#B8BBBF`, max width 900px, left-aligned with the headline, top at y=406. **It must stay on one line** (it is about 884px wide and ends at y=445), which leaves about 40px of field under it. If the wording grows past 900px, shorten the wording; do not let it wrap or shrink the type. |
 | Wall | Along the bottom, x 48 to 1152: the eight footer bricks in footer order (orange, green, blue, tan, pink, blue, orange, green), two studs each, varied heights, **no letters**, running off the bottom edge |
 
 - The card has no other text, no screenshot, no URL and no tagline beyond these two lines.
