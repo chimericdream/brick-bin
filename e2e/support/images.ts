@@ -96,3 +96,49 @@ export function coverPng(title: string): Buffer {
     chunk('IEND', Buffer.alloc(0)),
   ]);
 }
+
+/** A 100x100 part picture on white: a studded block in the given colour (hex without #). */
+export function partPng(hex: string): Buffer {
+  const w = 100;
+  const h = 100;
+  const base: [number, number, number] = [
+    parseInt(hex.slice(0, 2), 16),
+    parseInt(hex.slice(2, 4), 16),
+    parseInt(hex.slice(4, 6), 16),
+  ];
+  const shade = (f: number): [number, number, number] => [
+    Math.round(base[0] * f),
+    Math.round(base[1] * f),
+    Math.round(base[2] * f),
+  ];
+  const studs = [28, 50, 72].map((cx) => ({ cx, cy: 34 }));
+  const raw = Buffer.alloc((w * 3 + 1) * h);
+  for (let y = 0; y < h; y++) {
+    const row = y * (w * 3 + 1);
+    raw[row] = 0;
+    for (let x = 0; x < w; x++) {
+      let rgb: [number, number, number] = [255, 255, 255];
+      if (x >= 14 && x <= 86 && y >= 40 && y <= 74) rgb = y > 66 ? shade(0.7) : base;
+      for (const s of studs) {
+        const dx = x - s.cx;
+        const dy = y - s.cy;
+        if (dx * dx + dy * dy <= 49) rgb = shade(dx * dx + dy * dy > 30 ? 0.7 : 1.1);
+      }
+      raw.set(
+        rgb.map((v) => Math.min(255, v)),
+        row + 1 + x * 3,
+      );
+    }
+  }
+  const ihdr = Buffer.alloc(13);
+  ihdr.writeUInt32BE(w, 0);
+  ihdr.writeUInt32BE(h, 4);
+  ihdr[8] = 8;
+  ihdr[9] = 2;
+  return Buffer.concat([
+    Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]),
+    chunk('IHDR', ihdr),
+    chunk('IDAT', deflateSync(raw)),
+    chunk('IEND', Buffer.alloc(0)),
+  ]);
+}

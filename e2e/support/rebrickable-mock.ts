@@ -26,6 +26,8 @@ export class RebrickableMock {
   coverStatus: number | null = null;
   /** Milliseconds to wait before each colour ZIP, so a test can watch progress. */
   ldrawDelayMs = 0;
+  /** Screenshot runs only: draws the image for a set cover path instead of the tiny PNG. */
+  coverImage: ((path: string) => Buffer) | null = null;
   archive: Promise<Buffer> = buildArchive({}, MOCK_URL);
   private server: http.Server | null = null;
   private ldraw = buildLdrawZip();
@@ -35,6 +37,7 @@ export class RebrickableMock {
     this.ldrawStatus = null;
     this.coverStatus = null;
     this.ldrawDelayMs = 0;
+    this.coverImage = null;
     this.archive = buildArchive({}, MOCK_URL);
   }
 
@@ -79,7 +82,7 @@ export class RebrickableMock {
         // Set covers: one tiny PNG for every set, so a saved set gets a real stored image.
         if (url.pathname.startsWith('/media/sets/')) {
           if (this.coverStatus) return send(this.coverStatus, 'no cover');
-          return send(200, TINY_PNG, 'image/png');
+          return send(200, this.coverImage?.(url.pathname) ?? TINY_PNG, 'image/png');
         }
         // UPCitemdb: one known barcode for the Titanic box.
         if (url.pathname === '/upc/lookup') {
