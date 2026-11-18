@@ -122,7 +122,12 @@ days on the old machine, wait out the rest of that window.
 
 ## Configuration
 
-Everything comes from environment variables (`.env.example` has them all).
+Everything comes from environment variables. `.env.example` is for local development and the
+try-out compose file; `deploy/.env.example` is for the Tailscale stack. Both compose files pass the
+variables below from `.env` to the app, with three exceptions: `DATABASE_URL` is built from
+`POSTGRES_PASSWORD`, `DATA_DIR` stays `/data` (where the `app-data` volume is mounted), and the
+Tailscale stack always sets `COOKIE_SECURE=true`. A variable left out of `.env` keeps the app's
+default.
 
 | Variable                      | Purpose                                                                                       |
 | ----------------------------- | --------------------------------------------------------------------------------------------- |
