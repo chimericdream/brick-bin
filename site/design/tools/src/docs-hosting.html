@@ -1,0 +1,82 @@
+{"title": "Hosting · Docs · Brick Bin", "description": "What Brick Bin runs, how much disk it wants, how to back it up and restore it, and when it goes online.", "section": "hosting", "nav": "docs", "toc": [["runs", "What runs"], ["storage", "Storage"], ["backups", "Backups"], ["restoring", "Restoring"], ["no-tailscale", "Without Tailscale"], ["downloads", "What it downloads"]]}
+<div class="wrap docs">
+  {SIDENAV}
+  <article class="docs__main">
+    {PHONENAV}
+    <header class="page-head studs">
+      <nav aria-label="Breadcrumb"><ol class="crumbs"><li><a href="index.html">Home</a></li><li>Docs</li><li aria-current="page">Hosting</li></ol></nav>
+      <h1>Hosting</h1>
+      <p class="lead">Brick Bin is built for one household on one small server. This page covers what's running, what it stores, and what to copy somewhere safe.</p>
+    </header>
+    {TOC}
+    <div class="prose">
+      <h2 id="runs">What runs</h2>
+      <p>The recommended home is a Proxmox VM or LXC with Docker, reached over <a href="https://tailscale.com/">Tailscale</a>. The compose file starts four containers.</p>
+      <div class="table-wrap">
+        <table class="table-stack">
+          <thead><tr><th scope="col">Container</th><th scope="col">What it does</th><th scope="col">Updates</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">App</th><td>Brick Bin itself.</td><td data-label="Updates">Watchtower, every five minutes</td></tr>
+            <tr><th scope="row">Postgres 17</th><td>The app's own database. It isn't shared with anything else.</td><td data-label="Updates">Never automatic</td></tr>
+            <tr><th scope="row">Tailscale sidecar</th><td>Serves HTTPS at <code>https://brick-bin.&lt;your-tailnet&gt;.ts.net</code>.</td><td data-label="Updates">By you</td></tr>
+            <tr><th scope="row">Watchtower</th><td>Pulls a new app image when one is published.</td><td data-label="Updates">By you</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 id="storage">Storage</h2>
+      <p>Everything the app stores outside the database lives under <a href="docs-configuration.html#DATA_DIR"><code>DATA_DIR</code></a>.</p>
+      <div class="table-wrap">
+        <table class="table-stack">
+          <thead><tr><th scope="col">What</th><th scope="col">Holds</th><th scope="col">Plan for</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Catalog</th><td>Part images and catalog data from Rebrickable.</td><td data-label="Plan for">Several GB. The first import alone downloads about 6 GB of images.</td></tr>
+            <tr><th scope="row">Database</th><td>Sets, copies, people, wishlists, the activity trail.</td><td data-label="Plan for">A few hundred MB</td></tr>
+            <tr><th scope="row">Instruction PDFs</th><td>Whatever you upload or save.</td><td data-label="Plan for">Tens of GB over time</td></tr>
+            <tr><th scope="row">Cover images</th><td>One per set.</td><td data-label="Plan for">Small</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>A single PDF can be up to 200 MB by default. Change that with <a href="docs-configuration.html#INSTRUCTIONS_MAX_MB"><code>INSTRUCTIONS_MAX_MB</code></a>.</p>
+
+      <h2 id="backups">Backups</h2>
+      <p>A backup has three parts:</p>
+      <ul>
+        <li><b>Database dumps.</b> The catalog tables are skipped, because they can be imported again.</li>
+        <li><b>Cover images.</b></li>
+        <li><b>Instruction PDFs.</b></li>
+      </ul>
+      <div class="note note--mind">
+        <p class="note__title">Catalog images are not backed up</p>
+        <p>They're about 6 GB of files you can download again, so the backup leaves them out. After a restore, expect to run a catalog import.</p>
+      </div>
+
+      <h2 id="restoring">Restoring</h2>
+      <ol>
+        <li>Start a fresh stack, as in <a href="docs-setup.html#install">Setup</a>.</li>
+        <li>Restore the database dump, then put the cover images and instruction PDFs back under <code>DATA_DIR</code>.</li>
+        <li>Sign in and <a href="tutorial-import-catalog.html">run a catalog import</a>. Your sets and copies are already there. The import brings back catalog search and the part pictures.</li>
+      </ol>
+
+      <h2 id="no-tailscale">Running without Tailscale</h2>
+      <p>The plain compose file publishes the app on port 3000. Change the port with <a href="docs-configuration.html#APP_PORT"><code>APP_PORT</code></a>. If you put your own reverse proxy in front and serve HTTPS, set <a href="docs-configuration.html#COOKIE_SECURE"><code>COOKIE_SECURE</code></a> to <code>true</code>.</p>
+
+      <h2 id="downloads">What it downloads, and when</h2>
+      <p>Brick Bin makes no background downloads, and nothing in the app loads from a CDN. It reaches out in three cases, each started by a person:</p>
+      <ul>
+        <li>An admin runs a catalog import. Downloads come only from the origins in <a href="docs-configuration.html#REBRICKABLE_ALLOWED_ORIGINS"><code>REBRICKABLE_ALLOWED_ORIGINS</code></a>, over HTTPS.</li>
+        <li>Someone adds a catalog set, and its cover is fetched from <a href="docs-configuration.html#CATALOG_IMAGE_ORIGIN"><code>CATALOG_IMAGE_ORIGIN</code></a>.</li>
+        <li>Someone asks to save an instruction PDF from a web address.</li>
+      </ul>
+      <p class="credit">Catalog data comes from <a href="https://rebrickable.com/">Rebrickable</a>.</p>
+
+      <a class="next studs sec-config" href="docs-configuration.html">
+        <small>Next in the docs</small>
+        <b>Configuration &rarr;</b>
+        <span>Every environment variable, with its default.</span>
+      </a>
+      <div class="pager"><a href="docs-setup.html">&larr; Setup</a><span></span></div>
+    </div>
+  </article>
+  {TOCDESK}
+</div>

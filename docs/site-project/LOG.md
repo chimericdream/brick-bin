@@ -199,3 +199,15 @@ Design A / Design B mapping for Phase 1.5.
 - Still open for Phase 2 (Developer): font glyph coverage, outlining the lockup's live text, the
   `DATABASE_URL` line in the example `.env`. License path `/blob/main/LICENSE` and "© 2026 Bill
   Parrott" are confirmed correct by the repo's LICENSE file.
+
+### Gate 2 approved (2026-11-17)
+
+- The human approved Designer 3b's revised package for Phase 2.
+
+## Phase 2: build
+
+- Copied `design/designer-3b/` into `site/design/`, leaving out `inputs/`, `feedback/` and
+  `.taste-skill/`. `tools/` (the designer's page-stamping and screenshot scripts) is included for
+  reference.
+- Developer: Opus 5.5. Receives brief 04, the path `site/design/`, the human's answers, the open items
+  and the process limits.
