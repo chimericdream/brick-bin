@@ -159,6 +159,11 @@ export default function HostingPage() {
           Start only the database and load the dump into it, then start the rest and put the covers
           and the instruction PDFs back:
           <CodeBlock label="Terminal" code={RESTORE} />
+          <p>
+            The order matters. The dump carries its own tables, and loads cleanly only into an empty
+            database. When the app starts afterward, it adds any database changes newer than the
+            backup.
+          </p>
         </li>
         <li>
           Sign in and <Link href={tutorialHref('import-catalog')}>run a catalog import</Link>. Your

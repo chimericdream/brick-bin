@@ -31,9 +31,6 @@ export interface ConfigGroup {
   vars: ConfigVar[];
 }
 
-const NOT_PASSED =
-  'The compose files don’t pass this on. To set it, add it to the app’s environment.';
-
 export const CONFIG_GROUPS: ConfigGroup[] = [
   {
     id: 'must-set',
@@ -120,16 +117,16 @@ export const CONFIG_GROUPS: ConfigGroup[] = [
           </>
         ),
         default: { code: 'true' },
-        compose: NOT_PASSED,
       },
       {
         name: 'APP_VERSION',
         purpose: 'Release label, sent in the catalog import’s User-Agent.',
-        default: { text: 'Set in the image', wrap: true },
+        default: { code: '0.1' },
         compose: (
           <>
-            The compose files don&apos;t pass this on. The Tailscale install&apos;s image sets it to
-            the commit it was built from, and the try-out compose file builds with <code>dev</code>.
+            Both compose files pass it on only when it&apos;s set. Otherwise the Tailscale install
+            uses the commit its image was built from, and the try-out compose file uses{' '}
+            <code>dev</code>.
           </>
         ),
       },
@@ -184,7 +181,6 @@ export const CONFIG_GROUPS: ConfigGroup[] = [
           </>
         ),
         default: { text: 'Rebrickable’s page', wrap: true },
-        compose: NOT_PASSED,
       },
       {
         name: 'REBRICKABLE_ALLOWED_ORIGINS',
@@ -195,7 +191,6 @@ export const CONFIG_GROUPS: ConfigGroup[] = [
           </>
         ),
         default: { text: 'Rebrickable and its CDN', wrap: true },
-        compose: NOT_PASSED,
       },
       {
         name: 'CATALOG_IMAGE_ORIGIN',
@@ -206,7 +201,6 @@ export const CONFIG_GROUPS: ConfigGroup[] = [
           </>
         ),
         default: { text: 'Rebrickable’s CDN', wrap: true },
-        compose: NOT_PASSED,
       },
     ],
   },

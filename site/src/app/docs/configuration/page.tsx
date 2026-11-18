@@ -44,18 +44,14 @@ export default function ConfigurationPage() {
     >
       <p>
         Put them in the <code>.env</code> file beside your compose file, then run{' '}
-        <code>docker compose up -d</code> again so the app restarts with them. Every variable name
-        below is a link you can share.
+        <code>docker compose up -d</code> again so the app restarts with them. The{' '}
+        <code>.env.example</code> next to each compose file lists them. Every variable name below is
+        a link you can share.
       </p>
-      <Note title="Not every variable reaches the app from .env" variant="mind">
-        <p>
-          The compose files pass some variables from <code>.env</code> to the app and set others
-          themselves. Where a variable is handled differently, its row says so. To set one they
-          leave out, add it to the <code>environment</code> list of the <code>app</code> service in
-          the compose file. The Default column is the app&apos;s own default. The note under a row
-          says what the compose files do instead.
-        </p>
-      </Note>
+      <p>
+        The Default column is the app&apos;s own default, and a variable you leave out keeps it. The
+        note under a row says what the compose files do instead.
+      </p>
 
       {CONFIG_GROUPS.map((g) => (
         <Fragment key={g.id}>

@@ -120,8 +120,8 @@ export default function SetupPage() {
           tailnet, and create an auth key.
         </li>
         <li>
-          Create a file called <code>.env</code> in the <code>deploy</code> folder with these two
-          lines:
+          Copy <code>.env.example</code> to <code>.env</code> in the <code>deploy</code> folder, and
+          fill in the two values at the top:
           <CodeBlock label=".env" code={ENV} />
         </li>
         <li>
@@ -134,8 +134,8 @@ export default function SetupPage() {
       </ol>
       <p>
         The compose file turns on secure cookies and builds the database address itself, so most
-        installs only set those two. Every setting is listed in{' '}
-        <Link href={ROUTES.config}>Configuration</Link>.
+        installs only set those two. The rest of <code>.env.example</code> is commented out at the
+        defaults. Every setting is listed in <Link href={ROUTES.config}>Configuration</Link>.
       </p>
 
       <h2 id="first-visit">First visit</h2>
