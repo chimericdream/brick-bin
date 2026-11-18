@@ -180,3 +180,12 @@ Design A / Design B mapping for Phase 1.5.
   is gone, because it only fit at about 840–960px), with 3×2 at 360px and narrower; and no caption
   under real screenshots apart from a one-line note when an image exists in only one theme.
 - Process: one Edge at a time over three passes; no desktop apps launched; cleaned up.
+
+### Gate 2, second round (2026-11-17)
+
+- The human accepted the build-state buttons as always two rows of three (three rows of two at 360px
+  and narrower).
+- The human wants a one-line caption under real screenshots.
+- New changes sent to Designer 3b: content max width 760px instead of 720px; on the home hero, the
+  bin sits below the floor line in the "Mixed" state (`feedback/11-mixed-bin-below-line.png`), so it
+  must sit on the line in every state and at every width.
