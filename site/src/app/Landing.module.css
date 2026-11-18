@@ -1,0 +1,494 @@
+/* Landing page (SPEC 7.1). No section color: --sec falls back to ink. */
+
+/* ---------- hero ---------- */
+.hero {
+  --brick: var(--field);
+  --pitch: 44px;
+  --stud-h: 12px;
+  --stud-inset: 22px;
+  --focus: var(--field-focus);
+  color: var(--field-ink);
+  border-radius: var(--r);
+  margin-top: calc(var(--s2) + 12px);
+  display: grid;
+}
+.heroText {
+  padding: var(--s6) var(--s4) var(--s6);
+}
+.hero h1 {
+  font-size: var(--step-display);
+  line-height: 0.96;
+  letter-spacing: -0.04em;
+}
+.hero :global(.lead) {
+  margin-top: var(--s5);
+  max-width: 28em;
+}
+.heroSub {
+  margin-top: var(--s4);
+  max-width: 34em;
+  color: var(--field-muted);
+}
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s4) var(--s5);
+  margin-top: var(--s6);
+}
+.textLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-weight: 600;
+}
+@media (min-width: 60em) {
+  .hero {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    --pitch: 56px;
+    --stud-h: 15px;
+    --stud-inset: 28px;
+    margin-top: calc(var(--s2) + 15px);
+  }
+  .heroText {
+    padding: var(--s8) var(--s7);
+    align-self: center;
+  }
+}
+
+/* ---------- sections ---------- */
+.section {
+  margin-top: var(--section);
+}
+.head {
+  display: grid;
+  gap: var(--s4);
+  margin-bottom: var(--s6);
+}
+.head h2 {
+  font-size: var(--step-head);
+}
+.head p {
+  max-width: 36em;
+}
+.eyebrow {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-size: var(--step-small);
+  font-weight: 700;
+}
+@media (min-width: $mantine-breakpoint-md) {
+  .head {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: var(--s7);
+    align-items: end;
+    margin-bottom: var(--s7);
+  }
+  .head .eyebrow {
+    grid-column: 1 / -1;
+    margin-bottom: calc(-1 * var(--s3));
+  }
+}
+
+/* ---------- set against copy ---------- */
+.setcopy {
+  display: grid;
+  gap: var(--s6);
+}
+.setcopy h2 {
+  font-size: var(--step-head);
+}
+.setcopy > div > p {
+  margin-top: var(--s5);
+  max-width: 30em;
+}
+.copies {
+  background: var(--surface);
+  border-radius: var(--r);
+  padding: var(--s4);
+}
+.copiesSet {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s4);
+  font-weight: 700;
+  padding-bottom: var(--s3);
+  border-bottom: 2px solid var(--ink);
+}
+.copies ul {
+  list-style: none;
+  padding: 0;
+}
+.copies li {
+  display: grid;
+  grid-template-columns: 4.6em 1fr;
+  gap: 2px var(--s3);
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  align-items: baseline;
+}
+.copies li b {
+  font-weight: 700;
+}
+.copies li > span:last-child {
+  grid-column: 2;
+  font-size: var(--step-small);
+  color: var(--muted);
+}
+.copies li > span:last-child :global(.tag) {
+  color: inherit;
+}
+.copies figcaption {
+  margin-top: var(--s3);
+  font-size: var(--step-small);
+  color: var(--muted);
+}
+@media (min-width: $mantine-breakpoint-md) {
+  .setcopy {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    gap: var(--s8);
+    align-items: center;
+  }
+  .copies {
+    padding: var(--s5);
+  }
+}
+/* state and place share a line from 1100px */
+@media (min-width: 68.75em) {
+  .copies li {
+    grid-template-columns: 4.6em 9em 1fr;
+  }
+  .copies li > span:last-child {
+    grid-column: auto;
+  }
+}
+
+/* ---------- features ---------- */
+.features {
+  display: grid;
+  gap: var(--s2);
+  list-style: none;
+  padding: 0;
+}
+.feature {
+  background: var(--surface);
+  border-radius: var(--r);
+  padding: var(--s4);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--s3);
+  align-content: start;
+}
+.feature h3 {
+  font-size: 1.25rem;
+}
+.feature p {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+.chipRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  font-weight: 700;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 0 12px;
+  background: var(--ground);
+  border-radius: var(--r);
+  font-size: 1rem;
+  font-weight: 650;
+  white-space: nowrap;
+}
+.chipOn {
+  background: var(--ink);
+  color: var(--ground);
+}
+.chipBig {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  min-height: 44px;
+}
+.swatch {
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+  background: var(--part-tan);
+}
+.redact {
+  display: inline-block;
+  width: 3.2em;
+  height: 0.8em;
+  background: var(--ink);
+  border-radius: 1px;
+}
+.also {
+  margin-top: var(--s5);
+  max-width: 44em;
+}
+@media (min-width: $mantine-breakpoint-xs) {
+  .features {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .feature {
+    padding: var(--s5);
+  }
+}
+@media (min-width: $mantine-breakpoint-lg) {
+  .features {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ---------- screenshot pair ---------- */
+.shots {
+  display: grid;
+  gap: var(--s6);
+  align-items: start;
+}
+@media (min-width: $mantine-breakpoint-sm) {
+  .shots {
+    grid-template-columns: minmax(0, 1fr) 260px;
+    gap: var(--s5);
+  }
+}
+
+/* ---------- self-hosting: four bricks in running bond ---------- */
+.bond {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+  counter-reset: bond;
+}
+.bond li {
+  --brick: var(--surface);
+  --pitch: 28px;
+  --stud-h: 8px;
+  --stud-inset: 14px;
+  counter-increment: bond;
+  border-radius: var(--r);
+  padding: var(--s4);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px var(--s3);
+}
+.bond li:nth-child(even) {
+  --brick: var(--surface-2);
+}
+.bond li::after {
+  content: counter(bond);
+  grid-row: 1 / span 2;
+  grid-column: 1;
+  font-weight: 800;
+  font-size: var(--step-lead);
+  line-height: 1.15;
+  width: 1.2em;
+}
+.bond h3,
+.bond p {
+  grid-column: 2;
+}
+.bond p {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+.hostingNotes {
+  display: grid;
+  gap: var(--s4);
+  margin-top: var(--s6);
+  font-size: 1rem;
+}
+@media (min-width: $mantine-breakpoint-md) {
+  .bond li {
+    width: 58%;
+    padding: var(--s5);
+  }
+  .bond li:nth-child(2) {
+    margin-left: 14%;
+  }
+  .bond li:nth-child(3) {
+    margin-left: 28%;
+  }
+  .bond li:nth-child(4) {
+    margin-left: 42%;
+  }
+  .hostingNotes {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s7);
+  }
+}
+
+/* ---------- what you will not find here: a ledger of absences ---------- */
+.wont {
+  display: grid;
+  gap: var(--s7);
+}
+.wont .head {
+  display: block;
+}
+.ledger {
+  list-style: none;
+  padding: 0;
+  border-top: 2px solid var(--ink);
+}
+.ledger li {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px var(--s4);
+  align-items: baseline;
+  padding: var(--s4) 0;
+  border-bottom: 1px solid var(--line);
+}
+.ledger b {
+  font-weight: 700;
+}
+.ledger p {
+  grid-column: 1 / -1;
+  font-size: 1rem;
+  color: var(--muted);
+  max-width: 34em;
+}
+.tight li {
+  padding: 10px 0;
+}
+.wont h3 {
+  margin-bottom: var(--s4);
+}
+.wontNote {
+  margin-top: var(--s4);
+}
+@media (min-width: $mantine-breakpoint-md) {
+  .wont {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    gap: var(--s8);
+  }
+}
+
+/* ---------- closing call to action: the bin, sorted by color ---------- */
+.stack {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: calc(9px + 3px);
+  padding-top: 9px;
+}
+.brick,
+.open {
+  --brick: var(--sec);
+  --pitch: 32px;
+  --stud-h: 9px;
+  --stud-inset: 16px;
+  --focus: var(--ink);
+  --btn: var(--on-brick-btn);
+  --btn-ink: var(--on-brick-btn-ink);
+  --btn-hover: var(--on-brick-btn-hover);
+  margin-top: 0;
+  color: var(--brick-ink);
+  border-radius: var(--r);
+}
+.brick {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 2px var(--s4);
+  min-height: 60px;
+  padding: 10px var(--s4);
+  text-decoration: none;
+  transition: transform var(--t-med) var(--ease);
+}
+.brick b {
+  font-size: var(--step-lead);
+  font-weight: 750;
+  letter-spacing: -0.02em;
+}
+.brick span {
+  display: none;
+  font-size: 1rem;
+}
+.brick i {
+  font-style: normal;
+  font-weight: 700;
+  transition: transform var(--t-fast) var(--ease);
+}
+.brick:hover {
+  transform: translateY(-4px);
+}
+.brick:hover i {
+  transform: translateX(4px);
+}
+.open {
+  padding: var(--s5) var(--s4) var(--s5);
+  display: grid;
+  gap: var(--s4);
+}
+.open h2 {
+  font-size: var(--step-head);
+}
+.open p {
+  max-width: 30em;
+}
+/* In the approved mockup the closing button takes the stack bricks' shape too: 60px tall,
+   the larger studs, and its arrow shown from 768px. */
+.open > a {
+  --pitch: 32px;
+  --stud-h: 9px;
+  --stud-inset: 16px;
+  justify-self: start;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 2px var(--s4);
+  min-height: 60px;
+  padding: 10px var(--s4);
+  transition: transform var(--t-med) var(--ease);
+}
+.open > a:hover {
+  transform: translateY(-4px);
+}
+.open > a > span {
+  display: none;
+}
+@media (min-width: $mantine-breakpoint-sm) {
+  .brick {
+    grid-template-columns: 11em 1fr auto;
+    padding-inline: var(--s5);
+  }
+  .brick span {
+    display: block;
+  }
+  .open {
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    padding: var(--s7) var(--s5);
+  }
+  .open h2,
+  .open p {
+    grid-column: 1;
+  }
+  .open > a {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: end;
+    grid-template-columns: 11em 1fr auto;
+    padding-inline: var(--s5);
+  }
+  .open > a > span {
+    display: block;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .brick:hover,
+  .brick:hover i,
+  .open > a:hover {
+    transform: none;
+  }
+}

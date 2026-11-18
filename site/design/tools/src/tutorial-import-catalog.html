@@ -1,0 +1,92 @@
+{"title": "Import the LEGO catalog · Tutorials · Brick Bin", "description": "Load Rebrickable's LEGO catalog into Brick Bin by pasting the downloads page, and what the 48-hour limit means.", "section": "tutorials", "nav": "tutorials", "tutorial": "Import the LEGO catalog", "toc": [["goal", "The goal"], ["need", "What you need"], ["steps", "Steps"], ["wrong", "If something goes wrong"], ["next", "What next"]]}
+<div class="wrap docs">
+  {SIDENAV}
+  <article class="docs__main">
+    {PHONENAV}
+    <header class="page-head studs">
+      <nav aria-label="Breadcrumb"><ol class="crumbs"><li><a href="index.html">Home</a></li><li><a href="tutorials.html">Tutorials</a></li><li aria-current="page">Import the LEGO catalog</li></ol></nav>
+      <h1>Import the LEGO catalog</h1>
+      <ul class="meta"><li>Tutorial 2 of 10</li><li>7 steps</li><li>Admins only</li></ul>
+    </header>
+    {TOC}
+    <div class="prose">
+      <h2 id="goal">The goal</h2>
+      <p class="lead">By the end, searching for a LEGO set by number or name will find it, and missing pieces will come with pictures.</p>
+      <p>The catalog is data from <a href="https://rebrickable.com/">Rebrickable</a>. Brick Bin never fetches it on a schedule. It arrives when an admin asks for it, and at no other time.</p>
+
+      <section class="parts" aria-labeledby="need">
+        <h2 id="need">What you need</h2>
+        <ul class="parts__list">
+          <li><b>1 ×</b><span>An admin account, from the <a href="#not-mocked">first-run tutorial</a></span></li>
+          <li><b>1 ×</b><span>A computer with a browser. Copying a page's source is easier there than on a phone.</span></li>
+          <li><b>6 GB</b><span>Free disk for part images, plus room for the data archive</span></li>
+          <li><b>48 h</b><span>Since the last import, if there was one</span></li>
+        </ul>
+      </section>
+
+      <h2 id="steps">Steps</h2>
+      <ol class="steps">
+        <li>
+          <h3>Open the catalog page</h3>
+          <p>Sign in as an admin and open <b>Settings</b>, then <b>Catalog</b>. If no import has run yet, the page says so and shows an empty paste box.</p>
+@shot {"id": "T02-01", "kind": "desktop", "theme": "light", "title": "Catalog settings, before the first import", "screen": "Settings, Catalog.", "state": "Fresh install. No import has ever run, the paste box is empty and Import is disabled.", "view": "Desktop, 1440 wide, light.", "focus": "The paste box and the \"never imported\" status. Crop to the main column.", "alt": "The catalog settings page on a new install: a status line saying no import has run, an empty paste box and a disabled Import button.", "caption": "The Catalog page before the first import."}
+        </li>
+        <li>
+          <h3>Open Rebrickable's downloads page</h3>
+          <p>In a new tab, go to <a href="https://rebrickable.com/downloads/">rebrickable.com/downloads</a>. You don't need to sign in or click anything there.</p>
+        </li>
+        <li>
+          <h3>Copy the page's HTML</h3>
+          <p>View the page source, select everything and copy it.</p>
+          <ul>
+            <li>Windows and Linux: <kbd>Ctrl</kbd> + <kbd>U</kbd>, then <kbd>Ctrl</kbd> + <kbd>A</kbd> and <kbd>Ctrl</kbd> + <kbd>C</kbd></li>
+            <li>Mac: <kbd>⌥</kbd> + <kbd>⌘</kbd> + <kbd>U</kbd>, then <kbd>⌘</kbd> + <kbd>A</kbd> and <kbd>⌘</kbd> + <kbd>C</kbd></li>
+          </ul>
+          <div class="note">
+            <p class="note__title"><span class="b1"></span>Why the copy and paste?</p>
+            <p>Until Rebrickable confirms that automated page reads are fine, Brick Bin won't read that page for you. For now, you are the fetch. An admin who has permission can switch this on with <a href="docs-configuration.html#REBRICKABLE_PAGE_FETCH"><code>REBRICKABLE_PAGE_FETCH</code></a>.</p>
+          </div>
+        </li>
+        <li>
+          <h3>Paste it into Brick Bin</h3>
+          <p>Back on the Catalog page, paste into the box and press <b>Check</b>. Brick Bin reads the page and lists the files it will download.</p>
+@shot {"id": "T02-02", "kind": "desktop", "theme": "light", "title": "Catalog settings, files found", "screen": "Settings, Catalog.", "state": "HTML pasted and checked. The list of found files is showing, with dates, and Import is enabled.", "view": "Desktop, 1440 wide, light.", "focus": "The file list and the Import button. Crop out the pasted HTML, which is long and dull.", "alt": "The catalog settings page after checking the pasted page: a list of files found with their dates, and an enabled Import button.", "caption": "After Check: the files Brick Bin found, and the Import button."}
+        </li>
+        <li>
+          <h3>Press Import</h3>
+          <p>The import downloads about 6 GB of part images plus a data archive. How long that takes is up to your connection, so this is a good moment to go make coffee.</p>
+@shot {"id": "T02-03", "kind": "desktop", "theme": "dark", "title": "Catalog import in progress", "screen": "Settings, Catalog, during an import.", "state": "Import roughly 40% done, part images downloading.", "view": "Desktop, 1440 wide, dark.", "focus": "The progress display and the current step label. Crop tight to it.", "alt": "The catalog page during an import, with a progress bar at about 40 percent and a label saying part images are downloading.", "caption": "An import under way."}
+        </li>
+        <li>
+          <h3>Check that it worked</h3>
+          <p>Open <b>Add a set</b> and search for a set number you know. If it turns up with its picture, the catalog is in.</p>
+@shot {"id": "T02-04", "kind": "phone", "theme": "light", "title": "Catalog search results", "screen": "Add a set, catalog search.", "state": "A set number typed in, three results with cover images.", "view": "Phone, 390 wide, light.", "focus": "The first result and its cover image. Full screen, no browser chrome.", "alt": "The add-a-set search on a phone, showing three catalog results with cover pictures for a typed set number.", "caption": "Catalog search, with the set you looked for."}
+        </li>
+        <li>
+          <h3>Leave it alone for 48 hours</h3>
+          <p>An import can run at most once every 48 hours. If the Import button is disabled when you come back, that is the reason, and the page tells you when it wakes up. <a href="faq.html#wait">Why 48 hours?</a></p>
+          <div class="note note--mind">
+            <p class="note__title">Nothing updates by itself</p>
+            <p>The catalog is only as fresh as the last time an admin pressed the button. If a brand-new set is missing from search, run another import once the 48 hours are up.</p>
+          </div>
+        </li>
+      </ol>
+
+      <h2 id="wrong">If something goes wrong</h2>
+      <ul>
+        <li><b>"No files found" after pasting.</b> You probably copied the visible text and not the page source. Go back to step 3.</li>
+        <li><b>The import stops part-way.</b> Check free disk space first. The part images need about 6 GB.</li>
+        <li><b>You restored from a backup and the pictures are gone.</b> That's expected. Catalog images aren't backed up, so run an import again. See <a href="docs-hosting.html#restoring">restoring</a>.</li>
+      </ul>
+
+      <a class="next studs" id="next" href="#not-mocked">
+        <small>What next</small>
+        <b>Add your first set &rarr;</b>
+        <span>Catalog search, barcode scan, or a manual entry for off-brand sets.</span>
+      </a>
+      <div class="pager"><a href="#not-mocked">&larr; First run</a><a href="tutorials.html">All tutorials</a></div>
+      <p class="credit">Catalog data comes from <a href="https://rebrickable.com/">Rebrickable</a>.</p>
+    </div>
+  </article>
+  {TOCDESK}
+</div>

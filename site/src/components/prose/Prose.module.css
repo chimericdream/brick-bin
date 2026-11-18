@@ -1,0 +1,366 @@
+/* Prose and the blocks that live in it (SPEC 6.17 to 6.21). One measure: every block spans the
+   article column, so left and right edges always line up. Nothing here sets its own max-width. */
+
+.prose {
+  margin-top: var(--s7);
+}
+.prose > * + * {
+  margin-top: var(--s4);
+}
+.prose h2 {
+  font-size: var(--step-h2);
+  line-height: 1.1;
+  margin-top: var(--s8);
+  scroll-margin-top: var(--s5);
+}
+.prose h2:first-child {
+  margin-top: 0;
+}
+.prose h3 {
+  margin-top: var(--s6);
+  scroll-margin-top: var(--s5);
+}
+.prose ul:not([class]) {
+  list-style: none;
+  padding: 0;
+}
+.prose ul:not([class]) > li {
+  position: relative;
+  padding-left: 1.5em;
+}
+.prose ul:not([class]) > li + li,
+.prose ol:not([class]) > li + li {
+  margin-top: var(--s2);
+}
+/* the bullet is a 1x1 brick in the section color */
+.prose ul:not([class]) > li::before,
+.prose ul:not([class]) > li::after {
+  content: '';
+  position: absolute;
+  background: var(--sec);
+}
+.prose ul:not([class]) > li::before {
+  left: 0;
+  top: 0.66em;
+  width: 0.72em;
+  height: 0.48em;
+  border-radius: 1px;
+}
+.prose ul:not([class]) > li::after {
+  left: 0.15em;
+  top: 0.5em;
+  width: 0.42em;
+  height: 0.18em;
+}
+.prose ol:not([class]) {
+  padding-left: 1.5em;
+}
+.prose ol:not([class]) > li::marker {
+  font-weight: 750;
+}
+/* blocks nested in a list item start at its indent */
+.prose li > * + * {
+  margin-top: var(--s3);
+}
+
+/* ---------- steps (tutorials) ---------- */
+.steps {
+  list-style: none;
+  padding: 0;
+  counter-reset: step;
+}
+.steps > li {
+  counter-increment: step;
+  margin-top: var(--s7);
+}
+.steps > li > * + * {
+  margin-top: var(--s4);
+}
+.steps h3 {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s3);
+  margin-top: 0;
+  padding-top: 6px;
+  font-size: var(--step-lead);
+  line-height: 34px;
+}
+.steps h3::before {
+  content: counter(step);
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 34px;
+  background: var(--sec);
+  color: var(--brick-ink);
+  border-radius: var(--r);
+  font-size: 1.125rem;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+.steps h3::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 0.5px;
+  width: 32px;
+  height: 6px;
+  background: var(--sec);
+  -webkit-mask: var(--stud-mask) left bottom / 16px 100% round;
+  mask: var(--stud-mask) left bottom / 16px 100% round;
+}
+@media (min-width: $mantine-breakpoint-sm) {
+  .steps > li {
+    padding-left: 52px;
+  }
+  .steps h3 {
+    margin-left: -52px;
+  }
+}
+
+/* figures, code, callouts and tables get 24px above them (after the steps rule, so it wins) */
+.prose figure,
+.prose pre,
+.prose .codeblock,
+.prose .note,
+.prose .tableWrap {
+  margin-top: var(--s5);
+}
+/* a code block inside a plain numbered list sits closer to its item */
+.prose ol:not([class]) > li > .codeblock {
+  margin-top: var(--s3);
+}
+
+/* ---------- code blocks ---------- */
+.codeblock {
+  background: var(--code-bg);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s4);
+  padding-left: var(--s4);
+  border-bottom: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 0.875rem;
+  font-weight: 600;
+  min-height: 44px;
+}
+.bar button {
+  min-height: 44px;
+  padding: 0 var(--s4);
+  font-family: var(--font);
+  font-size: var(--step-small);
+  font-weight: 650;
+}
+.bar button:hover {
+  background: var(--surface-2);
+}
+.codeblock pre {
+  margin-top: 0;
+}
+.comment {
+  color: var(--muted);
+}
+
+/* ---------- callouts: flat, never studded ---------- */
+.note {
+  background: var(--surface);
+  border-radius: var(--r);
+  padding: var(--s4);
+  font-size: 1rem;
+}
+.noteTitle {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-weight: 750;
+  margin-bottom: 4px;
+}
+.note > * + * {
+  margin-top: var(--s2);
+}
+.noteTitle + * {
+  margin-top: 0;
+}
+.mind {
+  background: none;
+  border: 2px dashed var(--ink);
+}
+
+/* ---------- tables. Under 720px every row becomes a small block. ---------- */
+.tableWrap {
+  max-width: 100%;
+}
+.var {
+  font-family: var(--mono);
+  font-size: 0.875rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.tableWrap td code,
+.default code {
+  background: none;
+  padding: 0;
+  font-weight: 600;
+}
+.default {
+  white-space: nowrap;
+}
+.defaultWrap {
+  white-space: normal;
+}
+/* how the compose files treat a variable, under its purpose */
+.where {
+  display: block;
+  margin-top: 6px;
+  font-size: var(--step-small);
+  color: var(--muted);
+}
+/* code in a note stays at the 14px floor, in the note's own color */
+.tableWrap .where code {
+  font-size: 1em;
+  font-weight: 500;
+  color: inherit;
+  background: none;
+  padding: 0;
+}
+.tableWrap tbody tr {
+  scroll-margin-top: var(--s5);
+}
+@media (max-width: 44.9375em) {
+  .stack thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .stack,
+  .stack tbody,
+  .stack tr,
+  .stack th,
+  .stack td {
+    display: block;
+  }
+  .stack tr {
+    padding: var(--s3) 0;
+  }
+  .stack tr:first-child {
+    border-top: 2px solid var(--ink);
+  }
+  .stack th,
+  .stack td {
+    padding: 2px 0;
+  }
+  .stack td[data-label]::before {
+    content: attr(data-label) ': ';
+    font-size: var(--step-small);
+    font-weight: 700;
+  }
+  .var {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  .default {
+    white-space: normal;
+  }
+}
+
+/* ---------- what you need: the parts call-out from an instruction booklet ---------- */
+.parts {
+  background: var(--surface);
+  border-radius: var(--r);
+  padding: var(--s4);
+}
+.parts h2 {
+  font-size: var(--step-lead);
+  margin: 0 0 var(--s3);
+}
+.partsList {
+  list-style: none;
+  padding: 0;
+}
+.parts li {
+  display: grid;
+  grid-template-columns: 3.4em 1fr;
+  gap: var(--s3);
+  padding: var(--s2) 0;
+  border-top: 1px solid var(--line);
+  font-size: 1rem;
+}
+.parts li b {
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+/* ---------- "what next" and the pager ---------- */
+.next {
+  --brick: var(--sec);
+  --pitch: 32px;
+  --stud-h: 9px;
+  --stud-inset: 16px;
+  --focus: var(--ink);
+  display: block;
+  margin-top: calc(var(--s8) + 9px);
+  padding: var(--s5) var(--s4);
+  color: var(--brick-ink);
+  text-decoration: none;
+  border-radius: var(--r);
+  transition: transform var(--t-med) var(--ease);
+  scroll-margin-top: var(--s5);
+}
+.prose > .next {
+  margin-top: calc(var(--s8) + 9px);
+}
+.next:hover {
+  transform: translateY(-4px);
+}
+.next small {
+  display: block;
+  font-size: var(--step-small);
+  font-weight: 700;
+}
+.next b {
+  display: block;
+  font-size: var(--step-h2);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-top: 4px;
+}
+.next span {
+  display: block;
+  margin-top: var(--s2);
+  font-size: 1rem;
+}
+.pager {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s4);
+  margin-top: var(--s5);
+  font-weight: 600;
+}
+.pager a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.credit {
+  font-size: var(--step-small);
+  color: var(--muted);
+}
+.prose > .credit {
+  margin-top: var(--s6);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .next:hover {
+    transform: none;
+  }
+}

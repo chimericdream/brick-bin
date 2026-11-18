@@ -1,0 +1,161 @@
+.footer {
+  margin-top: var(--section);
+  background: var(--field);
+  color: var(--field-ink);
+  --focus: var(--field-focus);
+  padding-block: var(--s7) var(--s6);
+}
+/* after docs and the FAQ the footer comes sooner (SPEC 6.3) */
+:global(main:has([data-footer='tight'])) + .footer {
+  margin-top: var(--s7);
+}
+
+/* the wordmark wall: the bin tipped out */
+.wall {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 4px;
+  --h: 21vw;
+  padding-top: 12px;
+}
+.wall span {
+  --brick: var(--sec);
+  --pitch: 50%;
+  --stud-h: clamp(6px, 1.3vw, 16px);
+  --stud-inset: 8%;
+  flex: 0 0 calc((100% - 16px) / 5);
+  height: var(--h);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  color: var(--brick-ink);
+  font-weight: 800;
+  font-size: 15vw;
+  line-height: 0.82;
+  padding-bottom: 0.08em;
+  border-radius: var(--r);
+  margin-top: var(--stud-h);
+}
+.wall .gap {
+  display: none;
+}
+@media (min-width: $mantine-breakpoint-xs) {
+  .wall {
+    flex-wrap: nowrap;
+    --h: clamp(120px, 17vw, 230px);
+    height: calc(var(--h) + 16px);
+  }
+  .wall span {
+    flex: 1 1 0;
+    font-size: clamp(64px, 9.4vw, 128px);
+  }
+  .wall .gap {
+    display: block;
+    flex: 0.45 1 0;
+    height: 0;
+    background: none;
+    margin: 0;
+  }
+  .wall span:nth-child(2) {
+    height: calc(var(--h) * 0.72);
+  }
+  .wall span:nth-child(4) {
+    height: calc(var(--h) * 0.8);
+  }
+  .wall span:nth-child(5) {
+    height: calc(var(--h) * 0.9);
+  }
+  .wall span:nth-child(7) {
+    height: calc(var(--h) * 0.78);
+  }
+  .wall span:nth-child(9) {
+    height: calc(var(--h) * 0.86);
+  }
+}
+
+.grid {
+  scroll-margin-top: var(--s4);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s6) var(--s5);
+  margin-top: var(--s7);
+}
+.grid h2 {
+  font-size: var(--step-small);
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.4;
+  margin-bottom: var(--s2);
+}
+.grid ul {
+  list-style: none;
+  padding: 0;
+}
+.grid li a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 1rem;
+  text-decoration: none;
+}
+.grid li a:hover {
+  text-decoration: underline;
+}
+.credit {
+  grid-column: 1 / -1;
+  font-size: 1rem;
+  max-width: 34em;
+}
+.credit p + p {
+  margin-top: var(--s3);
+  color: var(--field-muted);
+}
+.base {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s4);
+  margin-top: var(--s7);
+  padding-top: var(--s5);
+  border-top: 1px solid var(--field-line);
+  font-size: var(--step-small);
+  color: var(--field-muted);
+}
+/* "Back to the top": a small button on the field, no studs (SPEC 6.3) */
+.top {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: var(--r);
+  background: var(--field-2);
+  color: var(--field-ink);
+  font-size: 0.9375rem;
+  font-weight: 650;
+  text-decoration: none;
+  transition: transform var(--t-fast) var(--ease);
+}
+.top:hover {
+  text-decoration: none;
+  transform: translateY(-2px);
+}
+.top:active {
+  transform: translateY(2px);
+}
+@media (min-width: $mantine-breakpoint-md) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(0, 1.3fr) minmax(0, 2.6fr);
+    gap: var(--s6);
+  }
+  .credit {
+    grid-column: auto;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .top:hover,
+  .top:active {
+    transform: none;
+  }
+}
