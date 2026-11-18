@@ -17,3 +17,6 @@ next-env.d.ts
 
 # Marketing site design history: kept on disk, not in the repo
 docs/site-project/design/
+
+# App redesign design history: kept on disk, not in the repo
+docs/app-redesign-project/design/
