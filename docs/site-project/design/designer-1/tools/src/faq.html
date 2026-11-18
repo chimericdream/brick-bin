@@ -1,0 +1,76 @@
+<!--{"title":"FAQ · Brick Bin","desc":"Short, honest answers about Brick Bin: brands, internet use, the catalog, kids and prices, Tailscale, backups, loose bricks and cost.","nav":"faq"}-->
+<div class="wrap">
+  <header class="page-head">
+    <h1>Questions, answered briefly</h1>
+    <p class="lead">The short answer comes first. The reasons follow, for anyone who wants them.</p>
+  </header>
+
+  <dl class="faq">
+    <div id="lego">
+      <dt>Is this a LEGO app?</dt>
+      <dd>
+        <p><span class="short">No.</span> Brick Bin works with any brand of building brick, including Mould King, CaDA, COBI, BlueBrixx and Lumibricks. It isn't affiliated with the LEGO Group.</p>
+        <p>The catalog lookup covers LEGO sets, because that's what Rebrickable's data describes. Sets from other brands are added by hand.</p>
+      </dd>
+    </div>
+    <div id="internet">
+      <dt>Does it need the internet?</dt>
+      <dd>
+        <p><span class="short">Not day to day.</span> Your data stays on your server, nothing loads from a CDN, and the app makes no background downloads.</p>
+        <p>It goes online only when someone asks it to: an admin importing the catalog, a cover being fetched for a set you add from the catalog, or a PDF you ask it to save from a web address.</p>
+      </dd>
+    </div>
+    <div id="catalog">
+      <dt>Where does the catalog come from?</dt>
+      <dd>
+        <p><span class="short"><a href="https://rebrickable.com/">Rebrickable</a>.</span> You import their data yourself, onto your own server.</p>
+        <p>Nothing is fetched on a schedule. An admin presses the button, and can do so at most once every 48 hours. <a href="tutorial-import-catalog.html">The import tutorial</a> walks through it.</p>
+      </dd>
+    </div>
+    <div id="kids">
+      <dt>Can my kids see prices?</dt>
+      <dd>
+        <p><span class="short">No.</span> Kid profiles are read-only, with no prices and no shopping list. They can still manage their own wishlist.</p>
+        <p>Sets you mark as hidden look, to a kid profile, as if they don't exist. That rule lives on the server and is covered by tests, so it doesn't depend on a button being tucked out of sight. Birthday presents are safe.</p>
+      </dd>
+    </div>
+    <div id="tailscale">
+      <dt>Can I run it without Tailscale?</dt>
+      <dd>
+        <p><span class="short">Yes.</span> Run the production compose file and open port 3000.</p>
+        <p>Tailscale is what we recommend because it gives you HTTPS and a tidy address with very little work. <a href="docs-hosting.html#no-tailscale">Running without it</a> is covered in the hosting docs.</p>
+      </dd>
+    </div>
+    <div id="backup">
+      <dt>How do I back it up?</dt>
+      <dd>
+        <p><span class="short">Three things:</span> database dumps, cover images and instruction PDFs.</p>
+        <p>The downloaded catalog images aren't backed up, and the dumps skip the catalog tables, because both can be imported again. After a restore, run a catalog import. <a href="docs-hosting.html#backups">Backups in detail</a>.</p>
+      </dd>
+    </div>
+    <div id="loose">
+      <dt>Can I track loose bricks?</dt>
+      <dd>
+        <p><span class="short">Not yet.</span> Version 1 tracks sets and the copies you own of them, plus the pieces each copy is missing.</p>
+        <p>Also not in version 1: owned minifigures, a build log, loans, ratings, guest share links, price-guide integrations, and currencies other than USD.</p>
+      </dd>
+    </div>
+    <div id="cost">
+      <dt>What does it cost?</dt>
+      <dd>
+        <p><span class="short">Nothing.</span> Brick Bin is free and open source. There's no account with us and no subscription.</p>
+        <p>You do supply the server, the disk and the bricks.</p>
+      </dd>
+    </div>
+  </dl>
+
+  <section class="section" aria-labelledby="more" style="padding-bottom:0">
+    <div class="section__head">
+      <h2 id="more">Still stuck?</h2>
+      <div>
+        <p>If your question is about getting it running, the docs are the place. If you think you've found a bug, the issue tracker is where to say so.</p>
+        <p class="lost__links" style="margin-top:24px"><a class="btn studs" href="docs-setup.html">Read the docs</a><a class="btn btn--quiet studs" href="#repo-issues">Report a problem</a></p>
+      </div>
+    </div>
+  </section>
+</div>
