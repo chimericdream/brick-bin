@@ -36,7 +36,7 @@
 
   <section>
     <h2>Header navigation</h2>
-    <p>The current page sits on a small plate in its section's colour. Docs takes the colour of the docs section you are in.</p>
+    <p>The current page sits on a small plate in its section's color. Docs takes the color of the docs section you are in.</p>
     <div class="specimens">
       <div class="specimen"><small>Rest · hover · focus</small><nav class="nav" style="display:flex" aria-label="Specimen"><a href="#n">Tutorials</a><a href="#n" class="is-hover">Docs</a><a href="#n" class="is-focus">FAQ</a></nav></div>
       <div class="specimen sec-tutorials"><small>Current: Tutorials</small><nav class="nav" style="display:flex" aria-label="Specimen"><a href="#n" aria-current="page">Tutorials</a><a href="#n">Docs</a><a href="#n">FAQ</a></nav></div>
@@ -115,7 +115,7 @@
         </ul>
         <a class="menu__brick studs sec-tutorials" href="#r" aria-current="page" style="margin-top:16px"><b>Tutorials</b><span>Ten walk-throughs</span></a>
       </div>
-      <div class="specimen specimen--wide" style="justify-items:stretch"><small>"What next" brick: rest and hover (lifts 4px). It takes the colour of the section it leads to.</small>
+      <div class="specimen specimen--wide" style="justify-items:stretch"><small>"What next" brick: rest and hover (lifts 4px). It takes the color of the section it leads to.</small>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:24px">
           <a class="next studs sec-hosting" style="margin-top:9px" href="#r"><small>Next in the docs</small><b>Hosting &rarr;</b><span>Rest</span></a>
           <a class="next studs sec-config is-hover" style="margin-top:9px" href="#r"><small>Next in the docs</small><b>Configuration &rarr;</b><span>Hover</span></a>
@@ -127,7 +127,7 @@
   <section class="sec-config">
     <h2>Reading furniture</h2>
     <div class="specimens">
-      <div class="specimen" style="justify-items:stretch"><small>Callout: note (flat, section-coloured 1×1)</small>
+      <div class="specimen" style="justify-items:stretch"><small>Callout: note (flat, section-colored 1×1)</small>
         <div class="note"><p class="note__title"><span class="b1"></span>Why the copy and paste?</p><p>For now, you are the fetch.</p></div></div>
       <div class="specimen" style="justify-items:stretch"><small>Callout: mind this (dashed outline)</small>
         <div class="note note--mind"><p class="note__title">Catalog images are not backed up</p><p>After a restore, expect to run a catalog import.</p></div></div>
@@ -136,7 +136,7 @@
         <div class="codeblock"><div class="codeblock__bar"><span>.env</span><button type="button" class="is-hover">Copy</button></div><pre><code>COOKIE_SECURE=true</code></pre></div></div>
       <div class="specimen"><small>Inline code and keys</small><p>Set <code>AUTO_MIGRATE</code> to <code>false</code>. Press <kbd>Ctrl</kbd> + <kbd>U</kbd>.</p></div>
       <div class="specimen" style="justify-items:stretch"><small>Bullets and step number</small>
-        <div class="prose" style="margin:0"><ul><li>A 1×1 brick at text size</li><li>In the section's colour</li></ul><ol class="steps"><li style="margin-top:16px"><h3>Open the catalog page</h3></li></ol></div></div>
+        <div class="prose" style="margin:0"><ul><li>A 1×1 brick at text size</li><li>In the section's color</li></ul><ol class="steps"><li style="margin-top:16px"><h3>Open the catalog page</h3></li></ol></div></div>
       <div class="specimen specimen--wide" style="justify-items:stretch"><small>Config table: a row, and a row reached by its link (<code>:target</code>). Under 720px each row becomes a block.</small>
         <table class="table-stack"><thead><tr><th scope="col">Variable</th><th scope="col">Purpose</th><th scope="col">Default</th></tr></thead><tbody>
           <tr><th scope="row"><a class="var" href="#t">APP_PORT</a></th><td>Port published by the plain compose file.</td><td class="default" data-label="Default"><code>3000</code></td></tr>
@@ -149,11 +149,20 @@
 
   <section>
     <h2>Screenshots: placeholder, real, and real in one theme only</h2>
-    <p>The frame keeps its ratio, its 1px line and its radius in all three cases. When a screenshot exists in only one theme it is shown as it is, and the caption says which theme it shows.</p>
-    <div class="specimens" style="grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr))">
-      <figure class="shot"><div class="shot__frame baseplate"><div class="shot__label"><b>LND-01</b><strong>Set detail page</strong>desktop · 16:10 · light</div></div><figcaption>1. Placeholder: baseplate and label.</figcaption></figure>
-      <figure class="shot"><div class="shot__frame"><div class="fakeshot fakeshot--match"><b>Set detail page</b><i style="width:70%"></i><i style="width:92%"></i><i style="width:84%"></i><i style="width:60%"></i></div></div><figcaption>2. Real screenshot in the theme being viewed. No note.</figcaption></figure>
-      <figure class="shot"><div class="shot__frame"><div class="fakeshot fakeshot--other"><b>Set detail page</b><i style="width:70%"></i><i style="width:92%"></i><i style="width:84%"></i><i style="width:60%"></i></div></div><figcaption>3. Only the other theme exists. The image is shown as it is, inside the same frame.<span class="shot__theme-note fakeshot-note"></span></figcaption></figure>
+    <p>The frame keeps its ratio, its 1px line and its radius in all three cases. A placeholder carries its shot notes inside the frame. A real image has nothing under it, unless it exists in only one theme: then one line says which theme it shows.</p>
+    <div class="specimens" style="grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr))">
+      <figure class="shot"><div class="shot__frame"><div class="shot__art baseplate" role="img" aria-label="Specimen placeholder"></div><div class="shot__label"><b>LND-01</b><strong>Set detail page</strong>desktop · 16:10 · light</div><div class="shot__notes" role="group" aria-label="Shot notes" tabindex="0"><b>LND-01 · Set detail page</b><dl><div><dt>Screen</dt><dd>Set detail page.</dd></div><div><dt>State</dt><dd>One set with five copies.</dd></div><div><dt>Viewport and theme</dt><dd>Desktop, 1440 wide, light.</dd></div><div><dt>Focus</dt><dd>The copies list.</dd></div></dl></div></div><figcaption>1. Placeholder. In a frame this short the center label gives way to one line in the notes.</figcaption></figure>
+      <figure class="shot"><div class="shot__frame"><div class="fakeshot fakeshot--match"><b>Set detail page</b><i style="width:70%"></i><i style="width:92%"></i><i style="width:84%"></i><i style="width:60%"></i></div></div><figcaption>2. Real screenshot in the theme being viewed. Nothing under it on the site (this line is the specimen's label).</figcaption></figure>
+      <figure class="shot"><div class="shot__frame"><div class="fakeshot fakeshot--other"><b>Set detail page</b><i style="width:70%"></i><i style="width:92%"></i><i style="width:84%"></i><i style="width:60%"></i></div></div><figcaption><span class="fakeshot-note"></span> (3. Only the other theme exists: the image is shown as it is, and this one line appears under it.)</figcaption></figure>
+    </div>
+  </section>
+
+  <section>
+    <h2>Breadcrumb and the Menu link</h2>
+    <div class="specimens">
+      <div class="specimen sec-setup" style="background:var(--sec);color:#121212;padding:16px;border-radius:3px;--focus:#121212;justify-items:stretch"><small style="color:#121212">Breadcrumb: link, plain step, current page</small><ol class="crumbs"><li><a href="#c">Home</a></li><li>Docs</li><li aria-current="page">Setup</li></ol></div>
+      <div class="specimen sec-faq" style="background:var(--sec);color:#121212;padding:16px;border-radius:3px;--focus:#121212;justify-items:stretch"><small style="color:#121212">Breadcrumb: link focused</small><ol class="crumbs"><li><a href="#c" class="is-focus" style="border-radius:3px">Home</a></li><li aria-current="page">FAQ</li></ol></div>
+      <div class="specimen"><small>Menu control (under 900px). Without scripts it is a link to the footer navigation.</small><a class="menu-btn" style="display:inline-flex" href="#site-nav">Menu <svg viewBox="0 0 20 20" aria-hidden="true"><path fill="currentColor" d="M2 4h16v2.5H2zM2 8.75h16v2.5H2zM2 13.5h16V16H2z"/></svg></a></div>
     </div>
   </section>
 

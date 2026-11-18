@@ -51,7 +51,7 @@
   --brick-faq: #f49ac1;
   --brick-ink: #121212;
   --brick-focus: #121212;
-  --part-grey: #a0a5a9;
+  --part-gray: #a0a5a9;
   --part-tan: #958a73;
 
   /* type */
@@ -158,7 +158,7 @@
   --opp-name: "light";
 }
 
-/* section colour: set once on <body data-section>, or on any element with a .sec-* class */
+/* section color: set once on <body data-section>, or on any element with a .sec-* class */
 [data-section="tutorials"],
 .sec-tutorials {
   --sec: var(--brick-tutorials);
@@ -320,7 +320,7 @@ kbd {
 }
 
 /* ---------- The motif, 1 of 4: the stud row (side view) ----------
-   .studs turns any block into a brick. It needs --brick (its colour).
+   .studs turns any block into a brick. It needs --brick (its color).
    Whole studs only: mask-repeat "round" fits a whole number. */
 .studs {
   --pitch: 20px;
@@ -520,8 +520,8 @@ kbd {
 .nav a.is-hover {
   background: var(--surface);
 }
-/* the current page sits on a small plate in its section colour, and is bolder:
-   the colours are about 2:1 on the light ground, so colour is never the only cue */
+/* the current page sits on a small plate in its section color, and is bolder:
+   the colors are about 2:1 on the light ground, so color is never the only cue */
 .nav a[aria-current] {
   font-weight: 800;
 }
@@ -552,6 +552,8 @@ kbd {
   gap: var(--s4);
 }
 .menu-btn {
+  text-decoration: none;
+  cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -747,19 +749,37 @@ html.menu-open body {
 .crumbs {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  align-items: baseline;
   font-size: var(--step-small);
   font-weight: 500;
+  line-height: 1.4;
   list-style: none;
   padding: 0;
 }
+.crumbs li {
+  display: flex;
+  align-items: baseline;
+}
+/* the separator is drawn, not typed, so the space on each side is always equal */
 .crumbs li + li::before {
-  content: "/";
-  margin-right: 6px;
+  content: "";
+  flex: none;
+  align-self: center;
+  width: 1.5px;
+  height: 0.95em;
+  margin-inline: 10px;
+  background: currentColor;
+  opacity: 0.55;
+  transform: skewX(-18deg);
 }
 .crumbs a {
-  display: inline-block;
-  padding-block: 4px;
+  /* inline, so the link shares the row's baseline; the padding only enlarges the tap area */
+  padding-block: 6px;
+  margin-block: -6px;
+  text-underline-offset: 0.22em;
+}
+.crumbs [aria-current] {
+  font-weight: 750;
 }
 .meta {
   display: flex;
@@ -827,7 +847,7 @@ html.menu-open body {
   background: var(--field-2);
   margin: 0 var(--s2) var(--s2);
   border-radius: var(--r);
-  padding: var(--s4);
+  padding: var(--s3);
   display: flex;
   flex-direction: column;
 }
@@ -854,9 +874,14 @@ html.menu-open body {
 .toy__note b {
   font-weight: 750;
 }
+.toy {
+  container: toy / inline-size;
+}
+/* Two rows of three at every width. A single row of six would need a panel about
+   760px wide, which the hero never gives it, so there is no six-across layout. */
 .toy__states {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 6px;
   margin-top: var(--s3);
   border: 0;
@@ -865,13 +890,20 @@ html.menu-open body {
 }
 .toy__states button {
   min-height: 44px;
-  padding: 0 6px;
+  padding: 0 4px;
   font-size: var(--step-small);
   font-weight: 650;
+  white-space: nowrap;
   background: var(--field);
   color: var(--field-ink);
   border-radius: var(--r);
   transition: transform var(--t-fast) var(--ease);
+}
+/* under 306px of panel, "Disassembled" no longer fits a third: three rows of two */
+@container toy (max-width: 305px) {
+  .toy__states {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 .toy__states button:hover {
   transform: translateY(-2px);
@@ -890,9 +922,6 @@ html.no-js .toy__hint {
   display: none;
 }
 @media (min-width: 640px) {
-  .toy__states {
-    grid-template-columns: repeat(6, 1fr);
-  }
   .toy {
     padding: var(--s5);
   }
@@ -1016,6 +1045,15 @@ html.no-js .toy__hint {
   }
 }
 
+@media (min-width: 900px) and (max-width: 1099px) {
+  .copies li {
+    grid-template-columns: 4.6em 1fr;
+  }
+  .copies li span:last-child {
+    grid-column: 2;
+  }
+}
+
 /* features */
 .features {
   display: grid;
@@ -1108,7 +1146,7 @@ html.no-js .toy__hint {
 }
 @media (min-width: 768px) {
   .shots {
-    grid-template-columns: minmax(0, 2.9fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) 260px;
     gap: var(--s5);
   }
 }
@@ -1219,7 +1257,7 @@ html.no-js .toy__hint {
   }
 }
 
-/* closing call to action: the bin, sorted by colour */
+/* closing call to action: the bin, sorted by color */
 .stack {
   list-style: none;
   padding: 0;
@@ -1307,7 +1345,9 @@ html.no-js .toy__hint {
   }
 }
 
-/* ---------- Screenshot placeholders ---------- */
+/* ---------- Screenshot placeholders ----------
+   The frame keeps a fixed ratio. Everything about a placeholder (baseplate, label, shot
+   notes) lives inside the frame and leaves with it when the real image arrives. */
 .shot {
   min-width: 0;
 }
@@ -1316,10 +1356,15 @@ html.no-js .toy__hint {
   aspect-ratio: var(--ar, 16 / 10);
   border: 1px solid var(--line);
   border-radius: var(--r);
-  display: grid;
-  place-items: center;
-  padding: var(--s4);
   overflow: hidden;
+  /* a size container: the contents can never stretch the frame, and they adapt to it */
+  container: shot / size;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+}
+.shot__art {
+  position: absolute;
+  inset: 0;
 }
 .shot__frame img {
   position: absolute;
@@ -1329,15 +1374,18 @@ html.no-js .toy__hint {
   object-fit: cover;
 }
 .shot__label {
+  position: relative;
+  place-self: center;
+  margin: var(--s3);
   background: var(--ground);
   border-radius: var(--r);
   padding: 10px 14px;
   text-align: center;
-  max-width: 100%;
   font-size: var(--step-small);
   line-height: 1.35;
 }
-.shot__label b {
+.shot__label b,
+.shot__notes > b {
   display: block;
   font-family: var(--mono);
   font-size: 0.875rem;
@@ -1348,36 +1396,66 @@ html.no-js .toy__hint {
   font-size: 1rem;
   font-weight: 700;
 }
-.shot figcaption {
-  margin-top: var(--s3);
+/* shot notes: for whoever takes the screenshot, never for readers */
+.shot__notes {
+  position: relative;
+  grid-row: 2;
+  align-self: end;
+  max-height: 100cqh;
+  overflow-y: auto;
+  padding: var(--s3) var(--s4);
+  background: color-mix(in srgb, var(--ground) 90%, transparent);
+  border-top: 1px solid var(--line);
   font-size: var(--step-small);
   line-height: 1.45;
   color: var(--muted);
 }
-.shot dl {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 2px var(--s3);
+.shot__notes > b {
+  display: none;
+  color: var(--ink);
+  margin-bottom: 4px;
 }
-.shot dt {
+.shot__notes dl {
+  display: grid;
+  gap: 6px;
+}
+.shot__notes dt {
   font-weight: 700;
   color: var(--ink);
 }
-/* narrow captions stack: label above its line */
-.shot--phone dl,
-.shot--crop dl {
-  grid-template-columns: 1fr;
-}
-.shot--phone dd + dt,
-.shot--crop dd + dt {
-  margin-top: 6px;
-}
-@media (max-width: 639px) {
-  .shot dl {
-    grid-template-columns: 1fr;
+/* a wide frame: labels in a column beside their lines */
+@container shot (min-width: 600px) {
+  .shot__notes dl {
+    gap: 2px;
   }
-  .shot dd + dt {
-    margin-top: 6px;
+  .shot__notes dl > div {
+    display: grid;
+    grid-template-columns: 10.5em 1fr;
+    gap: var(--s3);
+  }
+}
+/* a short frame: the center label gives way to one line in the notes, and each
+   label runs into its line */
+@container shot (max-height: 400px) and (max-width: 599px) {
+  .shot__label {
+    display: none;
+  }
+  .shot__notes {
+    border-top: 0;
+    padding: 10px var(--s3);
+  }
+  .shot__notes > b {
+    display: block;
+  }
+  .shot__notes dl {
+    gap: 2px;
+  }
+  .shot__notes dt,
+  .shot__notes dd {
+    display: inline;
+  }
+  .shot__notes dt::after {
+    content: ": ";
   }
 }
 .shot--phone .shot__frame {
@@ -1388,23 +1466,11 @@ html.no-js .toy__hint {
   --ar: 4 / 5;
   max-width: 320px;
 }
-.shot__theme-note {
-  display: block;
-  margin-top: 6px;
-  font-style: italic;
-}
-@media (min-width: 640px) {
-  .prose .shot--phone,
-  .prose .shot--crop {
-    display: grid;
-    grid-template-columns: minmax(0, 240px) 1fr;
-    gap: var(--s5);
-    align-items: end;
-  }
-  .prose .shot--phone figcaption,
-  .prose .shot--crop figcaption {
-    margin-top: 0;
-  }
+/* under a real image: nothing, unless the image is in the other theme */
+.shot figcaption {
+  margin-top: var(--s2);
+  font-size: var(--step-small);
+  color: var(--muted);
 }
 
 /* ---------- Docs layout ---------- */
@@ -1591,12 +1657,12 @@ html.no-js .toy__hint {
     display: none;
   }
   .docs__main {
-    max-width: 760px;
+    max-width: 720px;
   }
 }
 @media (min-width: 1280px) {
   .docs {
-    grid-template-columns: 232px minmax(0, 760px) minmax(0, 200px);
+    grid-template-columns: 232px minmax(0, 720px) minmax(0, 200px);
     justify-content: space-between;
   }
   .docs__main .toc {
@@ -1636,11 +1702,8 @@ html.no-js .toy__hint {
 .prose > * + * {
   margin-top: var(--s4);
 }
-.prose > p,
-.prose > ul,
-.prose > ol:not(.steps) {
-  max-width: 40em;
-}
+/* One measure. Text, callouts, code, tables, figures and the "next" brick all span
+   the article column (720px at most). Nothing inside .prose sets its own max-width. */
 .prose h2 {
   font-size: var(--step-h2);
   line-height: 1.1;
@@ -1746,7 +1809,6 @@ pre .c {
   border-radius: var(--r);
   padding: var(--s4);
   font-size: 1rem;
-  max-width: 44em;
 }
 .note__title {
   display: flex;
@@ -1865,10 +1927,6 @@ td code,
 .steps > li > * + * {
   margin-top: var(--s4);
 }
-.steps > li > p,
-.steps > li > ul {
-  max-width: 40em;
-}
 .steps h3 {
   position: relative;
   display: flex;
@@ -1918,7 +1976,6 @@ td code,
   background: var(--surface);
   border-radius: var(--r);
   padding: var(--s4);
-  max-width: 44em;
 }
 .parts h2 {
   font-size: var(--step-lead);
@@ -1955,7 +2012,6 @@ td code,
   text-decoration: none;
   border-radius: var(--r);
   transition: transform var(--t-med) var(--ease);
-  max-width: 44em;
 }
 .next:hover,
 .next.is-hover {
@@ -1984,7 +2040,6 @@ td code,
   justify-content: space-between;
   gap: var(--s4);
   margin-top: var(--s5);
-  max-width: 44em;
   font-weight: 600;
 }
 .pager a {
@@ -2100,7 +2155,7 @@ td code,
 }
 .faq__list {
   margin-top: var(--s6);
-  max-width: 46em;
+  max-width: 720px;
 }
 .faq__item {
   padding: var(--s5) 0;
@@ -2121,7 +2176,6 @@ td code,
 }
 .faq__item p {
   margin-top: var(--s3);
-  max-width: 40em;
 }
 .faq__item p + p {
   font-size: 1rem;
@@ -2234,7 +2288,7 @@ td code,
 .faq + .site-footer {
   margin-top: var(--s7);
 }
-/* the wordmark wall: the bin tipped out. The only place all five colours meet,
+/* the wordmark wall: the bin tipped out. The only place all five colors meet,
    apart from the closing stack and the phone menu. */
 .wall {
   display: flex;
@@ -2302,6 +2356,7 @@ td code,
   }
 }
 .footer-grid {
+  scroll-margin-top: var(--s4);
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--s6) var(--s5);

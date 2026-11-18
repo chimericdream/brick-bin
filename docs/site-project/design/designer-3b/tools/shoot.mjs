@@ -53,6 +53,13 @@ for (const s of ["sealed", "opened", "progress", "built", "apart", "mixed"]) {
   add(`state-hero-${s}-1440-${s === "sealed" || s === "mixed" ? "dark" : "light"}`, "index.html", { full: false, q: `state=${s}`, theme: s === "sealed" || s === "mixed" ? "dark" : "light", wait: 900 });
 }
 add("state-hero-mixed-390-light", "index.html", { w: 390, h: 844, full: false, q: "state=mixed", wait: 900, scroll: ".toy" });
+// build-state buttons at the widths where they used to get tight
+for (const w of [320, 360, 390, 480, 640, 768, 900, 959, 960, 1024, 1280, 1440]) {
+  add(`state-build-buttons-${w}-light`, "index.html", { w, h: 900, full: false, scroll: ".toy__note", check: "toy" });
+}
+// scripts off: the Menu link has jumped to the footer navigation
+add("state-nojs-menu-jump-390-light", "index.html", { w: 390, h: 844, full: false, q: "nojs=1", hash: "site-nav", wait: 1600 });
+add("state-nojs-header-390-light", "index.html", { w: 390, h: 844, full: false, q: "nojs=1" });
 // theme toggle: header crops
 const clipHeader = { x: 900, y: 0, width: 540, height: 80 };
 add("state-theme-toggle-system-light-device", "index.html", { theme: "system", scheme: "light", full: false, clip: clipHeader });
@@ -132,6 +139,13 @@ for (const j of jobs) {
   await evaluate(`document.fonts.ready.then(() => new Promise((r) => setTimeout(r, ${j.wait || 200})))`);
   const over = await evaluate("document.documentElement.scrollWidth - window.innerWidth");
   if (over > 0) problems.push(`${j.name}: page is ${over}px wider than the viewport`);
+  if (j.check === "toy") {
+    const r = await evaluate(`(() => { const b = [...document.querySelectorAll(".toy__states button")]; const tops = new Set(b.map((x) => Math.round(x.getBoundingClientRect().top))); return { rows: tops.size, clipped: b.filter((x) => x.scrollWidth > x.clientWidth).map((x) => x.textContent), tall: b.filter((x) => x.getBoundingClientRect().height > 46).length, width: Math.round(b[0].getBoundingClientRect().width), spare: Math.min(...b.map((x) => { const r = document.createRange(); r.selectNodeContents(x); return Math.round(x.clientWidth - r.getBoundingClientRect().width); })) }; })()`);
+    console.log(j.name, JSON.stringify(r));
+    if (r.clipped.length || r.tall) problems.push(`${j.name}: a build-state label does not fit`);
+  }
+  const notes = await evaluate(`[...document.querySelectorAll(".shot__notes")].filter((n) => n.scrollHeight > n.clientHeight + 1).length`);
+  if (notes) console.log(j.name, "shot notes that scroll inside their frame:", notes);
   if (j.full) {
     const height = await evaluate("Math.ceil(document.documentElement.scrollHeight)");
     await send("Emulation.setDeviceMetricsOverride", { width: j.w, height, deviceScaleFactor: 1, mobile: j.w < 700 });

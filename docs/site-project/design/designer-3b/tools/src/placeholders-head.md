@@ -8,12 +8,15 @@ Every place where the real app will be shown. This file is written by `tools/bui
 - **Frame.** A fixed-ratio box with a 1px `--line` border and a 3px radius. Desktop shots are 16:10,
   full phone screens are 9:19.5, tight phone crops are 4:5. The ratio is set on the frame, so nothing
   moves when the image arrives.
-- **Until the image exists** the frame shows the baseplate (studs from above) and a label: ID, screen
-  name, shape and theme.
-- **Caption.** Four labelled lines under every frame: Screen, State, Viewport and theme, Focus. These
-  are instructions for whoever takes the screenshot. Replace them with a one-line reader caption
-  when the real image goes in.
-- **Alt text** is on the frame (`role="img"` with `aria-label`) and moves to the `<img alt>`.
+- **Until the image exists** the frame shows the baseplate (studs from above), a label (ID, screen
+  name, shape and theme) and the **shot notes**.
+- **Shot notes** sit inside the frame, on a light panel along its bottom edge: Screen, State,
+  Viewport and theme, Focus. They are instructions for whoever takes the screenshot. They are part
+  of the placeholder only and are never site content.
+- **When the real image goes in**, the baseplate, the label and the shot notes all go. Nothing is
+  shown under a real image. The step or section text beside it already says what it shows, and the
+  alt text describes it for people who cannot see it.
+- **Alt text** is on the baseplate layer (`role="img"` with `aria-label`) and moves to the `<img alt>`.
 
 ## File names and themes
 
@@ -23,8 +26,8 @@ Every place where the real app will be shown. This file is written by `tools/bui
 Capture desktop shots at 1440 wide and phone shots at 390 wide, both at 2x.
 
 The site shows the file that matches the theme being viewed. **If only one theme exists, it shows
-that file in both themes**, inside the same frame, and adds "Shown in the light theme." (or dark) to
-the caption. The frame's border is what makes a light screenshot look deliberate on a dark page, so
+that file in both themes**, inside the same frame, and adds one small line under it: "Shown in the
+light theme." (or dark). That is the only thing that ever appears under a real image. The frame's border is what makes a light screenshot look deliberate on a dark page, so
 do not remove it. If just one can be taken, take the theme listed as "first choice" below. See
 `states.html`, "Screenshots", for all three cases drawn out.
 

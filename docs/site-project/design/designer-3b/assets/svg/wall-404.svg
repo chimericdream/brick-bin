@@ -1,5 +1,5 @@
 <!-- The 404 wall. The dashed gap and the numeral use currentColor, so set color to the ink token. -->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 220" role="img" aria-label="A wall of coloured bricks with one brick missing, its place marked by a dashed outline">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 220" role="img" aria-label="A wall of colored bricks with one brick missing, its place marked by a dashed outline">
       <g id="w">
         <g fill="#4db3e6"><rect x="0" y="16" width="116" height="48" rx="2"/><path d="M10 16V6h24v10zM50 16V6h24v10zM90 16V6h16v10z"/></g>
         <g fill="#f49ac1"><rect x="120" y="16" width="156" height="48" rx="2"/><path d="M128 16V6h24v10zM168 16V6h24v10zM208 16V6h24v10zM248 16V6h20v10z"/></g>

@@ -69,10 +69,10 @@ def header(meta):
       {theme("icons", "")}
       <a class="btn btn--small studs" href="docs-setup.html">Set it up</a>
     </div>
-    <button class="menu-btn" type="button" data-open aria-expanded="false" aria-controls="menu">
+    <a class="menu-btn" href="#site-nav" data-open>
       Menu
       <svg viewBox="0 0 20 20" aria-hidden="true"><path fill="currentColor" d="M2 4h16v2.5H2zM2 8.75h16v2.5H2zM2 13.5h16V16H2z"/></svg>
-    </button>
+    </a>
   </div>
 </header>
 <div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Menu">
@@ -90,7 +90,7 @@ def header(meta):
   </div>
   <div class="menu__foot">
     <span class="theme-label" id="menu-theme">Theme</span>
-    {theme("words", ' aria-labelledby="menu-theme"').replace(' aria-label="Theme"', "")}
+    {theme("words", ' aria-labeledby="menu-theme"').replace(' aria-label="Theme"', "")}
     <p class="small muted" style="margin-top:16px">Free and open source. It runs on your server, so there is nothing to sign in to here.</p>
   </div>
 </div>
@@ -108,21 +108,21 @@ def footer():
     return f"""<footer class="site-footer">
   <div class="wrap">
     <div class="wall" role="img" aria-label="Brick Bin, spelled out in bricks">{wall}</div>
-    <div class="footer-grid">
-      <nav aria-labelledby="f1"><h2 id="f1">Get it running</h2><ul>
+    <div class="footer-grid" id="site-nav">
+      <nav aria-labeledby="f1"><h2 id="f1">Get it running</h2><ul>
         <li><a href="docs-setup.html">Setup</a></li><li><a href="docs-hosting.html">Hosting</a></li><li><a href="docs-configuration.html">Configuration</a></li></ul></nav>
-      <nav aria-labelledby="f2"><h2 id="f2">Use it</h2><ul>
+      <nav aria-labeledby="f2"><h2 id="f2">Use it</h2><ul>
         <li><a href="tutorials.html">Tutorials</a></li><li><a href="faq.html">FAQ</a></li></ul></nav>
-      <nav aria-labelledby="f3"><h2 id="f3">The project</h2><ul>
-        <li><a href="{REPO}">Source code</a></li><li><a href="{REPO}/issues">Report a problem</a></li><li><a href="{REPO}/blob/main/LICENSE">MIT licence</a></li></ul></nav>
-      <div><h2 class="theme-label" id="f4">Theme</h2>{theme("icons", ' aria-labelledby="f4"').replace(' aria-label="Theme"', "")}</div>
+      <nav aria-labeledby="f3"><h2 id="f3">The project</h2><ul>
+        <li><a href="{REPO}">Source code</a></li><li><a href="{REPO}/issues">Report a problem</a></li><li><a href="{REPO}/blob/main/LICENSE">MIT license</a></li></ul></nav>
+      <div><h2 class="theme-label" id="f4">Theme</h2>{theme("icons", ' aria-labeledby="f4"').replace(' aria-label="Theme"', "")}</div>
       <div class="footer-credit">
         <p>Catalog data comes from <a href="https://rebrickable.com/">Rebrickable</a>. You import it yourself, onto your own server. Thank you, Rebrickable.</p>
         <p>Brick Bin is an independent project. It is not affiliated with, endorsed by or sponsored by the LEGO Group or any other brick maker. LEGO is a trademark of the LEGO Group.</p>
       </div>
     </div>
     <div class="footer-base">
-      <p>&copy; 2026 Bill Parrott. Free and open source under the MIT licence. Nothing on this site tracks you.</p>
+      <p>&copy; 2026 Bill Parrott. Free and open source under the MIT license. Nothing on this site tracks you.</p>
       <a class="btn btn--small" href="#top">Back to the top</a>
     </div>
   </div>
@@ -137,7 +137,7 @@ TUTORIALS = [
     ]),
     ("Day to day", [
         ("Track several copies and change build state", "Give each box its own place, owner and price, then move it from sealed to built with one tap.", 5),
-        ("Record missing pieces and work the shopping list", "Log the parts a copy is short of, then take the list to the shop or export it.", 7),
+        ("Record missing pieces and work the shopping list", "Log the parts a copy is short of, then take the list to the store or export it.", 7),
         ("Attach instructions", "Upload a PDF, save a link, or have Brick Bin save a PDF from a web address.", 4),
     ]),
     ("The household", [
@@ -174,7 +174,7 @@ def tut_index():
     n = 0
     for group, items in TUTORIALS:
         gid = re.sub(r"[^a-z]+", "-", group.lower())
-        out += f'<section class="tutgroup" aria-labelledby="{gid}"><h2 id="{gid}">{group}</h2><ul class="tutlist">'
+        out += f'<section class="tutgroup" aria-labeledby="{gid}"><h2 id="{gid}">{group}</h2><ul class="tutlist">'
         for name, summary, steps in items:
             n += 1
             out += f'<li><a href="{tut_href(name)}"><span class="n">{n}</span><b>{name}</b><span>{summary}</span><small>{steps} steps</small></a></li>'
@@ -236,15 +236,19 @@ def shot(m, page):
     shape = {"desktop": "desktop · 16:10", "phone": "phone · 9:19.5", "crop": "phone · 4:5 crop"}[kind]
     e = html.escape
     return f"""<figure class="shot{cls}">
-  <div class="shot__frame baseplate" role="img" aria-label="{e(d['alt'])}">
+  <div class="shot__frame">
+    <div class="shot__art baseplate" role="img" aria-label="{e(d['alt'])}"></div>
     <div class="shot__label"><b>{d['id']}</b><strong>{e(d['title'])}</strong>{shape} · {d['theme']}</div>
+    <div class="shot__notes" role="group" aria-label="Shot notes for {d['id']}" tabindex="0">
+      <b>{d['id']} · {e(d['title'])}</b>
+      <dl>
+        <div><dt>Screen</dt><dd>{e(d['screen'])}</dd></div>
+        <div><dt>State</dt><dd>{e(d['state'])}</dd></div>
+        <div><dt>Viewport and theme</dt><dd>{e(d['view'])}</dd></div>
+        <div><dt>Focus</dt><dd>{e(d['focus'])}</dd></div>
+      </dl>
+    </div>
   </div>
-  <figcaption><dl>
-    <dt>Screen</dt><dd>{e(d['screen'])}</dd>
-    <dt>State</dt><dd>{e(d['state'])}</dd>
-    <dt>Viewport and theme</dt><dd>{e(d['view'])}</dd>
-    <dt>Focus</dt><dd>{e(d['focus'])}</dd>
-  </dl></figcaption>
 </figure>"""
 
 
@@ -267,7 +271,7 @@ def build():
 <link rel="stylesheet" href="assets/css/site.css">
 <script>
 /* Set the saved theme before first paint. No attribute means "System". */
-(function(){{var d=document.documentElement;d.classList.remove("no-js");try{{var q=new URLSearchParams(location.search).get("theme"),t=q||localStorage.getItem("bb-theme");if(t==="light"||t==="dark")d.setAttribute("data-theme",t)}}catch(e){{}}}})();
+(function(){{var d=document.documentElement,p=new URLSearchParams(location.search);if(p.get("nojs"))return;d.classList.remove("no-js");try{{var q=p.get("theme"),t=q||localStorage.getItem("bb-theme");if(t==="light"||t==="dark")d.setAttribute("data-theme",t)}}catch(e){{}}}})();
 </script>
 </head>
 <body id="top" data-section="{meta.get('section', '')}">

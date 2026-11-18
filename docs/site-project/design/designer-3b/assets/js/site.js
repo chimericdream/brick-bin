@@ -1,10 +1,12 @@
 /* Brick Bin site mockups. Small and dependency-free; every page still reads without it.
    Query parameters exist only so states can be screenshotted:
    ?theme=system|light|dark  ?menu=open  ?toc=open  ?tutnav=open
-   ?state=sealed|opened|progress|built|apart|mixed */
+   ?state=sealed|opened|progress|built|apart|mixed
+   ?nojs=1 shows the page as it is with scripts off */
 (function () {
   var root = document.documentElement;
   var params = new URLSearchParams(location.search);
+  if (params.get("nojs")) return;
   root.classList.remove("no-js");
 
   /* ----- theme: System, Light, Dark. No data-theme attribute means System. ----- */
@@ -44,8 +46,20 @@
     else if (openBtn) openBtn.focus();
   }
   if (menu && openBtn) {
-    openBtn.addEventListener("click", function () {
+    /* Without scripts the Menu control is a plain link to the footer navigation.
+       With scripts it becomes a button that opens the menu sheet. */
+    openBtn.setAttribute("role", "button");
+    openBtn.setAttribute("aria-expanded", "false");
+    openBtn.setAttribute("aria-controls", "menu");
+    openBtn.addEventListener("click", function (e) {
+      e.preventDefault();
       setMenu(true);
+    });
+    openBtn.addEventListener("keydown", function (e) {
+      if (e.key === " ") {
+        e.preventDefault();
+        setMenu(true);
+      }
     });
     menu.querySelector("[data-close]").addEventListener("click", function () {
       setMenu(false);

@@ -1,7 +1,7 @@
 {"title": "FAQ · Brick Bin", "description": "Short, honest answers about Brick Bin: brands, internet access, the catalog, kids, Tailscale, backups, loose bricks and cost.", "section": "faq", "nav": "faq"}
 <div class="wrap">
   <header class="page-head studs">
-    <ol class="crumbs" aria-label="Breadcrumb"><li><a href="index.html">Home</a></li><li aria-current="page">FAQ</li></ol>
+    <nav aria-label="Breadcrumb"><ol class="crumbs"><li><a href="index.html">Home</a></li><li aria-current="page">FAQ</li></ol></nav>
     <h1>Questions, answered briefly</h1>
     <p class="lead">The short answer comes first. The reasons follow, for anyone who wants them.</p>
   </header>
@@ -22,6 +22,12 @@
       <h2><span class="b1"></span>Where does the catalog come from?</h2>
       <p><b><a href="https://rebrickable.com/">Rebrickable</a>.</b> You import their data yourself, onto your own server.</p>
       <p>Nothing is fetched on a schedule. An admin presses the button, and can do so at most once every 48 hours. <a href="tutorial-import-catalog.html">The import tutorial</a> walks through it.</p>
+    </section>
+    <section class="faq__item" id="wait">
+      <h2><span class="b1"></span>Why do I have to wait 48 hours between imports from Rebrickable?</h2>
+      <p><b>To stay well inside Rebrickable's rules.</b> Their <a href="https://rebrickable.com/downloads/">downloads page</a> says: "You may automate downloading these archives at most once a day." That is a little vague, so Brick Bin takes the cautious reading and waits 48 hours between imports.</p>
+      <p>In practice you'll rarely meet the limit. The import needs running a handful of times a year, once a month at most.</p>
+      <p>The same notice goes on: "Scraping our web pages is strictly against our Terms and will get you banned." That is why Brick Bin doesn't read the downloads page itself, and an admin <a href="tutorial-import-catalog.html">pastes its HTML in</a>.</p>
     </section>
     <section class="faq__item" id="kids">
       <h2><span class="b1"></span>Can my kids see prices?</h2>
@@ -45,17 +51,18 @@
     </section>
     <section class="faq__item" id="cost">
       <h2><span class="b1"></span>What does it cost?</h2>
-      <p><b>Nothing.</b> Brick Bin is free and open source, under the MIT licence. There's no account with us and no subscription.</p>
+      <p><b>Nothing.</b> Brick Bin is free and open source, under the MIT license. There's no account with us and no subscription.</p>
       <p>You do supply the server, the disk and the bricks.</p>
     </section>
   </div>
   <aside class="faq__aside">
-    <nav aria-labelledby="jump-h">
+    <nav aria-labeledby="jump-h">
       <h2 id="jump-h">Jump to</h2>
       <ul class="jump">
         <li><a href="#lego">Is this a LEGO app?</a></li>
         <li><a href="#internet">Does it need the internet?</a></li>
         <li><a href="#catalog">Where does the catalog come from?</a></li>
+        <li><a href="#wait">Why wait 48 hours between imports?</a></li>
         <li><a href="#kids">Can my kids see prices?</a></li>
         <li><a href="#tailscale">Can I run it without Tailscale?</a></li>
         <li><a href="#backups">How do I back it up?</a></li>

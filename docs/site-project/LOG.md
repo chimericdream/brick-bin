@@ -169,3 +169,14 @@ Design A / Design B mapping for Phase 1.5.
   downloading these archives at most once a day. Scraping our web pages is strictly against our Terms
   and will get you banned." Brick Bin reads "once a day" conservatively as 48 hours. Imports should
   only be needed a handful of times a year (once a month at most).
+
+### Designer 3b revision handoff (2026-11-17)
+
+- All 7 revisions are in place (checked: no UK spellings left in pages, SPEC, PLACEHOLDERS or CSS; FAQ
+  has the 48-hour entry; SPEC sections 6.2, 6.3, 6.7, 6.14, 6.17 and 6.26 are updated; 87 PNGs,
+  including build-button shots at 12 widths and the no-JS menu shots). `inputs/` and `feedback/` are
+  untouched.
+- Designer's choices that need the human's OK: the build-state buttons are always 2×3 (the row of six
+  is gone, because it only fit at about 840–960px), with 3×2 at 360px and narrower; and no caption
+  under real screenshots apart from a one-line note when an image exists in only one theme.
+- Process: one Edge at a time over three passes; no desktop apps launched; cleaned up.

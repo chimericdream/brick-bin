@@ -8,12 +8,15 @@ Every place where the real app will be shown. This file is written by `tools/bui
 - **Frame.** A fixed-ratio box with a 1px `--line` border and a 3px radius. Desktop shots are 16:10,
   full phone screens are 9:19.5, tight phone crops are 4:5. The ratio is set on the frame, so nothing
   moves when the image arrives.
-- **Until the image exists** the frame shows the baseplate (studs from above) and a label: ID, screen
-  name, shape and theme.
-- **Caption.** Four labelled lines under every frame: Screen, State, Viewport and theme, Focus. These
-  are instructions for whoever takes the screenshot. Replace them with a one-line reader caption
-  when the real image goes in.
-- **Alt text** is on the frame (`role="img"` with `aria-label`) and moves to the `<img alt>`.
+- **Until the image exists** the frame shows the baseplate (studs from above), a label (ID, screen
+  name, shape and theme) and the **shot notes**.
+- **Shot notes** sit inside the frame, on a light panel along its bottom edge: Screen, State,
+  Viewport and theme, Focus. They are instructions for whoever takes the screenshot. They are part
+  of the placeholder only and are never site content.
+- **When the real image goes in**, the baseplate, the label and the shot notes all go. Nothing is
+  shown under a real image. The step or section text beside it already says what it shows, and the
+  alt text describes it for people who cannot see it.
+- **Alt text** is on the baseplate layer (`role="img"` with `aria-label`) and moves to the `<img alt>`.
 
 ## File names and themes
 
@@ -23,8 +26,8 @@ Every place where the real app will be shown. This file is written by `tools/bui
 Capture desktop shots at 1440 wide and phone shots at 390 wide, both at 2x.
 
 The site shows the file that matches the theme being viewed. **If only one theme exists, it shows
-that file in both themes**, inside the same frame, and adds "Shown in the light theme." (or dark) to
-the caption. The frame's border is what makes a light screenshot look deliberate on a dark page, so
+that file in both themes**, inside the same frame, and adds one small line under it: "Shown in the
+light theme." (or dark). That is the only thing that ever appears under a real image. The frame's border is what makes a light screenshot look deliberate on a dark page, so
 do not remove it. If just one can be taken, take the theme listed as "first choice" below. See
 `states.html`, "Screenshots", for all three cases drawn out.
 
@@ -37,7 +40,7 @@ do not remove it. If just one can be taken, take the theme listed as "first choi
 - **Screen:** First visit: create household and admin.
 - **State:** Brand-new install. The form is filled in with a sample household name but not yet submitted.
 - **Viewport and theme:** Desktop, 1440 wide, light.
-- **Focus:** The whole form. Centre it and crop the empty margins.
+- **Focus:** The whole form. Center it and crop the empty margins.
 - **Alt text:** The first-visit screen: a form asking for a household name and the details of the admin account.
 
 ### LND-01: Set detail page
@@ -55,10 +58,10 @@ do not remove it. If just one can be taken, take the theme listed as "first choi
 - **Used on:** `index.html`
 - **Files:** `lnd-02-shopping-list-store-trip-mode.light.png`, `lnd-02-shopping-list-store-trip-mode.dark.png` (ratio 9:19.5; first choice for this spot: dark)
 - **Screen:** Shopping list in store-trip mode.
-- **State:** About twelve missing parts across three sets, grouped by part and colour, three ticked off.
+- **State:** About twelve missing parts across three sets, grouped by part and color, three checked off.
 - **Viewport and theme:** Phone, 390 wide, dark.
-- **Focus:** The part pictures and the large tick targets. Full screen, no browser chrome.
-- **Alt text:** The shopping list on a phone in store-trip mode: missing parts with pictures and large tick boxes, three already ticked.
+- **Focus:** The part pictures and the large checkboxes. Full screen, no browser chrome.
+- **Alt text:** The shopping list on a phone in store-trip mode: missing parts with pictures and large checkboxes, three already checked.
 
 ### T02-01: Catalog settings, before the first import
 
@@ -114,9 +117,9 @@ the real app.
 | T03-02 | Add your first set | Add a set, barcode scan | Camera view with a box barcode in frame | Phone, dark | The scan frame | The barcode scanner on a phone, pointed at a box barcode. |
 | T03-03 | Add your first set | Add a set, manual entry | Form filled in for an off-brand set (brand, number, name, piece count) | Desktop, light | The brand field and the fields with no catalog match | The manual entry form filled in for a set from another brand. |
 | T04-01 | Track several copies | Set detail page | One set, three copies in different states | Desktop, light | The copies list | A set with three copies, each with its own state and place. |
-| T04-02 | Track several copies | Build-state menu, open | Menu open on one copy, "Built" selected | Phone, light, 4:5 crop | The six states and the tick | The build-state menu open on a phone with six states and Built ticked. |
+| T04-02 | Track several copies | Build-state menu, open | Menu open on one copy, "Built" selected | Phone, light, 4:5 crop | The six states and the check mark | The build-state menu open on a phone with six states and Built checked. |
 | T05-01 | Missing pieces | Copy detail, add missing piece | Picker open on the set's inventory, one part chosen, quantity 2 | Desktop, light | Part pictures and the quantity control | The missing-piece picker showing the set's parts with pictures. |
-| T05-02 | Missing pieces | Shopping list, store-trip mode | Twelve parts, three ticked | Phone, dark | Tick targets and part pictures | The shopping list in store-trip mode with large tick boxes. |
+| T05-02 | Missing pieces | Shopping list, store-trip mode | Twelve parts, three checked | Phone, dark | Checkboxes and part pictures | The shopping list in store-trip mode with large checkboxes. |
 | T05-03 | Missing pieces | Shopping list, export menu | Export menu open: BrickLink XML, Rebrickable CSV, CSV | Desktop, light, 4:5 crop | The three export options | The export menu with three file formats. |
 | T06-01 | Attach instructions | Set detail, instructions panel | One uploaded PDF, one saved link | Desktop, light | The three ways to add: upload, link, save from address | The instructions panel listing a PDF and a link, with buttons to add more. |
 | T06-02 | Attach instructions | PDF viewer | A booklet open at a middle page, page jumper visible | Phone, light | The page jump control | An instruction PDF open on a phone with a control for jumping between pages. |
