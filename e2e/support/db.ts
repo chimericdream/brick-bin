@@ -215,10 +215,14 @@ export async function seedCatalog(): Promise<void> {
 }
 
 /** Puts a real PNG where the part-image route looks, and records it in the index. */
-export async function seedPartImage(colorId: number, partNum: string): Promise<void> {
+export async function seedPartImage(
+  colorId: number,
+  partNum: string,
+  image: Buffer = TINY_PNG,
+): Promise<void> {
   const folder = path.join(DATA_DIR, 'catalog', 'ldraw', String(colorId));
   mkdirSync(folder, { recursive: true });
-  writeFileSync(path.join(folder, `${partNum}.png`), TINY_PNG);
+  writeFileSync(path.join(folder, `${partNum}.png`), image);
   await sql`insert into catalog_part_images (part_num, color_id) values (${partNum}, ${colorId}) on conflict do nothing`;
 }
 
