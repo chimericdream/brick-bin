@@ -103,3 +103,11 @@ Design A / Design B mapping for Phase 1.5.
 - Theme toggle: add a third "System" setting.
 - "Mixed" build state: no longer a coherent set; its parts are mixed into everything else.
 - Section colours are not compared with the app's palette.
+
+### Second synthesis (human request, 2026-11-17)
+
+- The human asked for a second Designer 3 on Fable 5.2 doing the same task. It works in
+  `design/designer-3b/` with an identical copy of `inputs/`, so the A/B mapping is the same (A =
+  Designer 2, B = Designer 1).
+- It gets the same briefs (01 + 03), the same process limits, and the human's answers up front.
+- The two Designer 3s never see each other's work. They run in parallel, each limited to one browser.
