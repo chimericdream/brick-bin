@@ -17,6 +17,9 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm test --passWithNoTests
       - run: pnpm build
+      # The marketing site (site/). Root lint and format:check already cover it.
+      - run: pnpm --filter brick-bin-site typecheck
+      - run: pnpm --filter brick-bin-site build
 
   e2e:
     name: e2e
