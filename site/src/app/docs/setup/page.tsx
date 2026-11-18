@@ -6,6 +6,7 @@ import { PageHead } from '@/components/PageHead';
 import { CodeBlock } from '@/components/prose/CodeBlock';
 import { NextBrick, Note } from '@/components/prose/Blocks';
 import { Shot } from '@/components/Shot';
+import { pageMetadata } from '@/lib/metadata';
 import {
   REBRICKABLE_URL,
   REPO_URL,
@@ -15,12 +16,12 @@ import {
   tutorialHref,
 } from '@/lib/site';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: 'Setup · Docs',
   description:
     'Install Brick Bin on your own server: a quick try-out on port 3000, or the recommended Proxmox, Docker and Tailscale route.',
-  alternates: { canonical: ROUTES.setup },
-};
+  path: ROUTES.setup,
+});
 
 const TOC = [
   { id: 'before', label: 'Before you start' },

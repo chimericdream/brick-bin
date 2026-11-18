@@ -5,12 +5,13 @@ import { Button } from '@/components/Button';
 import { BuildPile } from '@/components/landing/BuildPile';
 import { Shot } from '@/components/Shot';
 import { TUTORIALS } from '@/content/tutorials';
+import { pageMetadata } from '@/lib/metadata';
 import { REBRICKABLE_URL, REPO_URL, ROUTES } from '@/lib/site';
 import { countWord } from '@/lib/words';
 
 import classes from './Landing.module.css';
 
-export const metadata: Metadata = { alternates: { canonical: ROUTES.home } };
+export const metadata: Metadata = pageMetadata({ path: ROUTES.home });
 
 const FEATURES: { title: string; chips: React.ReactNode; body: React.ReactNode }[] = [
   {

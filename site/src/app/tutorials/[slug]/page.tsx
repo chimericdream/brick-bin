@@ -5,6 +5,7 @@ import { PageHead } from '@/components/PageHead';
 import { CatalogCredit, NextBrick, Pager } from '@/components/prose/Blocks';
 import { Parts, Steps } from '@/components/prose/Tutorial';
 import { TUTORIALS, tutorialBySlug, tutorialNumber } from '@/content/tutorials';
+import { pageMetadata } from '@/lib/metadata';
 import { ROUTES, tutorialHref } from '@/lib/site';
 
 /** Every tutorial uses these five headings, so "On this page" never changes (SPEC 7.3). */
@@ -26,12 +27,11 @@ type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const t = tutorialBySlug((await params).slug)!;
-  return {
+  return pageMetadata({
     title: `${t.title} · Tutorials`,
     description: t.summary,
-    alternates: { canonical: tutorialHref(t.slug) },
-    openGraph: { title: `${t.title} · Tutorials · Brick Bin`, description: t.summary },
-  };
+    path: tutorialHref(t.slug),
+  });
 }
 
 export default async function TutorialPage({ params }: Props) {

@@ -3,16 +3,17 @@ import type { Metadata } from 'next';
 import { Button } from '@/components/Button';
 import { PageHead } from '@/components/PageHead';
 import { FAQ } from '@/content/faq';
+import { pageMetadata } from '@/lib/metadata';
 import { ISSUES_URL, ROUTES } from '@/lib/site';
 
 import classes from './Faq.module.css';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: 'FAQ',
   description:
     'Short, honest answers about Brick Bin: brands, internet access, the catalog, kids, Tailscale, backups, loose bricks and cost.',
-  alternates: { canonical: ROUTES.faq },
-};
+  path: ROUTES.faq,
+});
 
 /** Every answer is open. No accordion (SPEC 6.23). */
 export default function FaqPage() {

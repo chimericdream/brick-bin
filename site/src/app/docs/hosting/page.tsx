@@ -5,14 +5,15 @@ import { DocsShell } from '@/components/docs/DocsShell';
 import { PageHead } from '@/components/PageHead';
 import { CodeBlock } from '@/components/prose/CodeBlock';
 import { CatalogCredit, NextBrick, Note, Pager, StackTable } from '@/components/prose/Blocks';
+import { pageMetadata } from '@/lib/metadata';
 import { ROUTES, TAILSCALE_URL, configHref, tutorialHref } from '@/lib/site';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: 'Hosting · Docs',
   description:
     'What Brick Bin runs, how much disk it wants, how to back it up and restore it, and when it goes online.',
-  alternates: { canonical: ROUTES.hosting },
-};
+  path: ROUTES.hosting,
+});
 
 const TOC = [
   { id: 'runs', label: 'What runs' },

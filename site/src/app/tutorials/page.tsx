@@ -3,6 +3,7 @@ import Link from 'next/link';
 
 import { PageHead } from '@/components/PageHead';
 import { TUTORIAL_GROUPS, TUTORIALS, tutorialNumber } from '@/content/tutorials';
+import { pageMetadata } from '@/lib/metadata';
 import { ROUTES, tutorialHref } from '@/lib/site';
 import { countWord } from '@/lib/words';
 
@@ -10,11 +11,11 @@ import classes from './Tutorials.module.css';
 
 const COUNT = countWord(TUTORIALS.length);
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: 'Tutorials',
   description: `${COUNT} walk-throughs for Brick Bin, from the first run to checking what the collection is worth.`,
-  alternates: { canonical: ROUTES.tutorials },
-};
+  path: ROUTES.tutorials,
+});
 
 export default function TutorialsIndex() {
   return (

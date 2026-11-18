@@ -13,28 +13,16 @@ import type { Metadata, Viewport } from 'next';
 import { SiteFooter } from '@/components/SiteFooter';
 import { SiteHeader } from '@/components/SiteHeader';
 import { albertSans, jetbrainsMono } from '@/fonts';
-import { DESCRIPTION, SITE_NAME, SITE_URL, TAGLINE } from '@/lib/site';
+import { HOME_TITLE, pageMetadata } from '@/lib/metadata';
+import { SITE_NAME, SITE_URL } from '@/lib/site';
 import { NO_JS_SCRIPT, THEME_STORAGE_KEY } from '@/lib/theme';
 
 import { Providers } from './Providers';
 
-const DEFAULT_TITLE = `${SITE_NAME}: ${TAGLINE.charAt(0).toLowerCase()}${TAGLINE.slice(1)}`;
-
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: { default: DEFAULT_TITLE, template: `%s · ${SITE_NAME}` },
-  description: DESCRIPTION,
-  openGraph: {
-    type: 'website',
-    siteName: SITE_NAME,
-    title: DEFAULT_TITLE,
-    description: DESCRIPTION,
-    url: '/',
-    images: [
-      { url: '/og.png', width: 1200, height: 630, alt: 'Brick Bin: know what’s in every box.' },
-    ],
-  },
-  twitter: { card: 'summary_large_image' },
+  title: { default: HOME_TITLE, template: `%s · ${SITE_NAME}` },
+  ...pageMetadata({ path: '/' }),
 };
 
 export const viewport: Viewport = {
