@@ -10,7 +10,17 @@ export interface ConfigVar {
   purpose: ReactNode;
   /** A literal value (shown in mono), a short description, or a "you must set this" tag. */
   default: { code: string } | { text: string; wrap?: boolean } | { tag: 'Required' | 'Set it' };
-  /** Shown under the purpose when the compose files do not simply pass the value from .env. */
+  /**
+   * A note under the purpose, for rows where the compose files don't simply pass the value from
+   * .env. The Default column is always the app's own default; the note says what the compose
+   * files do instead. Wording rule (from the designer, so every note reads the same):
+   * - One or two short sentences, each ending in a period. No jokes.
+   * - Name the files with these terms only: "the try-out compose file", "the Tailscale install",
+   *   "both compose files" (or "the compose files").
+   * - Say what the file does first, then what the reader should do, if anything.
+   * - Literal values are <code>, as everywhere else. Contractions as on the rest of the site.
+   * - A note that repeats on several rows is fine: rows are reached one at a time by their links.
+   */
   compose?: ReactNode;
 }
 
@@ -22,7 +32,7 @@ export interface ConfigGroup {
 }
 
 const NOT_PASSED =
-  'The compose files do not pass this on. Add it to the app’s environment to set it.';
+  'The compose files don’t pass this on. To set it, add it to the app’s environment.';
 
 export const CONFIG_GROUPS: ConfigGroup[] = [
   {
@@ -48,7 +58,7 @@ export const CONFIG_GROUPS: ConfigGroup[] = [
         name: 'TS_AUTHKEY',
         purpose: 'Tailscale auth key for the sidecar, in the Tailscale install.',
         default: { tag: 'Set it' },
-        compose: 'Not used by the try-out compose file.',
+        compose: 'The try-out compose file doesn’t use it.',
       },
     ],
   },
@@ -71,7 +81,12 @@ export const CONFIG_GROUPS: ConfigGroup[] = [
         name: 'APP_PORT',
         purpose: 'Port the app is published on.',
         default: { code: '3000' },
-        compose: 'Try-out compose file only. The Tailscale install always publishes 3000.',
+        compose: (
+          <>
+            Only the try-out compose file reads it. The Tailscale install always publishes{' '}
+            <code>3000</code>.
+          </>
+        ),
       },
       {
         name: 'COOKIE_SECURE',
@@ -81,13 +96,21 @@ export const CONFIG_GROUPS: ConfigGroup[] = [
           </>
         ),
         default: { code: 'false' },
-        compose: 'The Tailscale install sets it to true itself.',
+        compose: (
+          <>
+            The Tailscale install sets it to <code>true</code> itself.
+          </>
+        ),
       },
       {
         name: 'DATA_DIR',
         purpose: 'Where covers, instruction PDFs and catalog files are kept.',
         default: { code: './data' },
-        compose: 'Always /data in the Docker image, on the app-data volume.',
+        compose: (
+          <>
+            Both compose files keep it at <code>/data</code>, on the app-data volume.
+          </>
+        ),
       },
       {
         name: 'AUTO_MIGRATE',
@@ -103,7 +126,12 @@ export const CONFIG_GROUPS: ConfigGroup[] = [
         name: 'APP_VERSION',
         purpose: 'Release label, sent in the catalog import’s User-Agent.',
         default: { text: 'Set in the image', wrap: true },
-        compose: 'The published image sets it to the commit it was built from.',
+        compose: (
+          <>
+            The compose files don&apos;t pass this on. The Tailscale install&apos;s image sets it to
+            the commit it was built from, and the try-out compose file builds with <code>dev</code>.
+          </>
+        ),
       },
     ],
   },

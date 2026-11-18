@@ -218,9 +218,17 @@
 /* how the compose files treat a variable, under its purpose */
 .where {
   display: block;
-  margin-top: 4px;
+  margin-top: 6px;
   font-size: var(--step-small);
   color: var(--muted);
+}
+/* code in a note stays at the 14px floor, in the note's own color */
+.tableWrap .where code {
+  font-size: 1em;
+  font-weight: 500;
+  color: inherit;
+  background: none;
+  padding: 0;
 }
 .tableWrap tbody tr {
   scroll-margin-top: var(--s5);

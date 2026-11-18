@@ -57,7 +57,12 @@ trade.
 - **A tutorial:** copy one of the files in `src/content/tutorials/`, change it, and add it to a
   group in `src/content/tutorials/index.ts`. Its page, number, sidebar entry, step count and
   sitemap entry follow.
-- **A configuration variable:** add one row to its group in `src/content/config.tsx`.
+- **A configuration variable:** add one row to its group in `src/content/config.tsx`. The
+  Default column is always the app's own default. If the compose files do something else with
+  the variable, say so in the row's `compose` note, following the wording rule above
+  `ConfigVar.compose`: one or two short sentences; name the files only as "the try-out compose
+  file", "the Tailscale install" or "both compose files" (or "the compose files"); say what the
+  file does first, then what the reader should do; literal values in `<code>`.
 - **A FAQ question:** add one entry to `src/content/faq.tsx`.
 - **A screenshot placeholder:** add an entry to `src/content/shots.ts`, use it with
   `<Shot id="..." />`, and run the `placeholders` command.

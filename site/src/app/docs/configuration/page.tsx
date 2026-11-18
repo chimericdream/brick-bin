@@ -8,14 +8,15 @@ import { CodeBlock } from '@/components/prose/CodeBlock';
 import { ConfigTable } from '@/components/prose/ConfigTable';
 import { NextBrick, Note, Pager, SmallNote } from '@/components/prose/Blocks';
 import { CONFIG_COUNT, CONFIG_GROUPS } from '@/content/config';
+import { pageMetadata } from '@/lib/metadata';
 import { ROUTES, tutorialHref } from '@/lib/site';
 import { countWord } from '@/lib/words';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: 'Configuration · Docs',
   description: 'Every Brick Bin environment variable, what it does and its default.',
-  alternates: { canonical: ROUTES.config },
-};
+  path: ROUTES.config,
+});
 
 const TOC = [
   ...CONFIG_GROUPS.map((g) => ({ id: g.id, label: g.title })),
@@ -51,7 +52,8 @@ export default function ConfigurationPage() {
           The compose files pass some variables from <code>.env</code> to the app and set others
           themselves. Where a variable is handled differently, its row says so. To set one they
           leave out, add it to the <code>environment</code> list of the <code>app</code> service in
-          the compose file.
+          the compose file. The Default column is the app&apos;s own default. The note under a row
+          says what the compose files do instead.
         </p>
       </Note>
 
