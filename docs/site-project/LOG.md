@@ -211,3 +211,22 @@ Design A / Design B mapping for Phase 1.5.
   reference.
 - Developer: Opus 5.5. Receives brief 04, the path `site/design/`, the human's answers, the open items
   and the process limits.
+
+### Developer handoff (2026-11-18, agent adb2354c716386681)
+
+- PR https://github.com/chimericdream/brick-bin/pull/4 (head a7536d0). Package `brick-bin-site`,
+  Next.js 16 static export, all pages including 10 tutorials, sitemap, robots, social metadata.
+- Changes outside `site/`: Dockerfile and `.dockerignore` (copy `site/package.json` before the frozen
+  install), root `tsconfig.json` excludes `site`, CI `check` runs the site typecheck and build, and
+  oxlint/oxfmt ignore `site/design` and `docs/site-project`.
+- Resolved: fonts replaced with full variable fonts (the copies were Latin subsets); og.png rendered
+  from live type; `DATABASE_URL` is built by the compose files from `POSTGRES_PASSWORD`, so it's
+  removed from the example `.env`; the 48-hour limit is confirmed in code and tests.
+- PM checks: local `pnpm --filter brick-bin-site build` passes; the built HTML loads nothing from a
+  third party (external URLs are plain links to github.com, rebrickable.com and tailscale.com, and
+  canonical/OG URLs are on brick-bin.app). No stray browser processes. Netlify deploy preview is ready.
+  CodeRabbit skipped the review (282 files over its limit of 100).
+- Relayed to Designer 3b for review: og.png and the per-row compose notes on the Configuration page.
+- For the human: compose pass-through for six variables and a missing `deploy/.env.example`; whether
+  the GHCR image is public; database restore order; app bug where the phone "More" tab links to the
+  missing `/more` route; whether `docs/site-project/` (147 MB) stays in the PR.
