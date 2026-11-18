@@ -50,3 +50,25 @@ Design A / Design B mapping for Phase 1.5.
 - The human agrees Designer 2 was the likely cause of the near-crash: Designer 1 had finished well
   before the machine locked up.
 - Answers to Designer 1's open questions: pending from the human.
+
+### Designer 2 handoff (agent a0129efb7612ff56f)
+
+- Concept: "Sorted by colour". Each section is a brick of its own colour (Tutorials orange, Setup
+  green, Hosting azure, Configuration tan, FAQ pink) on a near-colourless workshop ground. Jost (OFL)
+  for everything, system monospace for code.
+- Completeness check: passed. All pages, landing in light and dark at phone and desktop, dark
+  tutorial and Configuration (plus dark tutorials, FAQ, 404), mobile menu, docs nav, theme toggle
+  (auto, light, dark) and `states.html`. DESIGN-NOTES, TOKENS, PLACEHOLDERS (19 entries), SVGs and
+  fonts are present. 53 PNGs. Its screenshot and stamping scripts sit in its own scratchpad, not here.
+- Isolation statement: opened nothing in the repo outside `designer-2/`. Outside the repo: the design
+  skill's files, its scratchpad, temp browser profiles, and font downloads from the google/fonts repo.
+- Injected context: the same CLAUDE.md/AGENTS.md as Designer 1 (app stack, the app's fonts, design
+  file paths, architecture rules), plus git status (branch, git user name, recent commit titles). It
+  says it used none of it. An environment note also showed it the `designer-1` path when the PM's shell
+  changed directory. It says it did not open that path.
+- Screenshot method, in its own words: one headless Edge per run, never overlapping, and nothing in the
+  background. It says the 12 `bbcap-*` profiles were its own and were left behind because cleanup hit
+  locked files. It has deleted them. It took no new shots after the restart.
+- Open questions (held for the human): repo URL and licence; who the copyright line credits; whether
+  it may name and link Tailscale and link Rebrickable's downloads page directly; whether the section
+  colours should be re-checked against the app's palette.
