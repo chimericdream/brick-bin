@@ -150,3 +150,18 @@ Design A / Design B mapping for Phase 1.5.
 - Lockup SVG uses live text: outlining is needed only for off-site use; noted for Phase 2.
 - UK or US spelling: for the human.
 - Phone menu without JavaScript: for the human.
+
+### Gate 2 outcome (2026-11-17)
+
+- The human chose Designer 3b's package (Fable 5.2) as the final design, with revisions made by the
+  same Fable instance. Designer 3's package (Opus 5.5) stays in the repo for reference only.
+- Spelling: US. Phone menu without JavaScript: the Menu button jumps to the footer links.
+- Revisions sent to Designer 3b (the human's screenshots copied into `design/designer-3b/feedback/`):
+  1. Move the placeholder caption inside the placeholder box.
+  2. Restyle the breadcrumbs (baseline and spacing).
+  3. Home: the six build-state buttons switch to two rows of three before any label wraps.
+  4. FAQ: add "Why do I have to wait 48 hours between imports from Rebrickable?". The reason is
+     pending from the human; the designer drafts with no new claims.
+  5. Setup/Hosting/Configuration: make the callout and code block widths deliberate and consistent.
+  6. US spelling. 7. No-JS Menu button jumps to the footer links.
+- When the final package is copied to `site/design/`, leave out `inputs/` and `feedback/`.
