@@ -274,7 +274,7 @@
   font-size: var(--step-lead);
   margin: 0 0 var(--s3);
 }
-.parts ul {
+.partsList {
   list-style: none;
   padding: 0;
 }

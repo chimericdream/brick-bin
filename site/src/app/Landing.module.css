@@ -136,6 +136,9 @@
   font-size: var(--step-small);
   color: var(--muted);
 }
+.copies li > span:last-child :global(.tag) {
+  color: inherit;
+}
 .copies figcaption {
   margin-top: var(--s3);
   font-size: var(--step-small);
@@ -433,8 +436,26 @@
 .open p {
   max-width: 30em;
 }
+/* In the approved mockup the closing button takes the stack bricks' shape too: 60px tall,
+   the larger studs, and its arrow shown from 768px. */
 .open > a {
+  --pitch: 32px;
+  --stud-h: 9px;
+  --stud-inset: 16px;
   justify-self: start;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 2px var(--s4);
+  min-height: 60px;
+  padding: 10px var(--s4);
+  transition: transform var(--t-med) var(--ease);
+}
+.open > a:hover {
+  transform: translateY(-4px);
+}
+.open > a > span {
+  display: none;
 }
 @media (min-width: $mantine-breakpoint-sm) {
   .brick {
@@ -457,11 +478,17 @@
     grid-column: 2;
     grid-row: 1 / span 2;
     align-self: end;
+    grid-template-columns: 11em 1fr auto;
+    padding-inline: var(--s5);
+  }
+  .open > a > span {
+    display: block;
   }
 }
 @media (prefers-reduced-motion: reduce) {
   .brick:hover,
-  .brick:hover i {
+  .brick:hover i,
+  .open > a:hover {
     transform: none;
   }
 }

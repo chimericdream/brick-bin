@@ -7,7 +7,7 @@ export function Parts({ needs }: { needs: Tutorial['needs'] }) {
   return (
     <section className={classes.parts} aria-labelledby="need">
       <h2 id="need">What you need</h2>
-      <ul>
+      <ul className={classes.partsList}>
         {needs.map((n, i) => (
           <li key={i}>
             <b>{n.count}</b>
