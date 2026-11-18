@@ -1,0 +1,63 @@
+/* 404 (SPEC 6.24) */
+.lost {
+  display: grid;
+  gap: var(--s6);
+  padding-block: var(--s6) var(--s8);
+  align-items: center;
+}
+.art {
+  border-radius: var(--r);
+  border: 1px solid var(--line);
+  padding: var(--s5) var(--s4);
+}
+.art svg {
+  width: 100%;
+  height: auto;
+}
+.lost h1 {
+  font-size: var(--step-head);
+}
+.lost :global(.lead) {
+  margin-top: var(--s4);
+  max-width: 26em;
+}
+.part {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px var(--s4);
+  margin-top: var(--s5);
+  padding: var(--s4);
+  border: 2px dashed var(--ink);
+  border-radius: var(--r);
+  max-width: 30em;
+}
+.part b:first-child {
+  grid-row: 1 / span 2;
+  font-size: var(--step-h2);
+  font-weight: 800;
+  line-height: 1;
+  align-self: center;
+}
+.part span {
+  font-size: 1rem;
+  color: var(--muted);
+}
+.btnRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s4) var(--s3);
+  margin-top: var(--s6);
+}
+.lost :global(.small) {
+  margin-top: var(--s5);
+}
+@media (min-width: $mantine-breakpoint-md) {
+  .lost {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s8);
+    padding-block: var(--s8) var(--s10);
+  }
+  .art {
+    padding: var(--s7) var(--s6);
+  }
+}

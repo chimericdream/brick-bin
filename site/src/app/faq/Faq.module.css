@@ -1,0 +1,70 @@
+/* FAQ (SPEC 6.23) */
+.faq {
+  display: grid;
+  gap: var(--s7);
+  padding-bottom: var(--s8);
+}
+.list {
+  margin-top: var(--s6);
+  max-width: 760px;
+}
+.item {
+  padding: var(--s5) 0;
+  border-bottom: 1px solid var(--line);
+  scroll-margin-top: var(--s4);
+}
+.item h2 {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s3);
+  font-size: var(--step-lead);
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+.item h2 :global(.b1) {
+  font-size: 0.9em;
+}
+.item p {
+  margin-top: var(--s3);
+}
+.item p + p {
+  font-size: 1rem;
+}
+.aside {
+  align-self: start;
+}
+.aside > * + * {
+  margin-top: var(--s6);
+}
+.aside h2 {
+  font-size: var(--step-lead);
+  margin-bottom: var(--s3);
+}
+.jump {
+  list-style: none;
+  padding: 0;
+}
+.jump a {
+  display: flex;
+  min-height: 40px;
+  align-items: center;
+  font-size: 1rem;
+}
+.btnRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s4) var(--s3);
+  margin-top: var(--s4);
+}
+@media (min-width: $mantine-breakpoint-lg) {
+  .faq {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+    gap: var(--s8);
+  }
+  .aside {
+    position: sticky;
+    top: var(--s5);
+    margin-top: var(--s7);
+  }
+}
