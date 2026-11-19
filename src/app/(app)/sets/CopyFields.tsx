@@ -37,7 +37,7 @@ export function CopyFields({ prefix = '', members, locations, defaults = {} }: P
   const n = (key: string) => `${prefix}${key}`;
   return (
     <Stack gap="sm">
-      <SimpleGrid cols={{ base: 1, sm: 2 }}>
+      <SimpleGrid type="container" cols={{ base: 1, '540px': 2 }}>
         <Select
           name={n('buildState')}
           label="Build state"

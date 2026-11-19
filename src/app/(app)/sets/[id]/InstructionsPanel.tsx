@@ -1,29 +1,21 @@
 'use client';
 
 import { useRef, useState, useTransition } from 'react';
-import {
-  Alert,
-  Button,
-  Group,
-  Modal,
-  Paper,
-  Progress,
-  Stack,
-  Text,
-  TextInput,
-  Title,
-} from '@mantine/core';
+import { ActionIcon, Button, Modal, Progress, TextInput } from '@mantine/core';
 import {
   IconArrowDown,
   IconArrowUp,
   IconDownload,
   IconExternalLink,
+  IconFileText,
   IconLink,
   IconPencil,
   IconUpload,
 } from '@tabler/icons-react';
 
-import { ConfirmDelete } from '@/components/ConfirmDelete';
+import { ConfirmDelete, TRASH_SENTENCE } from '@/components/ConfirmDelete';
+import { DialogFoot } from '@/components/DialogFoot';
+import { Note } from '@/components/Note';
 
 import {
   addLinkAction,
@@ -176,11 +168,12 @@ export function InstructionsPanel({ setId, items, canEdit, maxMb, find }: Props)
   }
 
   return (
-    <section aria-labelledby="instructions-heading" className={classes.instructions}>
-      <Group justify="space-between" mb="sm" wrap="wrap">
-        <Title order={2} id="instructions-heading" size="h3">
+    <section aria-labelledby="instructions-heading" className={classes.section}>
+      <div className={classes.sectionHead}>
+        <h2 id="instructions-heading">
           Instructions
-        </Title>
+          {items.length > 0 && <small className={classes.count}> {items.length}</small>}
+        </h2>
         {find && (
           <Button
             component="a"
@@ -188,145 +181,143 @@ export function InstructionsPanel({ setId, items, canEdit, maxMb, find }: Props)
             target="_blank"
             rel="noopener noreferrer"
             variant="default"
-            leftSection={<IconExternalLink size={16} />}
+            size="compact-md"
+            leftSection={<IconExternalLink size={16} stroke={1.75} />}
           >
             {find.label}
           </Button>
         )}
-      </Group>
+      </div>
 
-      <Paper withBorder p="xs">
-        {items.length === 0 ? (
-          <Text c="dimmed" p="md">
-            No instructions saved for this set yet.
-          </Text>
-        ) : (
-          <ul className={classes.insList}>
-            {items.map((item, i) => (
-              <li key={item.id} className={classes.insRow}>
-                <span className={classes.insBadge} data-kind={item.kind} aria-hidden>
-                  {item.kind === 'file' ? 'PDF' : 'LINK'}
+      {items.length === 0 ? (
+        <div className={`${classes.inlineEmpty} app-baseplate`}>
+          <p className={classes.inlineCard}>
+            <b>No instructions saved for this set yet.</b>
+            {canEdit && ' Upload the PDF, or save a link to it.'}
+          </p>
+        </div>
+      ) : (
+        <ul className={classes.insList}>
+          {items.map((item, i) => (
+            <li key={item.id} className={classes.insRow}>
+              {item.kind === 'file' ? (
+                <IconFileText size={20} stroke={1.75} aria-hidden className={classes.insIcon} />
+              ) : (
+                <IconLink size={20} stroke={1.75} aria-hidden className={classes.insIcon} />
+              )}
+              <div className={classes.insText}>
+                <p className={classes.insLabel}>{item.label}</p>
+                <span className={classes.small}>
+                  {item.kind === 'file' ? 'PDF' : 'Link'}
+                  {item.detail ? ` · ${item.detail}` : ''}
+                  {item.sourceHost ? ` · saved from ${item.sourceHost}` : ''}
                 </span>
-                <div className={classes.insText}>
-                  <Text fw={650}>{item.label}</Text>
-                  <Text size="sm" c="dimmed">
-                    {item.detail}
-                    {item.sourceHost ? ` · saved from ${item.sourceHost}` : ''}
-                  </Text>
-                </div>
-                <Group gap={4} wrap="nowrap">
-                  {canEdit && (
-                    <>
-                      <Button
-                        variant="subtle"
-                        size="compact-md"
-                        aria-label={`Move ${item.label} up`}
-                        disabled={i === 0}
-                        onClick={() => start(() => moveInstructionAction(setId, item.id, 'up'))}
-                      >
-                        <IconArrowUp size={16} />
-                      </Button>
-                      <Button
-                        variant="subtle"
-                        size="compact-md"
-                        aria-label={`Move ${item.label} down`}
-                        disabled={i === items.length - 1}
-                        onClick={() => start(() => moveInstructionAction(setId, item.id, 'down'))}
-                      >
-                        <IconArrowDown size={16} />
-                      </Button>
-                      <Button
-                        variant="subtle"
-                        size="compact-md"
-                        aria-label={`Rename ${item.label}`}
-                        onClick={() => open({ rename: item }, item.label)}
-                      >
-                        <IconPencil size={16} />
-                      </Button>
-                    </>
-                  )}
-                  <Button
-                    component="a"
-                    href={item.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    variant="default"
-                    size="compact-md"
-                    leftSection={<IconExternalLink size={14} />}
-                  >
-                    {item.kind === 'file' ? 'Open' : 'Visit'}
-                  </Button>
-                  {canEdit && (
-                    <ConfirmDelete
-                      title={`Remove ${item.label}?`}
-                      triggerLabel="Remove"
-                      compact
-                      action={() => trashInstructionAction(setId, item.id)}
+              </div>
+              <div className={classes.insActions}>
+                {canEdit && (
+                  <>
+                    <ActionIcon
+                      variant="subtle"
+                      size={44}
+                      aria-label={`Move ${item.label} up`}
+                      disabled={i === 0}
+                      onClick={() => start(() => moveInstructionAction(setId, item.id, 'up'))}
                     >
-                      It moves to the trash. You can restore it from Settings &gt; Trash.
-                    </ConfirmDelete>
-                  )}
-                </Group>
-              </li>
-            ))}
-          </ul>
-        )}
-      </Paper>
+                      <IconArrowUp size={18} stroke={1.75} />
+                    </ActionIcon>
+                    <ActionIcon
+                      variant="subtle"
+                      size={44}
+                      aria-label={`Move ${item.label} down`}
+                      disabled={i === items.length - 1}
+                      onClick={() => start(() => moveInstructionAction(setId, item.id, 'down'))}
+                    >
+                      <IconArrowDown size={18} stroke={1.75} />
+                    </ActionIcon>
+                    <ActionIcon
+                      variant="subtle"
+                      size={44}
+                      aria-label={`Rename ${item.label}`}
+                      onClick={() => open({ rename: item }, item.label)}
+                    >
+                      <IconPencil size={18} stroke={1.75} />
+                    </ActionIcon>
+                  </>
+                )}
+                <Button
+                  component="a"
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variant="default"
+                  size="compact-md"
+                  leftSection={<IconExternalLink size={16} stroke={1.75} />}
+                >
+                  {item.kind === 'file' ? 'Open' : 'Visit'}
+                </Button>
+                {canEdit && (
+                  <ConfirmDelete
+                    title={`Remove ${item.label}?`}
+                    triggerLabel="Remove"
+                    compact
+                    action={() => trashInstructionAction(setId, item.id)}
+                  >
+                    {TRASH_SENTENCE}
+                  </ConfirmDelete>
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
 
       {canEdit && (
-        <Group mt="sm" gap="xs" wrap="wrap">
+        <div className={classes.insButtons}>
           <Button
             variant="default"
-            leftSection={<IconUpload size={16} />}
+            leftSection={<IconUpload size={20} stroke={1.75} />}
             onClick={() => open('upload')}
           >
             Upload PDF
           </Button>
           <Button
             variant="default"
-            leftSection={<IconLink size={16} />}
+            leftSection={<IconLink size={20} stroke={1.75} />}
             onClick={() => open('link')}
           >
             Add link
           </Button>
           <Button
             variant="default"
-            leftSection={<IconDownload size={16} />}
+            leftSection={<IconDownload size={20} stroke={1.75} />}
             onClick={() => open('save')}
           >
             Save PDF from a link
           </Button>
-        </Group>
+        </div>
       )}
 
-      <Modal opened={dialog !== null} onClose={close} title={titleOf(dialog)} centered>
-        <Stack gap="sm">
-          {error && (
-            <Alert color="red" variant="light" role="alert">
-              {error}
-            </Alert>
-          )}
+      <Modal opened={dialog !== null} onClose={close} title={titleOf(dialog)} size={440}>
+        <div className={classes.form}>
+          {error && <Note variant="error">{error}</Note>}
           {dialog === 'upload' && (
-            <>
-              <label>
-                <Text size="sm" fw={600}>
-                  PDF file
-                </Text>
-                <input
-                  ref={file}
-                  type="file"
-                  accept="application/pdf,.pdf"
-                  aria-label="PDF file"
-                  onChange={(e) => {
-                    const f = e.currentTarget.files?.[0];
-                    if (f && !label) setLabel(nameFromFile(f.name));
-                  }}
-                />
+            <div className={classes.field}>
+              <label htmlFor="instructions-file" className={classes.label}>
+                PDF file
               </label>
-              <Text size="xs" c="dimmed">
-                Up to {maxMb} MB. Large files can take a while.
-              </Text>
-            </>
+              <span className={classes.small}>Up to {maxMb} MB. Large files can take a while.</span>
+              <input
+                id="instructions-file"
+                ref={file}
+                type="file"
+                accept="application/pdf,.pdf"
+                className={classes.file}
+                onChange={(e) => {
+                  const f = e.currentTarget.files?.[0];
+                  if (f && !label) setLabel(nameFromFile(f.name));
+                }}
+              />
+            </div>
           )}
           {(dialog === 'link' || dialog === 'save') && (
             <TextInput
@@ -345,37 +336,37 @@ export function InstructionsPanel({ setId, items, canEdit, maxMb, find }: Props)
             data-autofocus
           />
           {dialog === 'save' && (
-            <Text size="xs" c="dimmed">
+            <p className={classes.small}>
               The PDF is downloaded once and stored here, so you keep it even if the maker takes it
               down. Only public https addresses work.
-            </Text>
+            </p>
           )}
           {progress !== null && busy && (
             <Progress value={Math.round(progress * 100)} aria-label="Upload progress" />
           )}
-          <Group justify="flex-end">
-            <Button variant="default" onClick={close}>
-              Cancel
-            </Button>
-            <Button
-              loading={busy}
-              onClick={() => {
-                if (dialog === 'upload') void upload();
-                else if (dialog === 'save') void saveFromLink();
-                else if (dialog === 'link') void addLink();
-                else if (dialog && typeof dialog === 'object') void rename(dialog.rename);
-              }}
-            >
-              {dialog === 'upload'
-                ? 'Upload'
-                : dialog === 'save'
-                  ? 'Download and save'
-                  : dialog === 'link'
-                    ? 'Add link'
-                    : 'Save'}
-            </Button>
-          </Group>
-        </Stack>
+        </div>
+        <DialogFoot>
+          <Button variant="default" onClick={close}>
+            Cancel
+          </Button>
+          <Button
+            loading={busy}
+            onClick={() => {
+              if (dialog === 'upload') void upload();
+              else if (dialog === 'save') void saveFromLink();
+              else if (dialog === 'link') void addLink();
+              else if (dialog && typeof dialog === 'object') void rename(dialog.rename);
+            }}
+          >
+            {dialog === 'upload'
+              ? 'Upload'
+              : dialog === 'save'
+                ? 'Download and save'
+                : dialog === 'link'
+                  ? 'Add link'
+                  : 'Save'}
+          </Button>
+        </DialogFoot>
       </Modal>
     </section>
   );
