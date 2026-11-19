@@ -4,7 +4,7 @@ import './globals.css';
 
 import type { Metadata } from 'next';
 import Script from 'next/script';
-import { atkinson, bricolage } from '@/fonts';
+import { albertSans, jetbrainsMono } from '@/fonts';
 import { mantineHtmlProps } from '@mantine/core';
 
 import { Providers } from './Providers';
@@ -27,7 +27,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${atkinson.variable} ${bricolage.variable}`} {...mantineHtmlProps}>
+    <html
+      lang="en"
+      className={`${albertSans.variable} ${jetbrainsMono.variable}`}
+      {...mantineHtmlProps}
+    >
       <body>
         <Script id="color-scheme" strategy="beforeInteractive">
           {COLOR_SCHEME_SCRIPT}
