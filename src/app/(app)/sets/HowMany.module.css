@@ -1,0 +1,9 @@
+.howMany {
+  max-width: 220px;
+
+  & input {
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+  }
+}

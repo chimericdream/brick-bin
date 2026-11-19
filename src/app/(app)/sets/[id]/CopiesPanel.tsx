@@ -1,7 +1,7 @@
 'use client';
 
-import { useActionState, useRef, useState } from 'react';
-import { ActionIcon, Button, Modal, NumberInput, type NumberInputHandlers } from '@mantine/core';
+import { useActionState, useState } from 'react';
+import { Button, Modal } from '@mantine/core';
 import {
   IconAlertTriangle,
   IconCheck,
@@ -20,6 +20,7 @@ import type { BuildState, Completeness } from '@/server/data/completeness';
 
 import { saveCopyAction, trashCopyAction, type ActionState } from '../actions';
 import { CopyFields, type CopyDefaults, type Option } from '../CopyFields';
+import { HowMany } from '../HowMany';
 import { BuildStateControl } from './BuildStateControl';
 import classes from './Detail.module.css';
 
@@ -45,48 +46,6 @@ interface Props {
   canEdit: boolean;
   members: Option[];
   locations: Option[];
-}
-
-/** "How many?": minus, the number, plus, in one frame. */
-function HowMany() {
-  const handlers = useRef<NumberInputHandlers>(undefined);
-  return (
-    <NumberInput
-      name="quantity"
-      label="How many?"
-      description="Creates that many identical copies at once."
-      min={1}
-      max={50}
-      defaultValue={1}
-      clampBehavior="strict"
-      allowDecimal={false}
-      hideControls
-      handlersRef={handlers}
-      className={classes.howMany}
-      leftSectionWidth={44}
-      rightSectionWidth={44}
-      leftSection={
-        <ActionIcon
-          variant="subtle"
-          size={42}
-          aria-label="One fewer"
-          onClick={() => handlers.current?.decrement()}
-        >
-          <IconMinus size={20} stroke={2} />
-        </ActionIcon>
-      }
-      rightSection={
-        <ActionIcon
-          variant="subtle"
-          size={42}
-          aria-label="One more"
-          onClick={() => handlers.current?.increment()}
-        >
-          <IconPlus size={20} stroke={2} />
-        </ActionIcon>
-      }
-    />
-  );
 }
 
 function CopyDialog({

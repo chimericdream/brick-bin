@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 
+import { PageHead } from '@/components/layout/PageHead';
 import { requireContext } from '@/server/auth/current';
 
 import { saveSetAction } from '../actions';
@@ -14,7 +15,11 @@ export default async function NewSetPage() {
   const [options, lookup] = await Promise.all([loadFormOptions(ctx), loadLookup(ctx)]);
   return (
     <>
-      <h1>Add a set</h1>
+      <PageHead
+        crumbs={[{ label: 'Library', href: '/sets' }]}
+        title="Add a set"
+        sub="Look it up, or type it in. One form covers the design and the box."
+      />
       <SetForm action={saveSetAction.bind(null, null)} setId={null} {...options} lookup={lookup} />
     </>
   );

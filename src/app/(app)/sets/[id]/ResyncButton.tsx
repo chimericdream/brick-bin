@@ -88,7 +88,7 @@ export function ResyncButton({ setId, setNum }: { setId: string; setNum: string 
           )}
           {preview && (
             <>
-              {preview.fields.length > 0 && <Text size="sm">Tick what to update:</Text>}
+              {preview.fields.length > 0 && <Text size="sm">Check what to update:</Text>}
               {preview.fields.map((f) => (
                 <Checkbox
                   key={f.key}
