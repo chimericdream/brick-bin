@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dune Rover 4x4 · Brick Bin</title>
+<link rel="icon" href="assets/svg/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/AlbertSans-Variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/app.css">
+<script src="assets/js/theme.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the content</a>
+<div class="app">
+  <header class="topbar"><a class="logo" href="library.html" aria-label="Brick Bin, home"><svg viewBox="0 0 32 32" aria-hidden="true"><path class="mark-brick" d="M10.5 5.5H15V9h2V5.5h4.5V9H23v14H9V9h1.5z"/><path class="mark-bin" d="M3 13h4v13h18V13h4v17H3z"/></svg><span>Brick Bin</span></a><span class="topbar__home">Hartley House</span></header>
+  <aside class="side">
+    <a class="logo" href="library.html" aria-label="Brick Bin, home"><svg viewBox="0 0 32 32" aria-hidden="true"><path class="mark-brick" d="M10.5 5.5H15V9h2V5.5h4.5V9H23v14H9V9h1.5z"/><path class="mark-bin" d="M3 13h4v13h18V13h4v17H3z"/></svg><span>Brick Bin</span></a>
+    <p class="side__home">Hartley House</p>
+    <a class="btn btn--primary studs" href="add-set.html" aria-label="Add set"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Add set</span></a>
+    <nav class="nav" aria-label="Main"><a href="library.html" aria-current="page"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></svg><span class="nav__long">Library</span><span class="nav__short">Library</span><span class="b1" aria-hidden="true"></span></a><a href="shopping-list.html"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 5.5l1.5 1.5l2.5-2.5M3.5 11.5l1.5 1.5l2.5-2.5M3.5 17.5l1.5 1.5l2.5-2.5M11 6h9M11 12h9M11 18h9"/></svg><span class="nav__long">Shopping list</span><span class="nav__short">Shopping</span><span class="b1" aria-hidden="true"></span></a><a href="wishlist.html"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M19.5 12.572L12 20l-7.5-7.428A5 5 0 1 1 12 6.006a5 5 0 1 1 7.5 6.572"/></svg><span class="nav__long">Wishlist</span><span class="nav__short">Wishlist</span><span class="b1" aria-hidden="true"></span></a><a href="collection.html"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="12" width="6" height="8" rx="1"/><rect x="9" y="8" width="6" height="12" rx="1"/><rect x="15" y="4" width="6" height="16" rx="1"/></svg><span class="nav__long">Collection</span><span class="nav__short">Collection</span><span class="b1" aria-hidden="true"></span></a><a href="import.html"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2M7 9l5-5l5 5M12 4v12"/></svg><span class="nav__long">Import</span><span class="nav__short">Import</span><span class="b1" aria-hidden="true"></span></a></nav>
+    <p class="side__label" id="nav-house">Household</p>
+      <nav class="nav" aria-labelledby="nav-house"><a href="settings.html"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 0 0-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 0 0-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 0 0-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 0 0-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 0 0 1.066-2.573c-.94-1.543.826-3.31 2.37-2.37c1 .608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg><span class="nav__long">Settings</span><span class="nav__short">Settings</span><span class="b1" aria-hidden="true"></span></a></nav>
+    <div class="side__foot">
+      <a class="side__who" href="more.html" aria-label="Ada Admin, Admin. Account and theme"><span class="who" aria-hidden="true">A</span><div><b>Ada Admin</b><span class="small muted">Admin</span></div></a>
+      <div class="seg theme " role="group" aria-label="Theme">
+    <button type="button" data-set-theme="system" aria-pressed="true" title="System"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1"/><path d="M7 20h10M9 16v4M15 16v4"/></svg><span class="vh">System</span></button>
+    <button type="button" data-set-theme="light" aria-pressed="false" title="Light"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M3 12h1M12 3v1M20 12h1M12 20v1M5.6 5.6l.7.7M18.4 5.6l-.7.7M17.7 17.7l.7.7M6.3 17.7l-.7.7"/></svg><span class="vh">Light</span></button>
+    <button type="button" data-set-theme="dark" aria-pressed="false" title="Dark"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1-8.313-12.454z"/></svg><span class="vh">Dark</span></button>
+  </div>
+      <a class="side__out" href="login.html"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2v-2M9 12h12l-3-3M18 15l3-3"/></svg><span>Sign out</span></a>
+      <p class="side__credit">Catalog data from <a href="https://rebrickable.com/">Rebrickable</a></p>
+    </div>
+  </aside>
+  <main class="main" id="main">
+    <header class="head studs">
+    <div class="head__text"><nav aria-label="Breadcrumb"><ol class="crumbs"><li><a href="library.html">Library</a></li><li>LEGO</li><li>Technic</li><li aria-current="page">Dune Rover 4x4</li></ol></nav><h1>Dune Rover 4x4</h1><p class="head__sub">LEGO <span class="mono">42188</span></p></div>
+    <div class="head__actions"><a class="btn btn--quiet" href="edit-set.html"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L18.5 9.5a2.828 2.828 0 1 0-4-4L4 16v4M13.5 6.5l4 4"/></svg>Edit set</a></div>
+  </header>
+    <section class="about" aria-label="About this set">
+    <span class="cover"><img src="assets/img/cover-dune-rover.svg" alt="Box art for Dune Rover 4x4"></span>
+    <div style="display:grid;gap:12px">
+      <dl class="facts"><div><dt>Year</dt><dd>2023</dd></div><div><dt>Pieces</dt><dd>1,078</dd></div><div><dt>Minifigs</dt><dd><span class="muted">—</span></dd></div><div><dt>Age</dt><dd><span class="muted">—</span></dd></div></dl>
+      <dl class="kv panel" style="padding:4px 16px">
+        <dt>Retail price</dt><dd class="num">$119.99</dd>
+        <dt>Tags</dt><dd><span class="chips"><span class="tag tag--quiet">Christmas 2025</span></span></dd>
+        
+      </dl>
+    </div>
+  </section>
+    <section class="section" aria-labelledby="h-copies">
+      <div class="section__head"><h2 id="h-copies">Copies<small>2</small></h2><button class="btn btn--primary studs" type="button"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Add copy</button></div>
+      <article class="panel copy" aria-label="Copy 1 of 2">
+    <div class="copy__head">
+      <span class="who" aria-hidden="true">M</span>
+      <div class="copy__who"><h3>Mo Member’s copy <small>copy 1 of 2</small></h3><p class="copy__place"><svg class="i i--sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="11" r="3"/><path d="M17.657 16.657L13.414 20.9a2 2 0 0 1-2.827 0l-4.244-4.243a8 8 0 1 1 11.314 0z"/></svg>Attic › Shelf 1</p></div>
+      <details class="st-menu"><summary class="st-btn studs" data-st="built" aria-label="Build state of copy 1: Built. Change it"><svg class="g" viewBox="0 0 20 20" aria-hidden="true"><path d="M2 13h16v4H2zM5 8.5h10v3.5H5zM8 4h4v3.5H8zM9 2.5h2V4H9z"/></svg>Built<svg class="i i--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6l6-6"/></svg></summary><div class="menu menu--desk" role="menu" aria-label="Build state"><button class="menu__item" type="button" role="menuitemradio" aria-checked="false"><span class="swatchbrick studs" data-st="sealed"><svg class="g" viewBox="0 0 20 20" aria-hidden="true"><path d="M2 3.5h16v3H2z"/><path fill-rule="evenodd" d="M3 8h14v9H3zM8.75 8v4h2.5V8z"/></svg></span><span><b>Sealed</b><span class="small">Factory sealed, never opened</span></span></button><button class="menu__item" type="button" role="menuitemradio" aria-checked="false"><span class="swatchbrick studs" data-st="opened"><svg class="g" viewBox="0 0 20 20" aria-hidden="true"><path d="M2.2 6.8l11.2-4.3 1 2.6L3.2 9.4z"/><path d="M3 10h14v7H3z"/><path d="M12 6.6h3.5V9H12z"/></svg></span><span><b>Opened</b><span class="small">Opened, not built</span></span></button><button class="menu__item" type="button" role="menuitemradio" aria-checked="false"><span class="swatchbrick studs" data-st="progress"><svg class="g" viewBox="0 0 20 20" aria-hidden="true"><path d="M2 12h16v5H2z"/><path d="M2 6.5h9v4.5H2zM3.5 4.5h2.5v2H3.5zM7 4.5h2.5v2H7zM12.5 10h2.5v2h-2.5z"/></svg></span><span><b>In progress</b><span class="small">Being built right now</span></span></button><button class="menu__item" type="button" role="menuitemradio" aria-checked="true"><span class="swatchbrick studs" data-st="built"><svg class="g" viewBox="0 0 20 20" aria-hidden="true"><path d="M2 13h16v4H2zM5 8.5h10v3.5H5zM8 4h4v3.5H8zM9 2.5h2V4H9z"/></svg></span><span><b>Built</b><span class="small">Finished and on display</span></span><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></button><button class="menu__item" type="button" role="menuitemradio" aria-checked="false"><span class="swatchbrick studs" data-st="apart"><svg class="g" viewBox="0 0 20 20" aria-hidden="true"><path d="M1.5 11.5h5V16h-5zM7.5 11.5h5V16h-5zM13.5 11.5h5V16h-5zM3 9.5h2v2H3zM9 9.5h2v2H9zM15 9.5h2v2h-2z"/><path d="M4.5 4h5v3.5h-5zM6 2.5h2V4H6z"/></svg></span><span><b>Disassembled</b><span class="small">Taken apart, kept together</span></span></button><button class="menu__item" type="button" role="menuitemradio" aria-checked="false"><span class="swatchbrick studs" data-st="mixed"><svg class="g" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M1.5 6h2v9.5h13V6h2v11.5h-17z"/><path d="M5.2 10.3l4.6-1.7 1 2.8-4.6 1.7zM10.6 12.2l4.7 1.2-.7 2.1H10zM11.5 6.6l3 .8-.7 2.6-3-.8z"/></svg></span><span><b>Mixed</b><span class="small">Parted into bulk bins</span></span></button></div></details>
+    </div>
+    <dl class="kv">
+      <dt>Pieces</dt><dd><a class="tag tag--dash" href="missing-picker.html">Missing 1 piece</a></dd>
+      <dt>Box and booklets</dt><dd><ul class="ticks"><li><svg class="i i--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Has the box</li><li><svg class="i i--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Has paper booklets</li></ul></dd>
+      <dt>Condition notes</dt><dd><span class="muted">None</span></dd>
+      <dt>Paid / value</dt><dd><span class="num"><b>$109.99 / $129.00</b></span><br><span class="small muted">valued Oct 2026</span></dd>
+    </dl>
+    <div class="copy__actions"><button class="btn btn--sm" type="button"><svg class="i i--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L18.5 9.5a2.828 2.828 0 1 0-4-4L4 16v4M13.5 6.5l4 4"/></svg>Edit copy</button><a class="btn btn--sm" href="missing-picker.html"><svg class="i i--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 9v4M10.363 3.591L2.257 17.125a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636-2.87L13.637 3.59a1.914 1.914 0 0 0-3.274 0zM12 16h.01"/></svg>Missing pieces</a><button class="btn btn--sm btn--danger-text" type="button">Remove copy</button></div>
+  </article><article class="panel copy" aria-label="Copy 2 of 2">
+    <div class="copy__head">
+      <span class="who" aria-hidden="true">O</span>
+      <div class="copy__who"><h3>Ours <small>copy 2 of 2</small></h3><p class="copy__place"><svg class="i i--sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="11" r="3"/><path d="M17.657 16.657L13.414 20.9a2 2 0 0 1-2.827 0l-4.244-4.243a8 8 0 1 1 11.314 0z"/></svg>Attic › Shelf 1</p></div>
+      <details class="st-menu"><summary class="st-btn studs" data-st="sealed" aria-label="Build state of copy 2: Sealed. Change it"><svg class="g" viewBox="0 0 20 20" aria-hidden="true"><path d="M2 3.5h16v3H2z"/><path fill-rule="evenodd" d="M3 8h14v9H3zM8.75 8v4h2.5V8z"/></svg>Sealed<svg class="i i--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6l6-6"/></svg></summary><div class="menu menu--desk" role="menu" aria-label="Build state"><button class="menu__item" type="button" role="menuitemradio" aria-checked="true"><span class="swatchbrick studs" data-st="sealed"><svg class="g" viewBox="0 0 20 20" aria-hidden="true"><path d="M2 3.5h16v3H2z"/><path fill-rule="evenodd" d="M3 8h14v9H3zM8.75 8v4h2.5V8z"/></svg></span><span><b>Sealed</b><span class="small">Factory sealed, never opened</span></span><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></button><button class="menu__item" type="button" role="menuitemradio" aria-checked="false"><span class="swatchbrick studs" data-st="opened"><svg class="g" viewBox="0 0 20 20" aria-hidden="true"><path d="M2.2 6.8l11.2-4.3 1 2.6L3.2 9.4z"/><path d="M3 10h14v7H3z"/><path d="M12 6.6h3.5V9H12z"/></svg></span><span><b>Opened</b><span class="small">Opened, not built</span></span></button><button class="menu__item" type="button" role="menuitemradio" aria-checked="false"><span class="swatchbrick studs" data-st="progress"><svg class="g" viewBox="0 0 20 20" aria-hidden="true"><path d="M2 12h16v5H2z"/><path d="M2 6.5h9v4.5H2zM3.5 4.5h2.5v2H3.5zM7 4.5h2.5v2H7zM12.5 10h2.5v2h-2.5z"/></svg></span><span><b>In progress</b><span class="small">Being built right now</span></span></button><button class="menu__item" type="button" role="menuitemradio" aria-checked="false"><span class="swatchbrick studs" data-st="built"><svg class="g" viewBox="0 0 20 20" aria-hidden="true"><path d="M2 13h16v4H2zM5 8.5h10v3.5H5zM8 4h4v3.5H8zM9 2.5h2V4H9z"/></svg></span><span><b>Built</b><span class="small">Finished and on display</span></span></button><button class="menu__item" type="button" role="menuitemradio" aria-checked="false"><span class="swatchbrick studs" data-st="apart"><svg class="g" viewBox="0 0 20 20" aria-hidden="true"><path d="M1.5 11.5h5V16h-5zM7.5 11.5h5V16h-5zM13.5 11.5h5V16h-5zM3 9.5h2v2H3zM9 9.5h2v2H9zM15 9.5h2v2h-2z"/><path d="M4.5 4h5v3.5h-5zM6 2.5h2V4H6z"/></svg></span><span><b>Disassembled</b><span class="small">Taken apart, kept together</span></span></button><button class="menu__item" type="button" role="menuitemradio" aria-checked="false"><span class="swatchbrick studs" data-st="mixed"><svg class="g" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M1.5 6h2v9.5h13V6h2v11.5h-17z"/><path d="M5.2 10.3l4.6-1.7 1 2.8-4.6 1.7zM10.6 12.2l4.7 1.2-.7 2.1H10zM11.5 6.6l3 .8-.7 2.6-3-.8z"/></svg></span><span><b>Mixed</b><span class="small">Parted into bulk bins</span></span></button></div></details>
+    </div>
+    <dl class="kv">
+      <dt>Pieces</dt><dd><span class="tag tag--quiet">Sealed</span></dd>
+      <dt>Box and booklets</dt><dd><ul class="ticks"><li><svg class="i i--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Has the box</li><li><svg class="i i--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Has paper booklets</li></ul></dd>
+      <dt>Condition notes</dt><dd>Box corner dented, 1 cm.</dd>
+      <dt>Paid / value</dt><dd><span class="num"><b><span class="muted">—</span> / <span class="muted">—</span></b></span></dd>
+    </dl>
+    <div class="copy__actions"><button class="btn btn--sm" type="button"><svg class="i i--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L18.5 9.5a2.828 2.828 0 1 0-4-4L4 16v4M13.5 6.5l4 4"/></svg>Edit copy</button><a class="btn btn--sm" href="missing-picker.html"><svg class="i i--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 9v4M10.363 3.591L2.257 17.125a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636-2.87L13.637 3.59a1.914 1.914 0 0 0-3.274 0zM12 16h.01"/></svg>Missing pieces</a><button class="btn btn--sm btn--danger-text" type="button">Remove copy</button></div>
+  </article>
+    </section>
+    <section class="section" aria-labelledby="h-ins">
+    <div class="section__head"><h2 id="h-ins">Instructions</h2><a class="btn btn--sm" href="https://www.lego.com/service/buildinginstructions" rel="noopener"><svg class="i i--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6M11 13l9-9M15 4h5v5"/></svg>Find on LEGO.com</a></div>
+    <div class="empty baseplate empty--inline"><div class="empty__card"><p><b>No instructions saved for this set yet.</b> Upload the PDF, or save a link to it.</p></div></div>
+    <div class="form__actions" style="margin-top:12px"><button class="btn" type="button"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2M7 9l5-5l5 5M12 4v12"/></svg>Upload PDF</button><button class="btn" type="button"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M9 15l6-6M11 6l.463-.536a5 5 0 0 1 7.071 7.072L18 13M13 18l-.397.534a5.068 5.068 0 0 1-7.127 0a4.972 4.972 0 0 1 0-7.071L6 11"/></svg>Add link</button><button class="btn" type="button"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2M7 11l5 5l5-5M12 4v12"/></svg>Save PDF from a link</button></div>
+  </section>
+    <p style="margin-top:32px;text-align:right"><button class="btn btn--danger-text" type="button"><svg class="i i--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg>Delete set</button></p>
+  </main>
+  <nav class="tabbar studs" aria-label="Main">
+    <a class="tab" href="library.html" aria-current="page"><svg class="i i--lg" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></svg><span>Library</span></a>
+    <a class="tab" href="shopping-list.html"><svg class="i i--lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 5.5l1.5 1.5l2.5-2.5M3.5 11.5l1.5 1.5l2.5-2.5M3.5 17.5l1.5 1.5l2.5-2.5M11 6h9M11 12h9M11 18h9"/></svg><span>Shopping</span></a>
+    <a class="tab tab--add" href="add-set.html"><span class="tab__add studs"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span><span>Add</span></a>
+    <a class="tab" href="wishlist.html"><svg class="i i--lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.5 12.572L12 20l-7.5-7.428A5 5 0 1 1 12 6.006a5 5 0 1 1 7.5 6.572"/></svg><span>Wishlist</span></a>
+    <a class="tab" href="more.html"><svg class="i i--lg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg><span>More</span></a>
+  </nav>
+</div>
+
+</body>
+</html>

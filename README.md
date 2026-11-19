@@ -4,7 +4,7 @@ A self-hosted web app for a household's collection of building-brick sets: LEGO 
 Built with Next.js, Mantine, PostgreSQL and Drizzle. Not a SaaS: you run it on your own server and
 reach it over your own network (for example Tailscale).
 
-`docs/PLAN.md` is the implementation plan. `docs/design/brick-bin/` holds the design mockups.
+`docs/PLAN.md` is the implementation plan. `docs/design/brick-bin/` holds the design reference: `SPEC.md`, the tokens and the static mockups.
 
 ## Features
 
