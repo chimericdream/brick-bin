@@ -32,36 +32,38 @@ function Table({ title, rows }: { title: string; rows: Breakdown[] }) {
       <div className={ui.panelHead}>
         <h2 id={headingId}>{title}</h2>
       </div>
-      <table className={ui.table}>
-        <thead>
-          <tr>
-            <th scope="col">Name</th>
-            <th scope="col" className={ui.r}>
-              Copies
-            </th>
-            <th scope="col" className={ui.r}>
-              Paid
-            </th>
-            <th scope="col" className={ui.r}>
-              Value
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((r) => (
-            <tr key={r.name}>
-              <th scope="row">{r.name}</th>
-              <td className={ui.r}>{r.copies}</td>
-              <td className={ui.r}>
-                <Money cents={r.paidCents} />
-              </td>
-              <td className={ui.r}>
-                <Money cents={r.estimatedCents} />
-              </td>
+      <div className={ui.tableWrap}>
+        <table className={ui.table}>
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col" className={ui.r}>
+                Copies
+              </th>
+              <th scope="col" className={ui.r}>
+                Paid
+              </th>
+              <th scope="col" className={ui.r}>
+                Value
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {rows.map((r) => (
+              <tr key={r.name}>
+                <th scope="row">{r.name}</th>
+                <td className={ui.r}>{r.copies}</td>
+                <td className={ui.r}>
+                  <Money cents={r.paidCents} />
+                </td>
+                <td className={ui.r}>
+                  <Money cents={r.estimatedCents} />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </section>
   );
 }
