@@ -93,7 +93,7 @@ test.describe('collection and value', () => {
     await db.seedSet({ name: 'Dear', copies: [{ estimatedValueCents: 90_000 }] });
     await db.seedSet({ name: 'Middle', copies: [{ estimatedValueCents: 5_000 }] });
     await page.goto('/sets?sort=value');
-    await expect(page.locator('ul > li strong')).toHaveText(['Dear', 'Middle', 'Cheap']);
+    await expect(page.locator('ul > li h3')).toHaveText(['Dear', 'Middle', 'Cheap']);
   });
 
   test('VAL-05 the empty collection explains itself', async ({ page }) => {

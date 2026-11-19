@@ -19,15 +19,17 @@ test.describe('phone navigation', () => {
     await expect(page).toHaveURL(/\/settings\/places$/);
   });
 
-  test('NAV-02 kid profiles have no More tab, and /more sends them to the library', async ({
-    kidPage,
-  }) => {
+  test('NAV-02 a kid’s More tab holds only the theme and Sign out', async ({ kidPage }) => {
     await kidPage.setViewportSize({ width: 390, height: 800 });
     await kidPage.goto('/sets');
-    await expect(
-      kidPage.getByRole('navigation', { name: 'Tabs' }).getByRole('link', { name: 'More' }),
-    ).toHaveCount(0);
-    await kidPage.goto('/more');
-    await expect(kidPage).toHaveURL(/\/sets$/);
+    const tabs = kidPage.getByRole('navigation', { name: 'Tabs' });
+    await expect(tabs.getByRole('link')).toHaveText(['Library', 'Wishlist', 'More']);
+    await tabs.getByRole('link', { name: 'More' }).click();
+    await expect(kidPage).toHaveURL(/\/more$/);
+    await expect(kidPage.getByRole('group', { name: 'Theme' })).toBeVisible();
+    await expect(kidPage.getByRole('button', { name: 'Sign out' })).toBeVisible();
+    for (const name of ['Collection', 'Import', 'Settings']) {
+      await expect(kidPage.getByRole('link', { name })).toHaveCount(0);
+    }
   });
 });

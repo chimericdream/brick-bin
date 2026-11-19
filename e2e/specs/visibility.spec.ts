@@ -110,7 +110,7 @@ test.describe('kid profile leak audit', () => {
       '/sets?tag=zzsecret-tag',
     ]) {
       await kidPage.goto(url);
-      await expect(kidPage.getByText('No sets match these filters.'), url).toBeVisible();
+      await expect(kidPage.getByText('Nothing in the bin matches that.'), url).toBeVisible();
       await expect(kidPage.getByText('ZZSECRET Present'), url).toHaveCount(0);
     }
     // The only visible set is still counted exactly.
