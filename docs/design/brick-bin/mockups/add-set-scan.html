@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Add a set · Brick Bin</title>
+<link rel="icon" href="assets/svg/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/AlbertSans-Variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/app.css">
+<script src="assets/js/theme.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the content</a>
+<div class="app">
+  <header class="topbar"><a class="logo" href="library.html" aria-label="Brick Bin, home"><svg viewBox="0 0 32 32" aria-hidden="true"><path class="mark-brick" d="M10.5 5.5H15V9h2V5.5h4.5V9H23v14H9V9h1.5z"/><path class="mark-bin" d="M3 13h4v13h18V13h4v17H3z"/></svg><span>Brick Bin</span></a><span class="topbar__home">Hartley House</span></header>
+  <aside class="side">
+    <a class="logo" href="library.html" aria-label="Brick Bin, home"><svg viewBox="0 0 32 32" aria-hidden="true"><path class="mark-brick" d="M10.5 5.5H15V9h2V5.5h4.5V9H23v14H9V9h1.5z"/><path class="mark-bin" d="M3 13h4v13h18V13h4v17H3z"/></svg><span>Brick Bin</span></a>
+    <p class="side__home">Hartley House</p>
+    <a class="btn btn--primary studs" href="add-set.html" aria-label="Add set"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Add set</span></a>
+    <nav class="nav" aria-label="Main"><a href="library.html"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></svg><span class="nav__long">Library</span><span class="nav__short">Library</span><span class="b1" aria-hidden="true"></span></a><a href="shopping-list.html"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 5.5l1.5 1.5l2.5-2.5M3.5 11.5l1.5 1.5l2.5-2.5M3.5 17.5l1.5 1.5l2.5-2.5M11 6h9M11 12h9M11 18h9"/></svg><span class="nav__long">Shopping list</span><span class="nav__short">Shopping</span><span class="b1" aria-hidden="true"></span></a><a href="wishlist.html"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M19.5 12.572L12 20l-7.5-7.428A5 5 0 1 1 12 6.006a5 5 0 1 1 7.5 6.572"/></svg><span class="nav__long">Wishlist</span><span class="nav__short">Wishlist</span><span class="b1" aria-hidden="true"></span></a><a href="collection.html"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="12" width="6" height="8" rx="1"/><rect x="9" y="8" width="6" height="12" rx="1"/><rect x="15" y="4" width="6" height="16" rx="1"/></svg><span class="nav__long">Collection</span><span class="nav__short">Collection</span><span class="b1" aria-hidden="true"></span></a><a href="import.html"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2M7 9l5-5l5 5M12 4v12"/></svg><span class="nav__long">Import</span><span class="nav__short">Import</span><span class="b1" aria-hidden="true"></span></a></nav>
+    <p class="side__label" id="nav-house">Household</p>
+      <nav class="nav" aria-labelledby="nav-house"><a href="settings.html"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 0 0-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 0 0-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 0 0-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 0 0-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 0 0 1.066-2.573c-.94-1.543.826-3.31 2.37-2.37c1 .608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg><span class="nav__long">Settings</span><span class="nav__short">Settings</span><span class="b1" aria-hidden="true"></span></a></nav>
+    <div class="side__foot">
+      <a class="side__who" href="more.html" aria-label="Ada Admin, Admin. Account and theme"><span class="who" aria-hidden="true">A</span><div><b>Ada Admin</b><span class="small muted">Admin</span></div></a>
+      <div class="seg theme " role="group" aria-label="Theme">
+    <button type="button" data-set-theme="system" aria-pressed="true" title="System"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1"/><path d="M7 20h10M9 16v4M15 16v4"/></svg><span class="vh">System</span></button>
+    <button type="button" data-set-theme="light" aria-pressed="false" title="Light"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M3 12h1M12 3v1M20 12h1M12 20v1M5.6 5.6l.7.7M18.4 5.6l-.7.7M17.7 17.7l.7.7M6.3 17.7l-.7.7"/></svg><span class="vh">Light</span></button>
+    <button type="button" data-set-theme="dark" aria-pressed="false" title="Dark"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1-8.313-12.454z"/></svg><span class="vh">Dark</span></button>
+  </div>
+      <a class="side__out" href="login.html"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2v-2M9 12h12l-3-3M18 15l3-3"/></svg><span>Sign out</span></a>
+      <p class="side__credit">Catalog data from <a href="https://rebrickable.com/">Rebrickable</a></p>
+    </div>
+  </aside>
+  <main class="main" id="main">
+    <header class="head studs">
+    <div class="head__text"><nav aria-label="Breadcrumb"><ol class="crumbs"><li><a href="library.html">Library</a></li><li aria-current="page">Add a set</li></ol></nav><h1>Add a set</h1><p class="head__sub">Look it up, or type it in. One form covers the design and the box.</p></div>
+    
+  </header>
+    <form class="narrow" style="display:grid;gap:16px" novalidate>
+    <section class="panel panel--pad" aria-labelledby="h-look">
+    <div class="section__head" style="margin-bottom:8px"><h2 id="h-look" style="font-size:var(--fs-h3)">Look up a LEGO set</h2><p class="small muted">Catalog data from <a href="https://rebrickable.com/">Rebrickable</a></p></div>
+    <div class="field"><label for="lk">Set number or name</label><div class="affix"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="7"/><path d="M21 21l-6-6"/></svg><input class="input" id="lk" type="search" inputmode="search" placeholder="10294 or Titanic" value="" style="padding-right:52px"><button class="affix__btn only-narrow" type="button" aria-label="Scan a barcode" style="color:var(--ink)"><svg class="i i--lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7V6a2 2 0 0 1 2-2h2M4 17v1a2 2 0 0 0 2 2h2M16 4h2a2 2 0 0 1 2 2v1M16 20h2a2 2 0 0 0 2-2v-1M5 11h1v2H5zM10 11v2M14 11h1v2h-1zM19 11v2"/></svg></button></div></div>
+    
+  </section>
+    
+    <section class="panel panel--pad form" aria-labelledby="h-set">
+      <h2 id="h-set" style="font-size:var(--fs-h3)">The set</h2>
+      
+      
+  <div class="form__row form__row--2">
+    <div><div class="field"><label for="f217">Brand <span class="req" aria-hidden="true">*</span></label><select id="f217" class="select"><option selected>BlueBrixx</option><option>CaDA</option><option>COBI</option><option>LEGO</option><option>Lumibricks</option><option>Mould King</option></select></div><button class="btn btn--sm btn--ghost" type="button" style="margin-top:4px"><svg class="i i--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>New brand</button></div>
+    <div class="field"><label for="f218">Set number</label><span class="hint">As printed on the box. Optional for unnumbered kits.</span><input id="f218" class="input mono" value="" placeholder="10294"></div>
+  </div>
+  <div class="field"><label for="f219">Name <span class="req" aria-hidden="true">*</span></label><input id="f219" class="input" value=""></div>
+  <div class="field"><label for="f220">Theme</label><select id="f220" class="select"><option selected>None</option><option>Botanical</option><option>Buildings</option><option>City</option><option>Historical</option><option>Icons</option><option>Star Wars</option><option>Technic</option><option>Vehicles</option></select></div>
+  <div class="form__row form__row--4"><div class="field"><label for="f221">Year</label><input id="f221" class="input" inputmode="numeric" value=""></div><div class="field"><label for="f222">Pieces</label><input id="f222" class="input" inputmode="numeric" value=""></div><div class="field"><label for="f223">Minifigs</label><input id="f223" class="input" inputmode="numeric"></div><div class="field"><label for="f224">Min age</label><input id="f224" class="input" inputmode="numeric"></div></div>
+  <div class="field"><label for="f225">Description</label><textarea id="f225" class="textarea" ></textarea></div>
+  <div class="form__row form__row--2"><div class="field"><label for="f226">Retail price</label><div class="affix affix--money"><span class="affix__pre">$</span><input id="f226" class="input num" inputmode="decimal" placeholder="0.00" value=""></div></div><div class="field"><label for="f227">Designer</label><span class="hint">For example a MOC designer</span><input id="f227" class="input" ></div></div>
+  <div class="field"><label for="f228">Tags</label><input id="f228" class="input" placeholder="Christmas 2025"></div>
+  <div class="field"><label for="f229">Cover image</label><span class="hint">JPEG, PNG or WebP, up to 8 MB</span><input id="f229" class="input" type="file" accept="image/jpeg,image/png,image/webp" style="padding:10px 12px"></div>
+  <div class="field"><label for="f230">Notes</label><textarea id="f230" class="textarea" ></textarea></div>
+  <label class="check"><input type="checkbox"><span>Hide from kid profiles<span class="hint">Kid profiles will not see this set, its copies or its cover. Useful for a present.</span></span></label>
+    </section>
+    <section class="panel panel--pad form" aria-label="A copy I own">
+  <label class="check"><input type="checkbox" checked><span>Add a copy I own</span></label>
+  <div class="form__row form__row--2"><div class="field"><label for="f106">How many?</label><span class="hint">Creates that many identical copies at once.</span><span class="stepper"><button type="button" aria-label="One fewer"><svg class="i i--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button><input id="f106" inputmode="numeric" value="1"><button type="button" aria-label="One more"><svg class="i i--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></span></div><div></div></div>
+  <div class="form__row form__row--2"><div class="field"><label for="f107">Build state</label><select id="f107" class="select"><option selected>Sealed</option><option>Opened</option><option>In progress</option><option>Built</option><option>Disassembled</option><option>Mixed</option></select></div><div class="field"><label for="f108">Owner</label><select id="f108" class="select"><option selected>Ours</option><option>Ada Admin</option><option>Mo Member</option><option>Kit Kid</option></select></div></div>
+  <div class="form__row form__row--2"><div class="field"><label for="f109">Place</label><select id="f109" class="select"><option selected>Not set</option><option>Attic</option><option>Attic › Shelf 1</option><option>Attic › Shelf 2</option><option>Basement</option><option>Basement › Tote 3</option><option>Living room</option><option>Living room › Display cabinet</option></select></div><div class="field"><label for="f110">Acquired on</label><input id="f110" class="input" type="date"></div></div>
+  <div class="form__row form__row--2"><div class="field"><label for="f111">Price paid</label><div class="affix affix--money"><span class="affix__pre">$</span><input id="f111" class="input num" inputmode="decimal" placeholder="0.00" value=""></div></div><div class="field"><label for="f112">Estimated value</label><div class="affix affix--money"><span class="affix__pre">$</span><input id="f112" class="input num" inputmode="decimal" placeholder="0.00" value=""></div></div></div>
+  <div class="form__row form__row--2"><div class="field"><label for="f113">Pieces last checked</label><span class="hint">Leave empty if never</span><input id="f113" class="input" type="date"></div><div></div></div>
+  <div><label class="check"><input type="checkbox" checked><span>Has the box</span></label><label class="check"><input type="checkbox" checked><span>Has paper booklets</span></label></div>
+  <div class="field"><label for="f114">Condition notes</label><textarea id="f114" class="textarea" placeholder="Box corner dented, stickers applied crooked"></textarea></div>
+  <div class="field"><label for="f115">Notes</label><textarea id="f115" class="textarea" ></textarea></div></section>
+    <div class="actionbar"><button class="btn btn--primary studs" type="button">Add set</button><a class="btn" href="library.html">Cancel</a></div>
+  </form>
+  </main>
+  <nav class="tabbar studs" aria-label="Main">
+    <a class="tab" href="library.html"><svg class="i i--lg" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></svg><span>Library</span></a>
+    <a class="tab" href="shopping-list.html"><svg class="i i--lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 5.5l1.5 1.5l2.5-2.5M3.5 11.5l1.5 1.5l2.5-2.5M3.5 17.5l1.5 1.5l2.5-2.5M11 6h9M11 12h9M11 18h9"/></svg><span>Shopping</span></a>
+    <a class="tab tab--add" href="add-set.html" aria-current="page"><span class="tab__add studs"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span><span>Add</span></a>
+    <a class="tab" href="wishlist.html"><svg class="i i--lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.5 12.572L12 20l-7.5-7.428A5 5 0 1 1 12 6.006a5 5 0 1 1 7.5 6.572"/></svg><span>Wishlist</span></a>
+    <a class="tab" href="more.html"><svg class="i i--lg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg><span>More</span></a>
+  </nav>
+</div>
+<div class="scrim"><div class="dialog dialog--sm " role="dialog" aria-modal="true" aria-labelledby="dlg-t">
+    <div class="dialog__head"><h2 id="dlg-t">Scan a barcode</h2><button class="btn btn--ghost btn--icon" type="button" aria-label="Close"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+    <div class="dialog__body"><div class="scan" role="img" aria-label="Camera view"><span></span></div><p>Point the camera at the barcode on the box. When it reads, the number goes into the lookup and this closes.</p></div>
+    <div class="dialog__foot"><button class="btn" type="button">Cancel</button></div>
+  </div></div>
+</body>
+</html>

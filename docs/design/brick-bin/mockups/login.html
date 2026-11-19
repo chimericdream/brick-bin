@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sign in · Brick Bin</title>
+<link rel="icon" href="assets/svg/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/AlbertSans-Variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/app.css">
+<script src="assets/js/theme.js"></script>
+</head>
+<body>
+<div class="gate">
+    <div class="gate__art">
+      <a class="logo" href="login.html" aria-label="Brick Bin, home"><svg viewBox="0 0 32 32" aria-hidden="true"><path class="mark-brick" d="M10.5 5.5H15V9h2V5.5h4.5V9H23v14H9V9h1.5z"/><path class="mark-bin" d="M3 13h4v13h18V13h4v17H3z"/></svg><span>Brick Bin</span></a>
+      <div style="display:grid;gap:16px"><h2>Know what’s in every box.</h2><p>Sets, the boxes you own of each, and everything that goes missing from them.</p></div>
+      <svg class="pile" viewBox="-40 96 560 172" role="img" aria-label="A small model built from colored bricks">
+  <path d="M-40 261H520" stroke="#3a3e44" stroke-width="2"/>
+  <g transform="translate(60 228)" fill="#ff8c1a"><rect width="120" height="32" rx="2"/><path d="M8-8h24v8H8zM48-8h24v8H48zM88-8h24v8H88z"/></g>
+  <g transform="translate(180 228)" fill="#4db3e6"><rect width="160" height="32" rx="2"/><path d="M8-8h24v8H8zM48-8h24v8H48zM88-8h24v8H88zM128-8h24v8h-24z"/></g>
+  <g transform="translate(340 228)" fill="#6cc04a"><rect width="80" height="32" rx="2"/><path d="M8-8h24v8H8zM48-8h24v8H48z"/></g>
+  <g transform="translate(100 196)" fill="#f49ac1"><rect width="80" height="32" rx="2"/><path d="M8-8h24v8H8zM48-8h24v8H48z"/></g>
+  <g transform="translate(180 196)" fill="#d8bc88"><rect width="120" height="32" rx="2"/><path d="M8-8h24v8H8zM48-8h24v8H48zM88-8h24v8H88z"/></g>
+  <g transform="translate(300 196)" fill="#ff8c1a"><rect width="80" height="32" rx="2"/><path d="M8-8h24v8H8zM48-8h24v8H48z"/></g>
+  <g transform="translate(140 164)" fill="#6cc04a"><rect width="120" height="32" rx="2"/><path d="M8-8h24v8H8zM48-8h24v8H48zM88-8h24v8H88z"/></g>
+  <g transform="translate(260 164)" fill="#4db3e6"><rect width="80" height="32" rx="2"/><path d="M8-8h24v8H8zM48-8h24v8H48z"/></g>
+  <g transform="translate(200 132)" fill="#f49ac1"><rect width="80" height="32" rx="2"/><path d="M8-8h24v8H8zM48-8h24v8H48z"/></g>
+</svg>
+    </div>
+    <main class="gate__form" id="main">
+      <h1>Welcome back</h1>
+      <p class="muted">Sign in to your household’s bin.</p>
+      
+      <form class="form" novalidate>
+        <div class="field"><label for="f231">Email <span class="req" aria-hidden="true">*</span></label><input id="f231" class="input" type="email" autocomplete="email" required></div>
+        <div class="field"><label for="pw">Password <span class="req" aria-hidden="true">*</span></label><div class="affix" style="--x:0"><input class="input" id="pw" type="password" autocomplete="current-password" required style="padding-left:12px;padding-right:48px"><button class="affix__btn" type="button" aria-label="Show password"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="2"/><path d="M21 12c-2.4 4-5.4 6-9 6c-3.6 0-6.6-2-9-6c2.4-4 5.4-6 9-6c3.6 0 6.6 2 9 6"/></svg></button></div></div>
+        <button class="btn btn--primary studs btn--block" type="button">Sign in</button>
+      </form>
+      <p class="small muted">Forgot your password? Ask an admin to set a new one.</p>
+      <p class="small muted" style="margin-top:8px">Catalog data from <a href="https://rebrickable.com/">Rebrickable</a>. Brick Bin is not affiliated with the LEGO Group or any other brick maker.</p>
+    </main>
+  </div>
+</body>
+</html>

@@ -15,11 +15,14 @@ sets (LEGO and off-brand). Hosted on a Proxmox server, reachable over Tailscale.
 - Next.js (App Router) + TypeScript, strict
 - **Mantine** for UI. **Do not add Tailwind** (or any utility-CSS framework). Use Mantine components,
   style props, and CSS modules with `postcss-preset-mantine`.
-- **Design system "Brick Bin"**: tokens in `src/theme.ts` (`--app-*` CSS variables, light and dark), reference
-  mockups in `docs/design/brick-bin/` (README, tokens.md). Bricolage Grotesque (titles) and Atkinson
-  Hyperlegible Next (body) are in `src/fonts/`. Use `--app-*` variables in CSS modules, not hard-coded
-  colours. Fonts and assets are
-  **self-hosted**; never load anything from a CDN at runtime.
+- **Design system "Sorted by state"**: the reference is `docs/design/brick-bin/` (`SPEC.md` is the
+  handoff, `TOKENS.md` the values, `DESIGN-NOTES.md` the reasoning, `mockups/` static HTML, and
+  `MOCKUP-INDEX.md`). A neutral room and six brick colors, each meaning one build state and nothing
+  else. Tokens are `--app-*` CSS variables in `src/theme.ts` (light and dark, mirrored in the Mantine
+  theme); use them in CSS modules, never hard-coded colors. Shared layout pieces are in
+  `src/components/ui/`. Albert Sans (everything) and JetBrains Mono (identifiers) are in `src/fonts/`
+  with their licenses. Fonts and assets are **self-hosted**; never load anything from a CDN at
+  runtime. US spelling in all UI text.
 - PostgreSQL 17 + Drizzle ORM (migrations via drizzle-kit). v1 is deployed, so **never regenerate or
   edit existing migration SQL or snapshots in `drizzle/`**. Every schema change is a new migration:
   run `pnpm db:generate` and commit its output, including the updated `drizzle/meta/_journal.json`.

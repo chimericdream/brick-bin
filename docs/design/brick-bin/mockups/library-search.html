@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Library · Brick Bin</title>
+<link rel="icon" href="assets/svg/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/AlbertSans-Variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/app.css">
+<script src="assets/js/theme.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the content</a>
+<div class="app">
+  <header class="topbar"><a class="logo" href="library.html" aria-label="Brick Bin, home"><svg viewBox="0 0 32 32" aria-hidden="true"><path class="mark-brick" d="M10.5 5.5H15V9h2V5.5h4.5V9H23v14H9V9h1.5z"/><path class="mark-bin" d="M3 13h4v13h18V13h4v17H3z"/></svg><span>Brick Bin</span></a><span class="topbar__home">Hartley House</span></header>
+  <aside class="side">
+    <a class="logo" href="library.html" aria-label="Brick Bin, home"><svg viewBox="0 0 32 32" aria-hidden="true"><path class="mark-brick" d="M10.5 5.5H15V9h2V5.5h4.5V9H23v14H9V9h1.5z"/><path class="mark-bin" d="M3 13h4v13h18V13h4v17H3z"/></svg><span>Brick Bin</span></a>
+    <p class="side__home">Hartley House</p>
+    <a class="btn btn--primary studs" href="add-set.html" aria-label="Add set"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Add set</span></a>
+    <nav class="nav" aria-label="Main"><a href="library.html" aria-current="page"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></svg><span class="nav__long">Library</span><span class="nav__short">Library</span><span class="b1" aria-hidden="true"></span></a><a href="shopping-list.html"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 5.5l1.5 1.5l2.5-2.5M3.5 11.5l1.5 1.5l2.5-2.5M3.5 17.5l1.5 1.5l2.5-2.5M11 6h9M11 12h9M11 18h9"/></svg><span class="nav__long">Shopping list</span><span class="nav__short">Shopping</span><span class="b1" aria-hidden="true"></span></a><a href="wishlist.html"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M19.5 12.572L12 20l-7.5-7.428A5 5 0 1 1 12 6.006a5 5 0 1 1 7.5 6.572"/></svg><span class="nav__long">Wishlist</span><span class="nav__short">Wishlist</span><span class="b1" aria-hidden="true"></span></a><a href="collection.html"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="12" width="6" height="8" rx="1"/><rect x="9" y="8" width="6" height="12" rx="1"/><rect x="15" y="4" width="6" height="16" rx="1"/></svg><span class="nav__long">Collection</span><span class="nav__short">Collection</span><span class="b1" aria-hidden="true"></span></a><a href="import.html"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2M7 9l5-5l5 5M12 4v12"/></svg><span class="nav__long">Import</span><span class="nav__short">Import</span><span class="b1" aria-hidden="true"></span></a></nav>
+    <p class="side__label" id="nav-house">Household</p>
+      <nav class="nav" aria-labelledby="nav-house"><a href="settings.html"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 0 0-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 0 0-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 0 0-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 0 0-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 0 0 1.066-2.573c-.94-1.543.826-3.31 2.37-2.37c1 .608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg><span class="nav__long">Settings</span><span class="nav__short">Settings</span><span class="b1" aria-hidden="true"></span></a></nav>
+    <div class="side__foot">
+      <a class="side__who" href="more.html" aria-label="Ada Admin, Admin. Account and theme"><span class="who" aria-hidden="true">A</span><div><b>Ada Admin</b><span class="small muted">Admin</span></div></a>
+      <div class="seg theme " role="group" aria-label="Theme">
+    <button type="button" data-set-theme="system" aria-pressed="true" title="System"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1"/><path d="M7 20h10M9 16v4M15 16v4"/></svg><span class="vh">System</span></button>
+    <button type="button" data-set-theme="light" aria-pressed="false" title="Light"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M3 12h1M12 3v1M20 12h1M12 20v1M5.6 5.6l.7.7M18.4 5.6l-.7.7M17.7 17.7l.7.7M6.3 17.7l-.7.7"/></svg><span class="vh">Light</span></button>
+    <button type="button" data-set-theme="dark" aria-pressed="false" title="Dark"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1-8.313-12.454z"/></svg><span class="vh">Dark</span></button>
+  </div>
+      <a class="side__out" href="login.html"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2v-2M9 12h12l-3-3M18 15l3-3"/></svg><span>Sign out</span></a>
+      <p class="side__credit">Catalog data from <a href="https://rebrickable.com/">Rebrickable</a></p>
+    </div>
+  </aside>
+  <main class="main" id="main">
+    <header class="head studs">
+    <div class="head__text"><h1>Library</h1><p class="head__sub">1 set matches “crane”</p></div>
+    <div class="head__actions"><a class="btn btn--quiet only-tablet-up" href="shopping-list.html"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 5.5l1.5 1.5l2.5-2.5M3.5 11.5l1.5 1.5l2.5-2.5M3.5 17.5l1.5 1.5l2.5-2.5M11 6h9M11 12h9M11 18h9"/></svg>Shopping list for these…</a><a class="btn btn--primary studs only-tablet-up" href="add-set.html"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Add set</a></div>
+  </header>
+    
+    <section aria-label="Build state">
+  <div class="sorter" role="group" aria-label="Filter by build state">
+    <button class="sorter__b studs is-zero" data-st="sealed" type="button" aria-pressed="false"><svg class="g" viewBox="0 0 20 20" aria-hidden="true"><path d="M2 3.5h16v3H2z"/><path fill-rule="evenodd" d="M3 8h14v9H3zM8.75 8v4h2.5V8z"/></svg><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg><span>Sealed</span><span class="n">0</span></button><button class="sorter__b studs is-zero" data-st="opened" type="button" aria-pressed="false"><svg class="g" viewBox="0 0 20 20" aria-hidden="true"><path d="M2.2 6.8l11.2-4.3 1 2.6L3.2 9.4z"/><path d="M3 10h14v7H3z"/><path d="M12 6.6h3.5V9H12z"/></svg><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg><span>Opened</span><span class="n">0</span></button><button class="sorter__b studs is-zero" data-st="progress" type="button" aria-pressed="false"><svg class="g" viewBox="0 0 20 20" aria-hidden="true"><path d="M2 12h16v5H2z"/><path d="M2 6.5h9v4.5H2zM3.5 4.5h2.5v2H3.5zM7 4.5h2.5v2H7zM12.5 10h2.5v2h-2.5z"/></svg><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg><span>In progress</span><span class="n">0</span></button><button class="sorter__b studs" data-st="built" type="button" aria-pressed="false"><svg class="g" viewBox="0 0 20 20" aria-hidden="true"><path d="M2 13h16v4H2zM5 8.5h10v3.5H5zM8 4h4v3.5H8zM9 2.5h2V4H9z"/></svg><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg><span>Built</span><span class="n">1</span></button><button class="sorter__b studs is-zero" data-st="apart" type="button" aria-pressed="false"><svg class="g" viewBox="0 0 20 20" aria-hidden="true"><path d="M1.5 11.5h5V16h-5zM7.5 11.5h5V16h-5zM13.5 11.5h5V16h-5zM3 9.5h2v2H3zM9 9.5h2v2H9zM15 9.5h2v2h-2z"/><path d="M4.5 4h5v3.5h-5zM6 2.5h2V4H6z"/></svg><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg><span>Disassembled</span><span class="n">0</span></button><button class="sorter__b studs is-zero" data-st="mixed" type="button" aria-pressed="false"><svg class="g" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M1.5 6h2v9.5h13V6h2v11.5h-17z"/><path d="M5.2 10.3l4.6-1.7 1 2.8-4.6 1.7zM10.6 12.2l4.7 1.2-.7 2.1H10zM11.5 6.6l3 .8-.7 2.6-3-.8z"/></svg><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg><span>Mixed</span><span class="n">0</span></button>
+  </div></section>
+    <div class="toolbar" role="search">
+      <div class="affix grow"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="7"/><path d="M21 21l-6-6"/></svg><input class="input" type="search" aria-label="Search name, number, theme, brand" placeholder="Search name, number, theme, brand" value="crane"></div>
+      <button class="btn only-narrow" type="button"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><circle cx="14" cy="6" r="2"/><path d="M4 6h8M16 6h4"/><circle cx="8" cy="12" r="2"/><path d="M4 12h2M10 12h10"/><circle cx="17" cy="18" r="2"/><path d="M4 18h11M19 18h1"/></svg>Filters</button>
+      <label class="toolbar__sort">Sort <select class="select"><option selected>Name</option><option>Newest first</option><option>Oldest first</option><option>Most pieces</option><option>Recently added</option></select></label>
+    </div>
+    <div class="lib">
+      <aside class="facets" aria-label="Filters"><label class="check switch"><input type="checkbox" role="switch"><span>Include sets with no copies<span class="hint">Showing sets we own.</span></span></label><details class="facet" open><summary>Brand<svg class="i i--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6l6-6"/></svg></summary><div><label class="check"><input type="checkbox"><span>BlueBrixx</span><span class="check__count">1</span></label><label class="check"><input type="checkbox"><span>CaDA</span><span class="check__count">1</span></label><label class="check"><input type="checkbox"><span>COBI</span><span class="check__count">1</span></label><label class="check"><input type="checkbox"><span>LEGO</span><span class="check__count">8</span></label><label class="check"><input type="checkbox"><span>Lumibricks</span><span class="check__count">1</span></label><label class="check"><input type="checkbox"><span>Mould King</span><span class="check__count">2</span></label></div></details><details class="facet" open><summary>Theme<svg class="i i--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6l6-6"/></svg></summary><div><label class="check"><input type="checkbox"><span>Botanical</span><span class="check__count">1</span></label><label class="check"><input type="checkbox"><span>Buildings</span><span class="check__count">2</span></label><label class="check"><input type="checkbox"><span>City</span><span class="check__count">2</span></label><label class="check"><input type="checkbox"><span>Historical</span><span class="check__count">1</span></label><label class="check"><input type="checkbox"><span>Icons</span><span class="check__count">4</span></label><label class="check"><input type="checkbox"><span>Star Wars</span><span class="check__count">1</span></label><label class="check"><input type="checkbox"><span>Technic</span><span class="check__count">2</span></label><label class="check"><input type="checkbox"><span>Vehicles</span><span class="check__count">1</span></label></div></details><details class="facet" open><summary>Completeness<svg class="i i--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6l6-6"/></svg></summary><div><label class="check"><input type="checkbox"><span>Missing pieces</span><span class="check__count">3</span></label><label class="check"><input type="checkbox"><span>Complete</span><span class="check__count zero">0</span></label><label class="check"><input type="checkbox"><span>Not checked</span><span class="check__count">8</span></label></div></details></aside>
+      <div><ul class="sets"><li class="set ">
+    <span class="cover"><img src="assets/img/cover-crawler-crane.svg" alt=""></span>
+    <div class="set__body">
+      <h3 class="set__name"><a href="set.html">Crawler Crane</a></h3>
+      <p class="set__meta">Mould King · <span class="mono">13124</span> · <span class="num">2022</span></p>
+      <div class="chips"><span class="st" data-st="built"><svg class="g" viewBox="0 0 20 20" aria-hidden="true"><path d="M2 13h16v4H2zM5 8.5h10v3.5H5zM8 4h4v3.5H8zM9 2.5h2V4H9z"/></svg>Built</span><span class="tag tag--line">Not checked</span></div>
+    </div>
+  </li></ul><p class="only-phone" style="margin-top:16px"><a class="btn btn--block" href="shopping-list.html"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 5.5l1.5 1.5l2.5-2.5M3.5 11.5l1.5 1.5l2.5-2.5M3.5 17.5l1.5 1.5l2.5-2.5M11 6h9M11 12h9M11 18h9"/></svg>Shopping list for these…</a></p></div>
+    </div>
+    <p class="credit">Catalog data from <a href="https://rebrickable.com/">Rebrickable</a></p>
+  </main>
+  <nav class="tabbar studs" aria-label="Main">
+    <a class="tab" href="library.html" aria-current="page"><svg class="i i--lg" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></svg><span>Library</span></a>
+    <a class="tab" href="shopping-list.html"><svg class="i i--lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 5.5l1.5 1.5l2.5-2.5M3.5 11.5l1.5 1.5l2.5-2.5M3.5 17.5l1.5 1.5l2.5-2.5M11 6h9M11 12h9M11 18h9"/></svg><span>Shopping</span></a>
+    <a class="tab tab--add" href="add-set.html"><span class="tab__add studs"><svg class="i " viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span><span>Add</span></a>
+    <a class="tab" href="wishlist.html"><svg class="i i--lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.5 12.572L12 20l-7.5-7.428A5 5 0 1 1 12 6.006a5 5 0 1 1 7.5 6.572"/></svg><span>Wishlist</span></a>
+    <a class="tab" href="more.html"><svg class="i i--lg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg><span>More</span></a>
+  </nav>
+</div>
+
+</body>
+</html>
