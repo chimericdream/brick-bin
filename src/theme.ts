@@ -126,6 +126,9 @@ const STATIC = {
   'stud-mask': STUD_MASK,
   // The primary button on a field (page head) brightens to white on hover, in both themes.
   'field-btn-hover': '#ffffff',
+  // Part renders arrive on white, so a part tile is white in both themes, with a muted icon on it.
+  'part-bg': '#ffffff',
+  'part-icon': '#4d4d48',
   ...BRICKS,
 } as const;
 

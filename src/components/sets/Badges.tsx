@@ -56,7 +56,11 @@ export function Tag({
   variant?: TagVariant;
   children: React.ReactNode;
 }) {
-  return <span className={tagClass(variant)}>{children}</span>;
+  return (
+    <span className={tagClass(variant)} data-tag={variant}>
+      {children}
+    </span>
+  );
 }
 
 const monthYear = (iso: string) =>

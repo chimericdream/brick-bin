@@ -1,0 +1,48 @@
+.empty {
+  display: grid;
+  place-items: center;
+  min-height: 260px;
+  padding: var(--app-s6) var(--app-s4);
+  border-radius: var(--app-r);
+}
+
+.card {
+  display: grid;
+  justify-items: start;
+  gap: var(--app-s2);
+  max-width: 420px;
+  padding: var(--app-s5);
+  border-radius: var(--app-r);
+  background: var(--app-ground);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--app-fs-h2);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.text p {
+  margin: 0;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--app-s2);
+  margin-top: var(--app-s2);
+}
+
+.inline {
+  padding: var(--app-s4);
+  border-radius: var(--app-r);
+}
+
+.inlineCard {
+  display: inline-block;
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: var(--app-r);
+  background: var(--app-ground);
+}

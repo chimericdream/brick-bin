@@ -52,6 +52,33 @@
   }
 }
 
+/* Tags on the field: outlines and dashes take the field's ink. */
+.extra {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+
+  & [data-tag='dash'] {
+    color: var(--app-field-ink);
+  }
+
+  & [data-tag='line'] {
+    border-color: var(--app-field-muted);
+    color: var(--app-field-muted);
+  }
+
+  & [data-tag='quiet'] {
+    background: var(--app-field-2);
+    color: var(--app-field-ink);
+  }
+
+  & [data-tag='solid'] {
+    background: var(--app-field-ink);
+    color: var(--app-field);
+  }
+}
+
 .actions {
   display: flex;
 
