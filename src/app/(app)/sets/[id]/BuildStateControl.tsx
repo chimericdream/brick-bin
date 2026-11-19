@@ -1,6 +1,6 @@
 'use client';
 
-import { useOptimistic, useRef, useState, useTransition } from 'react';
+import { useEffect, useOptimistic, useRef, useState, useTransition } from 'react';
 import { Menu, Modal, UnstyledButton } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { IconCheck, IconChevronDown } from '@tabler/icons-react';
@@ -36,6 +36,13 @@ function Choice({ state, current }: { state: BuildState; current: boolean }) {
  */
 function ChoiceList({ shown, onPick }: { shown: BuildState; onPick: (s: BuildState) => void }) {
   const list = useRef<HTMLDivElement>(null);
+  // Opening the list puts focus on the current state, so arrow keys start from there.
+  useEffect(() => {
+    const id = requestAnimationFrame(() =>
+      list.current?.querySelector<HTMLButtonElement>('[aria-checked="true"]')?.focus(),
+    );
+    return () => cancelAnimationFrame(id);
+  }, []);
   const onKey = (e: React.KeyboardEvent) => {
     const items = [...(list.current?.querySelectorAll<HTMLButtonElement>('button') ?? [])];
     const at = items.indexOf(document.activeElement as HTMLButtonElement);
@@ -119,6 +126,7 @@ export function BuildStateControl({
         position="bottom-end"
         offset={6}
         disabled={!desktop}
+        trapFocus={false}
         withinPortal
       >
         <Menu.Target>

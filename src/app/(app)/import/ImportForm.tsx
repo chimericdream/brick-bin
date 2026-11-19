@@ -7,6 +7,7 @@ import Link from 'next/link';
 
 import { Note } from '@/components/Note';
 import { Tag } from '@/components/sets/Badges';
+import { TableScroll } from '@/components/ui/TableScroll';
 import ui from '@/components/ui/ui.module.css';
 
 import { previewImportAction, runImportAction, type ImportState, type Preview } from './actions';
@@ -292,7 +293,7 @@ export function ImportForm() {
               First rows
             </h2>
             <div className={`${ui.panel} ${ui.pad}`}>
-              <div className={ui.tableWrap}>
+              <TableScroll label="First rows">
                 <table className={`${ui.table} ${classes.rowsTable}`} aria-label="First rows">
                   <thead>
                     <tr>
@@ -315,7 +316,7 @@ export function ImportForm() {
                     ))}
                   </tbody>
                 </table>
-              </div>
+              </TableScroll>
               {p.summary.rows > p.rows.length && (
                 <p className={ui.small}>Showing the first {p.rows.length} rows.</p>
               )}
