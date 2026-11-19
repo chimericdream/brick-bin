@@ -1,66 +1,66 @@
-.badge {
+/* A read-only build state: flat, filled, glyph and word in ink. */
+.st {
   display: inline-flex;
+  flex: none;
   align-items: center;
-  gap: 5px;
-  min-height: 24px;
-  padding: 2px 8px;
-  border-radius: var(--app-radius-badge);
-  font-size: 13px;
-  font-weight: 600;
+  gap: 6px;
+  min-height: 28px;
+  padding: 0 8px 0 6px;
+  border-radius: var(--app-r);
+  background: var(--st);
+  color: var(--app-brick-ink);
+  font-size: var(--app-fs-small);
+  font-weight: 700;
   line-height: 1.2;
   white-space: nowrap;
+}
 
-  &[data-state='sealed'] {
-    background: var(--app-s-sealed-bg);
-    color: var(--app-s-sealed-ink);
-  }
+.times {
+  padding-left: 2px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
 
-  &[data-state='opened'] {
-    background: var(--app-s-opened-bg);
-    color: var(--app-s-opened-ink);
-  }
+.tag {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  min-height: 28px;
+  padding: 0 8px;
+  border-radius: var(--app-r);
+  font-size: var(--app-fs-small);
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+  text-decoration: none;
+}
 
-  &[data-state='progress'] {
-    background: var(--app-s-progress-bg);
-    color: var(--app-s-progress-ink);
-  }
+.solid {
+  background: var(--app-ink);
+  color: var(--app-ground);
+}
 
-  &[data-state='built'] {
-    background: var(--app-s-built-bg);
-    color: var(--app-s-built-ink);
-  }
+/* Motif 4: the dashed outline. Something is missing, or needs you. */
+.dash {
+  padding: 0 6px;
+  border: 2px dashed currentColor;
+  background: none;
+  color: var(--app-ink);
+}
 
-  &[data-state='disassembled'] {
-    background: var(--app-s-disassembled-bg);
-    color: var(--app-s-disassembled-ink);
-  }
+a.dash:hover {
+  background: var(--app-surface);
+}
 
-  &[data-state='mixed'] {
-    background: repeating-linear-gradient(
-      135deg,
-      var(--app-s-mixed-bg) 0 6px,
-      color-mix(in srgb, var(--app-s-mixed-bg) 85%, var(--app-ink)) 6px 8px
-    );
-    color: var(--app-s-mixed-ink);
-  }
+.line {
+  border: 1px solid var(--app-edge);
+  background: none;
+  color: var(--app-muted);
+  font-weight: 600;
+}
 
-  &[data-completeness='sealed'] {
-    background: var(--app-s-sealed-bg);
-    color: var(--app-s-sealed-ink);
-  }
-
-  &[data-completeness='missing'] {
-    background: var(--app-warn-bg);
-    color: var(--app-warn-ink);
-  }
-
-  &[data-completeness='complete'] {
-    background: var(--app-ok-bg);
-    color: var(--app-ok-ink);
-  }
-
-  &[data-completeness='not_checked'] {
-    border: 1px solid var(--app-control);
-    color: var(--app-muted);
-  }
+.quiet {
+  background: var(--app-surface-2);
+  color: var(--app-ink);
 }

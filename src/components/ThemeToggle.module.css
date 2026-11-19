@@ -1,0 +1,48 @@
+/* A segmented control: a surface-2 track, the chosen option raised on paper. */
+.seg {
+  display: inline-flex;
+  max-width: 100%;
+  gap: 2px;
+  padding: 3px;
+  border-radius: var(--app-r);
+  background: var(--app-surface-2);
+
+  &[data-block] {
+    display: grid;
+    grid-auto-columns: 1fr;
+    grid-auto-flow: column;
+  }
+}
+
+.option {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 44px;
+  min-height: 38px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 2px;
+  background: none;
+  color: var(--app-muted);
+  font: inherit;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+
+  & svg {
+    flex: none;
+  }
+
+  &:hover {
+    color: var(--app-ink);
+  }
+
+  &[aria-pressed='true'] {
+    background: var(--app-paper);
+    box-shadow: 0 1px 0 var(--app-edge);
+    color: var(--app-ink);
+    font-weight: 750;
+  }
+}

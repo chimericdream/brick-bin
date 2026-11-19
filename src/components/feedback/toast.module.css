@@ -1,0 +1,34 @@
+:global(.mantine-Notification-root).failed {
+  border: 2px dashed var(--app-field-ink);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+}
+
+.text {
+  flex: 1 1 12em;
+}
+
+.action {
+  min-height: 36px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 2px;
+  background: var(--app-field-2);
+  color: var(--app-field-ink);
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--app-field-line);
+  }
+
+  &:focus-visible {
+    outline-color: var(--app-focus-field);
+  }
+}

@@ -1,0 +1,30 @@
+.note {
+  padding: var(--app-s4);
+  border-radius: var(--app-r);
+  background: var(--app-surface);
+
+  & > b:first-child,
+  & > strong:first-child {
+    display: block;
+    margin-bottom: 2px;
+  }
+}
+
+.mind {
+  border: 2px dashed var(--app-ink);
+  background: none;
+}
+
+.error {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: var(--app-danger-bg);
+  color: var(--app-danger-text);
+  font-weight: 600;
+}
+
+.icon {
+  flex: none;
+  margin-top: 2px;
+}
