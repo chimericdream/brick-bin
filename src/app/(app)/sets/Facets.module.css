@@ -3,118 +3,115 @@
   flex-direction: column;
 }
 
+/* "Include sets with no copies": a switch whose knob is a square stud. */
 .toggle {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  align-items: flex-start;
+  gap: 12px;
   min-height: 44px;
+  padding: 10px 0 0;
   color: var(--app-ink);
-  font-weight: 600;
   text-decoration: none;
+
+  &:hover .switch {
+    border-color: var(--app-ink);
+  }
 }
 
 .switch {
   position: relative;
   flex: none;
-  width: 36px;
-  height: 20px;
-  border: 2px solid var(--app-control);
-  border-radius: 999px;
+  width: 44px;
+  height: 24px;
+  border: 1.5px solid var(--app-edge);
+  border-radius: var(--app-r);
+  background: var(--app-paper);
 
   &::after {
     content: '';
     position: absolute;
     top: 2px;
     left: 2px;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: var(--app-control);
-    transition: transform 0.12s;
+    width: 17px;
+    height: 17px;
+    border-radius: 2px;
+    background: var(--app-edge);
+    transition: transform var(--app-t-fast) var(--app-snap);
   }
 
   &[data-on] {
-    border-color: var(--app-accent);
-    background: var(--app-accent);
+    border-color: var(--app-ink);
+    background: var(--app-ink);
 
     &::after {
-      background: var(--app-on-accent);
-      transform: translateX(16px);
+      background: var(--app-ground);
+      transform: translateX(19px);
     }
   }
 }
 
 .note {
-  margin: 0 0 8px;
+  margin: 0 0 var(--app-s3) 56px;
   color: var(--app-muted);
-  font-size: 13px;
+  font-size: var(--app-fs-small);
 }
 
 .group {
-  border-top: 1px solid var(--app-rule);
+  border-top: 1px solid var(--app-line);
 
   & > summary {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    min-height: 44px;
-    cursor: pointer;
-    font-family: var(--app-display);
-    font-weight: 700;
+    min-height: 48px;
+    font-weight: 750;
     list-style: none;
+    cursor: pointer;
 
     &::-webkit-details-marker {
       display: none;
     }
-
-    &::after {
-      content: '';
-      width: 8px;
-      height: 8px;
-      border-right: 2px solid var(--app-muted);
-      border-bottom: 2px solid var(--app-muted);
-      transform: rotate(45deg);
-    }
   }
 
-  &[open] > summary::after {
-    transform: rotate(-135deg);
+  &[open] > summary .chev {
+    transform: rotate(180deg);
   }
 
   & ul {
-    margin: 0 0 10px;
+    margin: 0;
     padding: 0;
     list-style: none;
   }
 }
 
-.dot {
-  width: 8px;
-  height: 8px;
-  margin-left: 8px;
-  margin-right: auto;
-  border-radius: 50%;
-  background: var(--app-accent);
+.chev {
+  flex: none;
+  margin-left: auto;
 }
 
+.body {
+  padding-bottom: var(--app-s2);
+}
+
+/* A facet value: a link drawn as a checkbox row, so every filter state has its own URL. */
 .row {
   display: flex;
   align-items: center;
-  gap: 10px;
-  min-height: 36px;
+  gap: 12px;
+  min-height: 44px;
   color: var(--app-ink);
   text-decoration: none;
 
-  @mixin hover {
-    color: var(--app-accent-ink);
+  &:hover .box {
+    border-color: var(--app-ink);
   }
 
-  &[data-empty] {
-    color: var(--app-muted);
+  &:hover .label {
+    text-decoration: underline;
   }
 
-  @media (max-width: $mantine-breakpoint-md) {
-    min-height: 44px;
+  @media (min-width: 1024px) {
+    min-height: 40px;
   }
 }
 
@@ -122,15 +119,16 @@
   display: grid;
   flex: none;
   place-items: center;
-  width: 18px;
-  height: 18px;
-  border: 2px solid var(--app-control);
-  border-radius: 4px;
+  width: 22px;
+  height: 22px;
+  border: 1.5px solid var(--app-edge);
+  border-radius: var(--app-r);
+  background: var(--app-paper);
+  color: var(--app-ground);
 
   .row[data-selected] & {
-    border-color: var(--app-accent);
-    background: var(--app-accent);
-    color: var(--app-on-accent);
+    border-color: var(--app-ink);
+    background: var(--app-ink);
   }
 }
 
@@ -142,7 +140,7 @@
 
 .count {
   color: var(--app-muted);
-  font-size: 13px;
+  font-variant-numeric: tabular-nums;
 }
 
 .sr {
@@ -151,6 +149,7 @@
   height: 1px;
   overflow: hidden;
   clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .years {
@@ -158,34 +157,45 @@
   flex-wrap: wrap;
   align-items: flex-end;
   gap: 8px;
-  margin-bottom: 12px;
+  margin-bottom: var(--app-s2);
 
   & label {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 6px;
     width: 84px;
-    color: var(--app-muted);
-    font-size: 13px;
+    font-size: var(--app-fs-small);
+    font-weight: 650;
   }
 
   & input {
-    height: 36px;
+    min-height: var(--app-ctl);
     padding: 0 8px;
-    border: 1px solid var(--app-control);
-    border-radius: var(--app-radius-control);
-    background: var(--app-surface);
+    border: 1px solid var(--app-edge);
+    border-radius: var(--app-r);
+    background: var(--app-paper);
     color: var(--app-ink);
-  }
+    font: inherit;
+    font-size: 1rem;
 
-  & button {
-    height: 36px;
-    padding: 0 14px;
-    border: 1px solid var(--app-control);
-    border-radius: var(--app-radius-control);
-    background: var(--app-surface);
-    color: var(--app-ink);
-    font-weight: 600;
-    cursor: pointer;
+    &:hover {
+      border-color: var(--app-ink);
+    }
+  }
+}
+
+.apply {
+  min-height: var(--app-ctl);
+  padding: 0 16px;
+  border: 0;
+  border-radius: var(--app-r);
+  background: var(--app-surface-2);
+  color: var(--app-ink);
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--app-line);
   }
 }

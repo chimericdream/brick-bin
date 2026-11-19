@@ -1,8 +1,6 @@
-import { IconCheck } from '@tabler/icons-react';
+import { IconCheck, IconChevronDown } from '@tabler/icons-react';
 import Link from 'next/link';
 
-import { BUILD_STATE_INFO } from '@/components/sets/Badges';
-import { BUILD_STATES } from '@/server/data/completeness';
 import type { Facets } from '@/server/data/library';
 import {
   PIECE_BANDS,
@@ -62,13 +60,15 @@ function Row({ filters, facetKey, value, label, count, depth = 0 }: RowProps) {
         scroll={false}
       >
         <span className={classes.box} aria-hidden>
-          {selected && <IconCheck size={13} stroke={3} />}
+          {selected && <IconCheck size={15} stroke={3} />}
         </span>
         <span className={classes.label}>
           {label}
           {selected && <span className={classes.sr}> (selected)</span>}
         </span>
-        <span className={classes.count}>{count}</span>
+        <span className={classes.count} data-zero={count === 0 || undefined}>
+          {count}
+        </span>
       </Link>
     </li>
   );
@@ -89,9 +89,10 @@ function Group({
     <details className={classes.group} open={defaultOpen || active || undefined}>
       <summary>
         {title}
-        {active && <span className={classes.dot} aria-label="has selections" />}
+        {active && <span className="app-vh">, has selections</span>}
+        <IconChevronDown size={16} stroke={1.75} aria-hidden className={classes.chev} />
       </summary>
-      {children}
+      <div className={classes.body}>{children}</div>
     </details>
   );
 }
@@ -198,21 +199,6 @@ export function FacetPanel({
         </Group>
       )}
 
-      <Group title="Build state" active={filters.states.length > 0} defaultOpen>
-        <ul>
-          {BUILD_STATES.map((s) => (
-            <Row
-              key={s}
-              filters={filters}
-              facetKey="states"
-              value={s}
-              label={BUILD_STATE_INFO[s].label}
-              count={facets.states[s] ?? 0}
-            />
-          ))}
-        </ul>
-      </Group>
-
       <Group title="Completeness" active={filters.completeness.length > 0} defaultOpen>
         <ul>
           <Row
@@ -313,7 +299,9 @@ export function FacetPanel({
               defaultValue={filters.yearMax ?? ''}
             />
           </label>
-          <button type="submit">Apply</button>
+          <button type="submit" className={classes.apply}>
+            Apply
+          </button>
         </form>
       </Group>
 
@@ -343,13 +331,15 @@ export function FacetPanel({
               scroll={false}
             >
               <span className={classes.box} aria-hidden>
-                {filters.hasInstructions && <IconCheck size={13} stroke={3} />}
+                {filters.hasInstructions && <IconCheck size={15} stroke={3} />}
               </span>
               <span className={classes.label}>
                 Has instructions
                 {filters.hasInstructions && <span className={classes.sr}> (selected)</span>}
               </span>
-              <span className={classes.count}>{facets.instructions}</span>
+              <span className={classes.count} data-zero={facets.instructions === 0 || undefined}>
+                {facets.instructions}
+              </span>
             </Link>
           </li>
         </ul>
