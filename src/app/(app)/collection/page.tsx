@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { PageHead } from '@/components/layout/PageHead';
 import { BUILD_STATE_INFO, StateTag, Tag } from '@/components/sets/Badges';
 import { EmptyState } from '@/components/ui/EmptyState';
+import { TableScroll } from '@/components/ui/TableScroll';
 import ui from '@/components/ui/ui.module.css';
 import { formatMoney } from '@/lib/money';
 import { requireContext } from '@/server/auth/current';
@@ -32,7 +33,7 @@ function Table({ title, rows }: { title: string; rows: Breakdown[] }) {
       <div className={ui.panelHead}>
         <h2 id={headingId}>{title}</h2>
       </div>
-      <div className={ui.tableWrap}>
+      <TableScroll label={title}>
         <table className={ui.table}>
           <thead>
             <tr>
@@ -63,7 +64,7 @@ function Table({ title, rows }: { title: string; rows: Breakdown[] }) {
             ))}
           </tbody>
         </table>
-      </div>
+      </TableScroll>
     </section>
   );
 }
@@ -212,7 +213,7 @@ export default async function CollectionPage() {
             {c.staleValues.length === 0 ? (
               <p className={classes.p}>Every copy has a recent estimate.</p>
             ) : (
-              <div className={ui.tableWrap}>
+              <TableScroll label="Value not set in over a year">
                 <table className={ui.table}>
                   <thead>
                     <tr>
@@ -245,7 +246,7 @@ export default async function CollectionPage() {
                     ))}
                   </tbody>
                 </table>
-              </div>
+              </TableScroll>
             )}
           </section>
         </div>

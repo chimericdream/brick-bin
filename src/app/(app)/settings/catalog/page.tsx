@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { LocalTime } from '@/components/LocalTime';
 import { Tag } from '@/components/sets/Badges';
 import { EmptyState } from '@/components/ui/EmptyState';
+import { TableScroll } from '@/components/ui/TableScroll';
 import ui from '@/components/ui/ui.module.css';
 import { ago } from '@/lib/ago';
 import { requireContext } from '@/server/auth/current';
@@ -101,7 +102,7 @@ export default async function CatalogPage() {
           </EmptyState>
         ) : (
           <div className={`${ui.panel} ${ui.pad}`}>
-            <div className={ui.tableWrap}>
+            <TableScroll label="Import history">
               <table className={`${ui.table} ${classes.history}`}>
                 <thead>
                   <tr>
@@ -149,7 +150,7 @@ export default async function CatalogPage() {
                   ))}
                 </tbody>
               </table>
-            </div>
+            </TableScroll>
           </div>
         )}
       </section>
