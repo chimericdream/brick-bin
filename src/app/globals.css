@@ -1,38 +1,652 @@
+/*
+ * Base styles, the brick motifs, and the Mantine overrides that make its components follow the
+ * design. Colours and sizes are `--app-*` variables from src/theme.ts; the few that change with the
+ * viewport are set here.
+ */
+
+:root {
+  --app-gutter: 16px;
+  --app-ctl: 48px;
+  --app-ctl-sm: 44px;
+  --app-fs-h1: 1.625rem;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --app-gutter: 24px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --app-gutter: 32px;
+    --app-ctl: 44px;
+    --app-ctl-sm: 36px;
+    --app-fs-h1: 2rem;
+  }
+}
+
+:root[data-mantine-color-scheme='light'] {
+  color-scheme: light;
+}
+
+:root[data-mantine-color-scheme='dark'] {
+  color-scheme: dark;
+}
+
+/* ---------- Base ---------- */
+
+html {
+  text-size-adjust: 100%;
+}
+
 body {
   background: var(--app-ground);
   color: var(--app-ink);
-  font-size: 15px;
+  font-family: var(--app-font);
+  font-size: var(--app-fs-body);
   line-height: 1.5;
-  font-variant-numeric: tabular-nums;
   -webkit-font-smoothing: antialiased;
-}
-
-/* Flat surfaces: a soft edge, never a shadow. */
-.mantine-Paper-root,
-.mantine-Card-root {
-  border-color: var(--app-border);
-}
-
-/* A visible, consistent keyboard focus ring in the accent colour. */
-:focus-visible {
-  outline: 2px solid var(--app-accent);
-  outline-offset: 2px;
+  overflow-x: hidden;
 }
 
 h1,
-h2,
-h3 {
-  font-family: var(--app-display);
-  font-weight: 700;
-  letter-spacing: -0.01em;
+h2 {
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
 }
 
-/* Inputs sit on the surface colour with the 3:1 control outline, in both themes. */
-.mantine-Input-input,
-.mantine-PasswordInput-innerInput {
-  background: var(--app-surface);
-  border-color: var(--app-control);
+h3,
+h4 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+a {
+  color: inherit;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 0.18em;
+}
+
+a:hover {
+  text-decoration-thickness: 3px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--app-focus);
+  outline-offset: 2px;
+  border-radius: var(--app-r);
+}
+
+/* Identifiers (set numbers, part numbers): never under the 14px floor. */
+.app-mono {
+  font-family: var(--app-mono);
+  font-size: max(0.9375em, 0.875rem);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.app-num {
+  font-variant-numeric: tabular-nums;
+}
+
+.app-vh {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/*
+ * Motif 1: the stud row. A row of flat studs on the top edge of a block, in the block's colour
+ * (`--brick`). It means "the one thing to press here" or "this is a place". Whole studs only.
+ * Zero specificity, so a component's own class can change its position, margins and sizes.
+ */
+:where(.app-studs) {
+  --pitch: 20px;
+  --stud-h: 6px;
+  --stud-inset: 10px;
+  position: relative;
+  margin-top: var(--stud-h);
+  background: var(--brick);
+}
+
+:where(.app-studs)::before {
+  content: '';
+  position: absolute;
+  right: var(--stud-inset);
+  bottom: calc(100% - 0.5px);
+  left: var(--stud-inset);
+  height: var(--stud-h);
+  background: var(--brick);
+  mask: var(--app-stud-mask) left bottom / var(--pitch) 100% round;
+  transform-origin: bottom;
+  transition: transform var(--app-t-fast) var(--app-ease);
+  pointer-events: none;
+}
+
+/* Motif 3: the baseplate. "Something is waiting to go here." Never behind text. */
+:where(.app-baseplate) {
+  background-color: var(--app-surface);
+  background-image: radial-gradient(circle, var(--app-dot) 4.5px, transparent 5px);
+  background-position: center;
+  background-size: 20px 20px;
+}
+
+/* A state fill: `data-st` picks the brick. */
+[data-st='sealed'] {
+  --st: var(--app-st-sealed);
+}
+
+[data-st='opened'] {
+  --st: var(--app-st-opened);
+}
+
+[data-st='progress'] {
+  --st: var(--app-st-progress);
+}
+
+[data-st='built'] {
+  --st: var(--app-st-built);
+}
+
+[data-st='apart'] {
+  --st: var(--app-st-apart);
+}
+
+[data-st='mixed'] {
+  --st: var(--app-st-mixed);
+}
+
+/* ---------- Buttons ---------- */
+
+.mantine-Button-root {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: auto;
+  min-height: var(--button-height);
+  border: 0;
+  border-radius: var(--app-r);
+  font-size: var(--button-fz);
+  font-weight: 650;
+  line-height: 1.2;
+  overflow: visible;
+  transition:
+    transform var(--app-t-fast) var(--app-ease),
+    background-color var(--app-t-fast) var(--app-ease);
+}
+
+.mantine-Button-root[data-block] {
+  display: flex;
+  width: 100%;
+}
+
+/* Quiet: everything that is not the one main action. */
+.mantine-Button-root:is([data-variant='default'], [data-variant='light'], [data-variant='quiet']) {
+  background: var(--app-surface-2);
   color: var(--app-ink);
+}
+
+.mantine-Button-root:is(
+    [data-variant='default'],
+    [data-variant='light'],
+    [data-variant='quiet']
+  ):hover {
+  background: var(--app-line);
+}
+
+/* Ghost: low-weight row actions. */
+.mantine-Button-root:is(
+  [data-variant='subtle'],
+  [data-variant='ghost'],
+  [data-variant='transparent']
+) {
+  padding-inline: 12px;
+  background: none;
+  color: var(--app-ink);
+}
+
+.mantine-Button-root:is(
+    [data-variant='subtle'],
+    [data-variant='ghost'],
+    [data-variant='transparent']
+  ):hover {
+  background: var(--app-surface);
+}
+
+/* Danger text: Remove, Delete. */
+.mantine-Button-root[data-variant='danger-text'] {
+  padding-inline: 12px;
+  background: none;
+  color: var(--app-danger);
+}
+
+.mantine-Button-root[data-variant='danger-text']:hover {
+  background: var(--app-danger-bg);
+  color: var(--app-danger-text);
+}
+
+/* Danger fill: only "Move to trash" inside a confirm dialog. */
+.mantine-Button-root[data-variant='danger'] {
+  background: var(--app-danger);
+  color: var(--app-danger-ink);
+}
+
+.mantine-Button-root[data-variant='danger']:hover {
+  background: var(--app-danger-hover);
+}
+
+/* Primary: an ink brick with studs. One per block. */
+.mantine-Button-root:is(:not([data-variant]), [data-variant='filled'], [data-variant='primary']) {
+  --brick: var(--app-btn);
+  --pitch: 20px;
+  --stud-h: 6px;
+  --stud-inset: 10px;
+  margin-top: var(--stud-h);
+  background: var(--brick);
+  color: var(--app-btn-ink);
+}
+
+.mantine-Button-root:is(
+    :not([data-variant]),
+    [data-variant='filled'],
+    [data-variant='primary']
+  )::before {
+  inset: auto var(--stud-inset) calc(100% - 0.5px);
+  height: var(--stud-h);
+  border-radius: 0;
+  background: var(--brick);
+  opacity: 1;
+  filter: none;
+  mask: var(--app-stud-mask) left bottom / var(--pitch) 100% round;
+  transform: none;
+  transform-origin: bottom;
+  transition: transform var(--app-t-fast) var(--app-ease);
+}
+
+.mantine-Button-root:is(
+    :not([data-variant]),
+    [data-variant='filled'],
+    [data-variant='primary']
+  ):hover:not(:disabled, [data-disabled], [data-loading]) {
+  --brick: var(--app-btn-hover);
+  background: var(--brick);
+  transform: translateY(-2px);
+}
+
+.mantine-Button-root:is(
+    :not([data-variant]),
+    [data-variant='filled'],
+    [data-variant='primary']
+  ):active:not(:disabled, [data-disabled], [data-loading]) {
+  transform: translateY(2px);
+}
+
+.mantine-Button-root:is(
+    :not([data-variant]),
+    [data-variant='filled'],
+    [data-variant='primary']
+  ):active::before {
+  transform: scaleY(0.5);
+}
+
+/* Disabled: no studs, because it cannot be pressed. */
+.mantine-Button-root:is(:disabled, [data-disabled]):not([data-loading]) {
+  background: var(--app-surface);
+  color: var(--app-muted);
+  transform: none;
+}
+
+.mantine-Button-root:is(:disabled, [data-disabled]):not([data-loading])::before {
+  display: none;
+}
+
+.mantine-Button-root[data-loading] {
+  cursor: progress;
+}
+
+.mantine-ActionIcon-root {
+  border-radius: var(--app-r);
+  color: var(--app-ink);
+}
+
+/* ---------- Fields ---------- */
+
+.mantine-InputWrapper-root,
+.mantine-Input-wrapper {
+  --input-height: var(--app-ctl);
+  --input-radius: var(--app-r);
+  --input-fz: 1rem;
+}
+
+.mantine-InputWrapper-label {
+  margin-bottom: 6px;
+  font-size: var(--app-fs-small);
+  font-weight: 650;
+}
+
+.mantine-InputWrapper-required {
+  color: var(--app-danger);
+}
+
+.mantine-InputWrapper-description {
+  margin-bottom: 6px;
+  color: var(--app-muted);
+  font-size: var(--app-fs-small);
+}
+
+.mantine-InputWrapper-error {
+  color: var(--app-danger);
+  font-size: var(--app-fs-small);
+  font-weight: 600;
+}
+
+/* 16px on every width: phones zoom into anything smaller. */
+.mantine-Input-input {
+  border: 1px solid var(--app-edge);
+  border-radius: var(--app-r);
+  background: var(--app-paper);
+  color: var(--app-ink);
+  font-size: 1rem;
+}
+
+.mantine-Input-input::placeholder {
+  color: var(--app-muted);
+  opacity: 1;
+}
+
+.mantine-Input-input:hover:not(:disabled) {
+  border-color: var(--app-ink);
+}
+
+.mantine-Input-input:focus,
+.mantine-Input-input:focus-within {
+  border-color: var(--app-ink);
+}
+
+.mantine-Input-input:focus-visible {
+  outline: 3px solid var(--app-focus);
+  outline-offset: 0;
+}
+
+.mantine-Input-input[data-error] {
+  border: 2px solid var(--app-danger);
+  color: var(--app-ink);
+}
+
+.mantine-Input-input:disabled {
+  border-color: var(--app-line);
+  background: var(--app-surface);
+  color: var(--app-muted);
+}
+
+.mantine-Input-section {
+  color: var(--app-muted);
+}
+
+textarea.mantine-Input-input {
+  min-height: 88px;
+}
+
+.mantine-Combobox-dropdown,
+.mantine-Popover-dropdown {
+  border: 1px solid var(--app-line);
+  border-radius: var(--app-r);
+  background: var(--app-paper);
+}
+
+.mantine-Combobox-option {
+  min-height: 40px;
+  border-radius: var(--app-r);
+  font-size: 1rem;
+}
+
+.mantine-Combobox-option:hover,
+.mantine-Combobox-option[data-combobox-selected] {
+  background: var(--app-surface);
+  color: var(--app-ink);
+}
+
+/* Checkbox: a 22px square; checked is ink with a ground-coloured check. */
+.mantine-Checkbox-root {
+  --checkbox-size: 22px;
+  --checkbox-radius: var(--app-r);
+  --checkbox-color: var(--app-ink);
+  --checkbox-icon-color: var(--app-ground);
+}
+
+.mantine-Checkbox-body {
+  align-items: center;
+  min-height: 44px;
+}
+
+.mantine-Checkbox-input {
+  border: 1.5px solid var(--app-edge);
+  background: var(--app-paper);
+}
+
+.mantine-Checkbox-input:hover {
+  border-color: var(--app-ink);
+}
+
+.mantine-Checkbox-input:checked {
+  border-color: var(--app-ink);
+  background: var(--app-ink);
+}
+
+.mantine-Checkbox-label {
+  font-size: 1rem;
+}
+
+/* Switch: a square stud for a knob. */
+.mantine-Switch-root {
+  --switch-height: 24px;
+  --switch-width: 44px;
+  --switch-thumb-size: 17px;
+  --switch-radius: var(--app-r);
+  --switch-color: var(--app-ink);
+}
+
+.mantine-Switch-track {
+  border: 1px solid var(--app-edge);
+  background: var(--app-paper);
+}
+
+.mantine-Switch-thumb {
+  border: 0;
+  border-radius: 2px;
+  background: var(--app-edge);
+}
+
+.mantine-Switch-input:checked + * > .mantine-Switch-thumb {
+  background: var(--app-ground);
+}
+
+/* ---------- Floating things: menus, dialogs, toasts ---------- */
+
+.mantine-Menu-dropdown {
+  min-width: 260px;
+  max-width: min(340px, calc(100vw - 32px));
+  padding: 6px;
+  border: 1px solid var(--app-line);
+  border-radius: var(--app-r);
+  background: var(--app-paper);
+  box-shadow: var(--app-shadow-float);
+}
+
+.mantine-Menu-item {
+  min-height: 48px;
+  padding: 6px 10px;
+  border-radius: var(--app-r);
+  color: var(--app-ink);
+  font-size: 1rem;
+}
+
+.mantine-Menu-item:hover,
+.mantine-Menu-item[data-menu-active],
+.mantine-Menu-item[aria-checked='true'] {
+  background: var(--app-surface);
+}
+
+.mantine-Modal-overlay {
+  background: var(--app-scrim);
+}
+
+.mantine-Modal-content {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--app-r);
+  background: var(--app-paper);
+  box-shadow: var(--app-shadow-float);
+}
+
+.mantine-Modal-header {
+  gap: var(--app-s3);
+  min-height: 0;
+  padding: 8px 8px 8px var(--app-s4);
+  border-bottom: 1px solid var(--app-line);
+  background: var(--app-paper);
+}
+
+.mantine-Modal-title {
+  font-size: var(--app-fs-h3);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.mantine-Modal-close {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  min-height: 48px;
+  border-radius: var(--app-r);
+  color: var(--app-ink);
+}
+
+.mantine-Modal-close svg {
+  width: 22px !important;
+  height: 22px !important;
+}
+
+.mantine-Modal-body {
+  padding: var(--app-s4) !important;
+}
+
+/* Under 768 every dialog is a bottom sheet with the main action on top. */
+@media (max-width: 767px) {
+  .mantine-Modal-inner {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .mantine-Modal-content {
+    flex: 0 0 100%;
+    max-height: 92dvh;
+    border-radius: var(--app-r) var(--app-r) 0 0;
+  }
+}
+
+.mantine-Notifications-root {
+  pointer-events: none;
+}
+
+.mantine-Notifications-root > * {
+  pointer-events: auto;
+}
+
+/* Toasts: bottom right from 768; under it, bottom centre, 20px above the tab bar. */
+@media (min-width: 768px) {
+  .mantine-Notifications-root[data-position] {
+    right: var(--app-s5);
+    bottom: var(--app-s5);
+  }
+}
+
+@media (max-width: 767px) {
+  .mantine-Notifications-root[data-position] {
+    top: auto;
+    right: var(--app-gutter);
+    bottom: calc(var(--app-tabbar) + 20px + env(safe-area-inset-bottom, 0px));
+    left: var(--app-gutter);
+    width: auto;
+    max-width: none;
+    transform: none;
+  }
+}
+
+.mantine-Notification-root {
+  max-width: 440px;
+  min-height: 48px;
+  margin-inline: auto;
+  padding: 6px 6px 6px 14px;
+  border: 1px solid var(--app-field-line);
+  border-radius: var(--app-r);
+  background: var(--app-field);
+  color: var(--app-field-ink);
+  box-shadow: var(--app-shadow-float);
+}
+
+.mantine-Notification-root::before {
+  display: none;
+}
+
+.mantine-Notification-icon {
+  width: auto;
+  height: auto;
+  margin-inline-end: 10px;
+  background: none;
+  color: var(--app-field-ink);
+}
+
+.mantine-Notification-description {
+  color: var(--app-field-ink);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.mantine-Notification-closeButton {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  color: var(--app-field-ink);
+}
+
+.mantine-Notification-closeButton:hover {
+  background: var(--app-field-2);
+}
+
+.mantine-Notification-closeButton:focus-visible {
+  outline-color: var(--app-focus-field);
+}
+
+/* ---------- Mantine Alerts on screens not yet redesigned ---------- */
+
+.mantine-Alert-root {
+  border-radius: var(--app-r);
+}
+
+/* ---------- Reduced motion: nothing travels; colours still change ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 1ms !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+  }
+
+  .mantine-Button-root:hover,
+  .mantine-Button-root:active {
+    transform: none !important;
+  }
 }
 
 /* Printing the shopping list: only the list, none of the app around it. */
@@ -45,13 +659,4 @@ h3 {
     background: #fff;
     color: #000;
   }
-}
-
-/*
- * In dark mode every filled colour uses its lighter shade, so text on it must be dark. Mantine
- * picks the filled-button text colour from the light shade, which leaves white on light blue.
- */
-:root[data-mantine-color-scheme='dark']
-  .mantine-Button-root:is(:not([data-variant]), [data-variant='filled']):not([data-disabled]) {
-  --button-color: #0e1319 !important;
 }

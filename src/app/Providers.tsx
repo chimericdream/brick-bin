@@ -13,7 +13,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       cssVariablesResolver={cssVariablesResolver}
       defaultColorScheme="auto"
     >
-      <Notifications />
+      <Notifications position="bottom-right" containerWidth={440} />
       {children}
     </MantineProvider>
   );

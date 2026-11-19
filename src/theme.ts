@@ -1,223 +1,286 @@
 import {
   ActionIcon,
-  Badge,
   Button,
-  Card,
-  NumberInput,
-  Paper,
-  Select,
-  Textarea,
-  TextInput,
+  Checkbox,
+  Menu,
+  Modal,
+  Switch,
   createTheme,
   type CSSVariablesResolver,
   type MantineColorsTuple,
 } from '@mantine/core';
 
 /**
- * Visual system: "Brick Bin". A cool grey ground, "bin blue" for actions and small marks, and rust
- * for missing pieces and delete. Build states carry their own tinted badge pairs. Titles and
- * numbers are set in Bricolage Grotesque, everything else in Atkinson Hyperlegible Next. The
- * reference mockups and the full token table are in docs/design/brick-bin (tokens.md).
+ * Visual system: "Sorted by state". A neutral room (off-white or charcoal, near-black ink, one
+ * 3px radius, no shadows at rest) and six brick colours that each mean one build state and nothing
+ * else. Albert Sans for everything, JetBrains Mono for identifiers. The design reference is in
+ * docs/design/brick-bin (SPEC.md, TOKENS.md); the values below are its tokens as `--app-*` CSS
+ * variables, which the CSS modules use. Sizes that change with the viewport (gutter, control
+ * height, page-title size) are set in globals.css.
  */
 
-/** Primary. Shade 6 is the light-mode fill; shade 3 is the lighter fill used in dark mode. */
-const bin: MantineColorsTuple = [
-  '#eef4fc',
-  '#dbe7f6',
-  '#b9d6f7',
-  '#6fa9ea',
-  '#3f82cc',
-  '#2a6ab5',
-  '#1d5ca6',
-  '#123f78',
-  '#0d2f5c',
-  '#082044',
+/** The room, light. */
+const LIGHT = {
+  ground: '#f5f5f2',
+  paper: '#ffffff',
+  surface: '#eaeae5',
+  'surface-2': '#dcdcd5',
+  line: '#cfcfc7',
+  edge: '#85857d',
+  ink: '#121212',
+  muted: '#4d4d48',
+  field: '#17191c',
+  'field-2': '#26292e',
+  'field-line': '#3a3e44',
+  'field-ink': '#f5f5f2',
+  'field-muted': '#b8bbbf',
+  btn: '#121212',
+  'btn-ink': '#f5f5f2',
+  'btn-hover': '#34342f',
+  focus: '#0b5fc4',
+  'focus-field': '#7cc0ff',
+  danger: '#b3261e',
+  'danger-hover': '#8f1d17',
+  'danger-ink': '#ffffff',
+  'danger-bg': '#fbeae7',
+  'danger-text': '#7a1711',
+  dot: 'rgb(18 18 18 / 0.13)',
+  scrim: 'rgb(18 18 18 / 0.55)',
+} as const;
+
+/** The room, dark. The bricks do not change; the room darkens. */
+const DARK: Record<keyof typeof LIGHT, string> = {
+  ground: '#141517',
+  paper: '#191b1e',
+  surface: '#1e2023',
+  'surface-2': '#2a2d31',
+  line: '#34373c',
+  edge: '#767a80',
+  ink: '#efefea',
+  muted: '#abaeb2',
+  field: '#0b0c0d',
+  'field-2': '#1c1e21',
+  'field-line': '#2c2f33',
+  'field-ink': '#efefea',
+  'field-muted': '#abaeb2',
+  btn: '#efefea',
+  'btn-ink': '#121212',
+  'btn-hover': '#ffffff',
+  focus: '#7cc0ff',
+  'focus-field': '#7cc0ff',
+  danger: '#ff9a8d',
+  'danger-hover': '#ffb4ab',
+  'danger-ink': '#121212',
+  'danger-bg': '#3a1a17',
+  'danger-text': '#ffb4ab',
+  dot: 'rgb(239 239 234 / 0.12)',
+  scrim: 'rgb(0 0 0 / 0.66)',
+};
+
+/** The bricks: one colour per build state, the same in both themes, always with ink on top. */
+export const BRICKS = {
+  'st-sealed': '#d8bc88',
+  'st-opened': '#f49ac1',
+  'st-progress': '#ff8c1a',
+  'st-built': '#6cc04a',
+  'st-apart': '#4db3e6',
+  'st-mixed': '#a0a5a9',
+  'brick-ink': '#121212',
+} as const;
+
+const FONT = 'var(--font-albert-sans), "Albert Sans", system-ui, "Segoe UI", sans-serif';
+const MONO =
+  'var(--font-jetbrains-mono), "JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace';
+
+/** Whole studs only: a 20 by 6 tile with one 12px stud, repeated with `mask-repeat: round`. */
+const STUD_MASK =
+  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 6' preserveAspectRatio='none'%3E%3Crect x='4' width='12' height='6'/%3E%3C/svg%3E\")";
+
+const STATIC = {
+  font: FONT,
+  mono: MONO,
+  'fs-small': '0.875rem',
+  'fs-body': '1rem',
+  'fs-lead': '1.125rem',
+  'fs-h3': '1.25rem',
+  'fs-h2': '1.375rem',
+  'fs-figure': '1.75rem',
+  s1: '4px',
+  s2: '8px',
+  s3: '12px',
+  s4: '16px',
+  s5: '24px',
+  s6: '32px',
+  s7: '48px',
+  s8: '64px',
+  max: '1280px',
+  side: '248px',
+  rail: '96px',
+  tabbar: '64px',
+  r: '3px',
+  't-fast': '120ms',
+  't-med': '240ms',
+  ease: 'cubic-bezier(0.2, 0.7, 0.2, 1)',
+  snap: 'cubic-bezier(0.3, 1.4, 0.5, 1)',
+  'shadow-float': '0 18px 48px rgb(0 0 0 / 0.28), 0 2px 6px rgb(0 0 0 / 0.18)',
+  'stud-mask': STUD_MASK,
+  // The primary button on a field (page head) brightens to white on hover, in both themes.
+  'field-btn-hover': '#ffffff',
+  ...BRICKS,
+} as const;
+
+/** Mantine's own colour scale only matters where Mantine paints something we have not restyled. */
+const ink: MantineColorsTuple = [
+  '#f5f5f2',
+  '#eaeae5',
+  '#dcdcd5',
+  '#cfcfc7',
+  '#85857d',
+  '#4d4d48',
+  '#34342f',
+  '#121212',
+  '#0b0c0d',
+  '#000000',
 ];
 
-/** Missing pieces, errors and delete. Shade 6 on light grounds, shade 3 on dark ones. */
-const rust: MantineColorsTuple = [
-  '#fdf1ee',
-  '#fde4de',
-  '#ffb4a6',
-  '#ff8f80',
-  '#e0604f',
-  '#c9402f',
-  '#b42318',
-  '#8a1c0f',
-  '#6a150b',
-  '#4a0e07',
-];
+const appVars = (values: Record<string, string>) =>
+  Object.fromEntries(Object.entries(values).map(([k, v]) => [`--app-${k}`, v]));
 
-/** Cool neutrals for chips, hovers and rules. */
-const slate: MantineColorsTuple = [
-  '#eef1f5',
-  '#e4e9ef',
-  '#d3dae3',
-  '#a3b0be',
-  '#7f8d9d',
-  '#4f5d6c',
-  '#3a4756',
-  '#25303d',
-  '#14202e',
-  '#0e1319',
-];
+/**
+ * Old tokens that screens not yet redesigned still read. Each points at its nearest new token.
+ * Delete this block once nothing uses them.
+ */
+const LEGACY = {
+  '--app-display': 'var(--app-font)',
+  '--app-radius-card': 'var(--app-r)',
+  '--app-radius-tile': 'var(--app-r)',
+  '--app-radius-control': 'var(--app-r)',
+  '--app-sunk': 'var(--app-surface)',
+  '--app-tint': 'var(--app-surface-2)',
+  '--app-accent': 'var(--app-ink)',
+  '--app-on-accent': 'var(--app-ground)',
+  '--app-accent-ink': 'var(--app-ink)',
+  '--app-border': 'var(--app-line)',
+  '--app-rule': 'var(--app-line)',
+  '--app-control': 'var(--app-edge)',
+  '--app-ok-ink': 'var(--app-ink)',
+  '--app-notice-bg': 'var(--app-surface)',
+  '--app-notice-border': 'var(--app-line)',
+  '--app-notice-ink': 'var(--app-ink)',
+};
 
-const SANS = 'var(--font-atkinson), system-ui, -apple-system, "Segoe UI", sans-serif';
-const DISPLAY = 'var(--font-bricolage), system-ui, "Segoe UI", sans-serif';
+/** Points Mantine's own variables at the room, so its components follow both themes. */
+const MANTINE = {
+  '--mantine-color-body': 'var(--app-ground)',
+  '--mantine-color-text': 'var(--app-ink)',
+  '--mantine-color-dimmed': 'var(--app-muted)',
+  '--mantine-color-placeholder': 'var(--app-muted)',
+  '--mantine-color-anchor': 'var(--app-ink)',
+  '--mantine-color-default': 'var(--app-paper)',
+  '--mantine-color-default-hover': 'var(--app-surface)',
+  '--mantine-color-default-color': 'var(--app-ink)',
+  '--mantine-color-default-border': 'var(--app-edge)',
+  '--mantine-color-error': 'var(--app-danger)',
+  '--mantine-color-disabled': 'var(--app-surface)',
+  '--mantine-color-disabled-color': 'var(--app-muted)',
+  '--mantine-color-disabled-border': 'var(--app-line)',
+  '--mantine-primary-color-filled': 'var(--app-btn)',
+  '--mantine-primary-color-filled-hover': 'var(--app-btn-hover)',
+  '--mantine-primary-color-contrast': 'var(--app-btn-ink)',
+  '--mantine-primary-color-light': 'var(--app-surface-2)',
+  '--mantine-primary-color-light-hover': 'var(--app-line)',
+  '--mantine-primary-color-light-color': 'var(--app-ink)',
+  '--mantine-color-ink-filled': 'var(--app-btn)',
+  '--mantine-color-ink-filled-hover': 'var(--app-btn-hover)',
+  '--mantine-color-ink-light': 'var(--app-surface-2)',
+  '--mantine-color-ink-light-hover': 'var(--app-line)',
+  '--mantine-color-ink-light-color': 'var(--app-ink)',
+  '--mantine-color-ink-text': 'var(--app-ink)',
+  '--mantine-color-red-filled': 'var(--app-danger)',
+  '--mantine-color-red-filled-hover': 'var(--app-danger-hover)',
+  '--mantine-color-red-light': 'var(--app-danger-bg)',
+  '--mantine-color-red-light-hover': 'var(--app-danger-bg)',
+  '--mantine-color-red-light-color': 'var(--app-danger-text)',
+  '--mantine-color-red-text': 'var(--app-danger)',
+};
 
 export const theme = createTheme({
-  primaryColor: 'bin',
-  primaryShade: { light: 6, dark: 3 },
-  autoContrast: true,
-  // Mantine's red is the error colour in alerts, inputs and destructive buttons; make it rust.
-  colors: { bin, rust, slate, red: rust },
-  fontFamily: SANS,
-  fontFamilyMonospace: 'ui-monospace, "Cascadia Mono", "Segoe UI Mono", monospace',
+  primaryColor: 'ink',
+  colors: { ink },
+  fontFamily: FONT,
+  fontFamilyMonospace: MONO,
   headings: {
-    fontFamily: DISPLAY,
-    fontWeight: '700',
+    fontFamily: FONT,
+    fontWeight: '800',
     sizes: {
-      h1: { fontSize: 'clamp(28px, 3.4vw, 40px)', lineHeight: '1.1' },
-      h2: { fontSize: '24px', lineHeight: '1.2' },
-      h3: { fontSize: '20px', lineHeight: '1.25' },
-      h4: { fontSize: '18px', lineHeight: '1.3' },
-      h5: { fontSize: '16px', lineHeight: '1.35' },
-      h6: { fontSize: '14px', lineHeight: '1.4' },
+      h1: { fontSize: 'var(--app-fs-h1)', lineHeight: '1.1' },
+      h2: { fontSize: 'var(--app-fs-h2)', lineHeight: '1.1' },
+      h3: { fontSize: 'var(--app-fs-h3)', lineHeight: '1.2', fontWeight: '700' },
+      h4: { fontSize: 'var(--app-fs-lead)', lineHeight: '1.2', fontWeight: '700' },
+      h5: { fontSize: '1rem', lineHeight: '1.3', fontWeight: '700' },
+      h6: { fontSize: '0.875rem', lineHeight: '1.4', fontWeight: '700' },
     },
   },
-  fontSizes: { xs: '12px', sm: '13px', md: '15px', lg: '17px', xl: '20px' },
-  radius: { xs: '6px', sm: '8px', md: '10px', lg: '12px', xl: '16px' },
+  // Nothing is set under 14px.
+  fontSizes: { xs: '0.875rem', sm: '0.875rem', md: '1rem', lg: '1.125rem', xl: '1.25rem' },
+  lineHeights: { xs: '1.4', sm: '1.45', md: '1.5', lg: '1.5', xl: '1.5' },
+  // One molded edge everywhere; pieces inside a 3px container use 2px.
+  radius: { xs: '2px', sm: '3px', md: '3px', lg: '3px', xl: '3px' },
   defaultRadius: 'sm',
   spacing: { xs: '8px', sm: '12px', md: '16px', lg: '24px', xl: '32px' },
+  // No shadow at rest; menus, dialogs and toasts float (they use md, lg and xl).
+  shadows: {
+    xs: 'none',
+    sm: 'none',
+    md: 'var(--app-shadow-float)',
+    lg: 'var(--app-shadow-float)',
+    xl: 'var(--app-shadow-float)',
+  },
+  breakpoints: { xs: '30em', sm: '48em', md: '56.25em', lg: '64em', xl: '77.5em' },
+  focusRing: 'auto',
+  other: {
+    light: LIGHT,
+    dark: DARK,
+    ...STATIC,
+  },
   components: {
-    Button: Button.extend({ defaultProps: { radius: 'sm', fw: 600 } }),
+    Button: Button.extend({
+      defaultProps: { radius: 'sm' },
+      // Controls are 48px under 1024 and 44px above; "compact" sizes are the small row buttons.
+      vars: (_theme, props) => {
+        const compact = String(props.size ?? '').startsWith('compact');
+        return {
+          root: {
+            '--button-height': compact ? 'var(--app-ctl-sm)' : 'var(--app-ctl)',
+            '--button-padding-x': compact ? '12px' : '16px',
+            '--button-fz': compact ? '0.9375rem' : '1rem',
+          },
+        };
+      },
+    }),
     ActionIcon: ActionIcon.extend({ defaultProps: { variant: 'subtle', color: 'gray' } }),
-    Paper: Paper.extend({ defaultProps: { radius: 'lg', shadow: undefined } }),
-    Card: Card.extend({ defaultProps: { radius: 'lg', shadow: undefined } }),
-    TextInput: TextInput.extend({ defaultProps: { radius: 'sm' } }),
-    NumberInput: NumberInput.extend({ defaultProps: { radius: 'sm' } }),
-    Select: Select.extend({ defaultProps: { radius: 'sm' } }),
-    Textarea: Textarea.extend({ defaultProps: { radius: 'sm' } }),
-    Badge: Badge.extend({
-      defaultProps: { variant: 'light', color: 'bin', radius: 6 },
-      styles: { root: { textTransform: 'none', fontWeight: 600, letterSpacing: 0 } },
-      // Nothing under 12px; build-state badges always pair an icon with the word.
-      vars: (_theme, props) => ({
-        root: {
-          '--badge-fz': props.size === 'xs' ? '12px' : '13px',
-          '--badge-height': props.size === 'xs' ? '20px' : '24px',
-        },
-      }),
+    Checkbox: Checkbox.extend({ defaultProps: { radius: 'sm', size: 'md' } }),
+    Switch: Switch.extend({ defaultProps: { radius: 'xs' } }),
+    Menu: Menu.extend({ defaultProps: { radius: 'sm', shadow: 'md' } }),
+    Modal: Modal.extend({
+      defaultProps: {
+        centered: true,
+        radius: 'sm',
+        overlayProps: { blur: 0 },
+        closeButtonProps: { 'aria-label': 'Close' },
+        transitionProps: { transition: 'fade', duration: 200 },
+      },
     }),
   },
 });
 
 /**
- * The ground, surfaces and text for both colour schemes (secondary text reaches 4.5:1 on every
- * surface it sits on). `--app-*` variables are for the bespoke CSS modules; `--mantine-color-*`
- * overrides make Mantine's own components follow the same palette.
+ * Light and dark values are keyed off Mantine's `data-mantine-color-scheme` attribute, which the
+ * inline script in the root layout sets before first paint.
  */
 export const cssVariablesResolver: CSSVariablesResolver = () => ({
-  variables: {
-    '--app-display': DISPLAY,
-    '--app-radius-card': '12px',
-    '--app-radius-tile': '10px',
-    '--app-radius-control': '8px',
-    '--app-radius-badge': '6px',
-  },
-  light: {
-    '--mantine-color-body': '#eef1f5',
-    '--mantine-color-text': '#14202e',
-    '--mantine-color-dimmed': '#4f5d6c',
-    '--mantine-color-placeholder': '#566371',
-    '--mantine-color-default': '#ffffff',
-    '--mantine-color-default-hover': '#e4e9ef',
-    '--mantine-color-default-border': '#7f8d9d',
-    '--app-ground': '#eef1f5',
-    '--app-surface': '#ffffff',
-    '--app-sunk': '#e4e9ef',
-    '--app-ink': '#14202e',
-    '--app-muted': '#4f5d6c',
-    '--app-tint': '#dbe7f6',
-    '--app-accent': '#1d5ca6',
-    '--app-on-accent': '#ffffff',
-    '--app-accent-ink': '#123f78',
-    '--app-border': '#d3dae3',
-    '--app-rule': '#e3e8ee',
-    '--app-control': '#7f8d9d',
-    '--app-rail': '#cdd5de',
-    '--app-rail-hi': '#e9eef3',
-    '--app-scrim': 'rgba(14, 20, 28, 0.5)',
-    '--app-s-sealed-bg': '#e3e8ee',
-    '--app-s-sealed-ink': '#25303d',
-    '--app-s-opened-bg': '#d6efec',
-    '--app-s-opened-ink': '#0d4a45',
-    '--app-s-progress-bg': '#dbe7f6',
-    '--app-s-progress-ink': '#123f78',
-    '--app-s-built-bg': '#d9efdf',
-    '--app-s-built-ink': '#14532d',
-    '--app-s-disassembled-bg': '#efe6d3',
-    '--app-s-disassembled-ink': '#5b4511',
-    '--app-s-mixed-bg': '#e6e8ec',
-    '--app-s-mixed-ink': '#2f3a47',
-    '--app-warn-bg': '#fde4de',
-    '--app-warn-ink': '#8a1c0f',
-    '--app-ok-bg': '#d9efdf',
-    '--app-ok-ink': '#14532d',
-    '--app-notice-bg': '#fff5d6',
-    '--app-notice-border': '#ecd88a',
-    '--app-notice-ink': '#6b4a00',
-    '--app-danger': '#b42318',
-    '--app-danger-bg': '#fde4de',
-    '--app-danger-ink': '#8a1c0f',
-  },
-  dark: {
-    // Mantine derives the contrast colour from the light shade; the dark fill is lighter, so text on it is dark.
-    '--mantine-primary-color-contrast': '#0e1319',
-    '--mantine-color-bin-contrast': '#0e1319',
-    '--mantine-color-body': '#0e1319',
-    '--mantine-color-text': '#e8edf3',
-    '--mantine-color-dimmed': '#a3b0be',
-    '--mantine-color-placeholder': '#97a5b4',
-    '--mantine-color-default': '#161d25',
-    '--mantine-color-default-hover': '#1e2730',
-    '--mantine-color-default-border': '#6b7a8b',
-    '--app-ground': '#0e1319',
-    '--app-surface': '#161d25',
-    '--app-sunk': '#0a0e13',
-    '--app-ink': '#e8edf3',
-    '--app-muted': '#a3b0be',
-    '--app-tint': '#1b2d44',
-    '--app-accent': '#6fa9ea',
-    '--app-on-accent': '#06182c',
-    '--app-accent-ink': '#b9d6f7',
-    '--app-border': '#28323d',
-    '--app-rule': '#1e2730',
-    '--app-control': '#6b7a8b',
-    '--app-rail': '#2b3642',
-    '--app-rail-hi': '#37444f',
-    '--app-scrim': 'rgba(0, 0, 0, 0.62)',
-    '--app-s-sealed-bg': '#232d38',
-    '--app-s-sealed-ink': '#d5dde6',
-    '--app-s-opened-bg': '#12332f',
-    '--app-s-opened-ink': '#9fe0d8',
-    '--app-s-progress-bg': '#1b2d44',
-    '--app-s-progress-ink': '#b9d6f7',
-    '--app-s-built-bg': '#143323',
-    '--app-s-built-ink': '#9be0b4',
-    '--app-s-disassembled-bg': '#38301c',
-    '--app-s-disassembled-ink': '#e8d49a',
-    '--app-s-mixed-bg': '#262c35',
-    '--app-s-mixed-ink': '#cfd8e2',
-    '--app-warn-bg': '#3d1c17',
-    '--app-warn-ink': '#ffb4a6',
-    '--app-ok-bg': '#143323',
-    '--app-ok-ink': '#9be0b4',
-    '--app-notice-bg': '#3a3114',
-    '--app-notice-border': '#6b5a1f',
-    '--app-notice-ink': '#f0dc8e',
-    '--app-danger': '#ff8f80',
-    '--app-danger-bg': '#3d1c17',
-    '--app-danger-ink': '#ffb4a6',
-  },
+  variables: { ...appVars(STATIC), ...LEGACY },
+  // Mantine sets its own colour variables per scheme, so ours go in the same blocks to win.
+  light: { ...appVars(LIGHT), ...MANTINE },
+  dark: { ...appVars(DARK), ...MANTINE },
 });
