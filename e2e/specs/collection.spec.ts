@@ -62,7 +62,7 @@ test.describe('collection and value', () => {
     await db.sql`update copies set valued_on = current_date where estimated_value_cents = 100`;
     await page.goto('/collection');
     const stale = page.getByRole('region', { name: 'Value not set in over a year' });
-    await expect(stale.getByRole('listitem')).toHaveCount(2);
+    await expect(stale.locator('tbody tr')).toHaveCount(2);
     await expect(stale).toContainText('$50.00 · Apr 2023');
     await expect(stale).toContainText('no estimate · never valued');
     await expect(stale).not.toContainText('Fresh');

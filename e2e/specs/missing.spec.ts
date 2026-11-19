@@ -105,7 +105,7 @@ test.describe('missing pieces', () => {
     await page.getByRole('combobox', { name: 'Category' }).click();
     await expect(page.getByRole('option', { name: 'Plates (2)' })).toBeVisible();
     await page.keyboard.press('Escape');
-    await page.getByRole('combobox', { name: 'Colour' }).click();
+    await page.getByRole('combobox', { name: 'Color' }).click();
     await page.getByRole('option', { name: 'Red (1)' }).click();
     await expect(page.getByText(/^1 part/)).toBeVisible();
     await expect(tile(page, 'Plate 1 x 2', 'Red')).toBeVisible();
@@ -182,7 +182,7 @@ test.describe('missing pieces', () => {
       .getByRole('list', { name: 'Part matches' })
       .getByRole('button', { name: /Plate, Modified 1 x 1 with Clip/ })
       .click();
-    await page.getByRole('combobox', { name: 'Colour' }).click();
+    await page.getByRole('combobox', { name: 'Color' }).click();
     await page.getByRole('option', { name: /^Black/ }).click();
     await page.getByLabel('How many?').fill('4');
     await page.getByRole('button', { name: 'Add to missing' }).click();
@@ -198,7 +198,7 @@ test.describe('missing pieces', () => {
       .getByRole('list', { name: 'Part matches' })
       .getByRole('button', { name: /Brick 2 x 4/ })
       .click();
-    await page.getByRole('combobox', { name: 'Colour' }).click();
+    await page.getByRole('combobox', { name: 'Color' }).click();
     await expect(page.getByRole('option').first()).toContainText('Black');
     await expect(
       page.getByRole('option', { name: /White \(not seen in this part\)/ }),
