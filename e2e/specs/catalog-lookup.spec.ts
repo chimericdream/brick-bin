@@ -203,7 +203,7 @@ test.describe('LEGO catalog lookup', () => {
     await db.seedCatalog();
     await page.goto('/sets/new');
     await expect(page.getByRole('list', { name: 'Catalog matches' })).toHaveCount(0);
-    await page.getByRole('button', { name: '+ New brand' }).click();
+    await page.getByRole('button', { name: 'New brand' }).click();
     await page.getByLabel(label('New brand')).fill('Mould King');
     await page.getByLabel(label('Name')).fill('Crawler Crane');
     await page.getByLabel('Add a copy I own').uncheck();

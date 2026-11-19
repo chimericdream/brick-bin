@@ -21,7 +21,7 @@ test.describe('adding sets', () => {
 
   test('SET-02 adds an off-brand set with a new brand and no copy', async ({ page, db }) => {
     await page.goto('/sets/new');
-    await page.getByRole('button', { name: '+ New brand' }).click();
+    await page.getByRole('button', { name: 'New brand' }).click();
     await page.getByLabel(label('New brand')).fill('Mould King');
     await page.getByLabel(label('Name')).fill('Crawler Crane');
     await page.getByLabel('Add a copy I own').uncheck();

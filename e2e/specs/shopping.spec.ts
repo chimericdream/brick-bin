@@ -74,7 +74,7 @@ test.describe('shopping list', () => {
     await expect(page).toHaveURL(/sort=set/);
     await expect.poll(order).toEqual(['Brick 2 x 4', 'Plate 1 x 2']); // Hogwarts before Titanic
 
-    await page.getByLabel('Colour').selectOption({ label: 'Red' });
+    await page.getByLabel('Color').selectOption({ label: 'Red' });
     await page.getByRole('button', { name: 'Apply' }).click();
     await expect(page.getByText('4 pieces on 1 line')).toBeVisible();
     await expect(page.getByText('Brick 2 x 4')).toHaveCount(0);
@@ -166,7 +166,7 @@ test.describe('shopping list', () => {
     await page.goto('/missing?trip=1');
     const plate = page.getByRole('checkbox', { name: /^Plate 1 x 2, Red, quantity 4$/ });
     await plate.check();
-    await expect(page.getByText('1 of 2 ticked')).toBeVisible();
+    await expect(page.getByText('1 of 2 checked off')).toBeVisible();
     await page.reload();
     await expect(plate).toBeChecked(); // kept in this browser
     expect(await db.count('copy_missing_items', 'resolved_at is not null')).toBe(0); // nothing sent anywhere
