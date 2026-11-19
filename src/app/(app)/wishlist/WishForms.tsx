@@ -1,19 +1,14 @@
 'use client';
 
 import { useActionState, useEffect, useState } from 'react';
-import {
-  Alert,
-  Button,
-  Checkbox,
-  Group,
-  Modal,
-  Paper,
-  Select,
-  Stack,
-  Text,
-  Textarea,
-  TextInput,
-} from '@mantine/core';
+import { Button, Checkbox, Modal, Select, Textarea, TextInput } from '@mantine/core';
+import { IconLock, IconPlus } from '@tabler/icons-react';
+
+import { DialogFoot } from '@/components/DialogFoot';
+import { toastDone } from '@/components/feedback/toast';
+import { Note } from '@/components/Note';
+import { Tag } from '@/components/sets/Badges';
+import ui from '@/components/ui/ui.module.css';
 
 import { CatalogLookup, type CatalogHit } from '../sets/CatalogLookup';
 import {
@@ -24,6 +19,7 @@ import {
   updateWishAction,
   type WishState,
 } from './actions';
+import classes from './Wishlist.module.css';
 
 export interface WishDefaults {
   title?: string;
@@ -43,11 +39,11 @@ interface FieldsProps {
 
 function Fields({ d, showPrice }: FieldsProps) {
   return (
-    <Stack gap="sm">
+    <>
       {d.rbSetNum && <input type="hidden" name="rbSetNum" value={d.rbSetNum} />}
       {d.brandId && <input type="hidden" name="brandId" value={d.brandId} />}
       <TextInput name="title" label="Name" required defaultValue={d.title ?? ''} />
-      <Group grow align="flex-start">
+      <div className={classes.pair}>
         <TextInput name="setNumber" label="Set number" defaultValue={d.setNumber ?? ''} />
         {showPrice && (
           <TextInput
@@ -55,10 +51,11 @@ function Fields({ d, showPrice }: FieldsProps) {
             label="Price seen"
             placeholder="149.99"
             inputMode="decimal"
+            leftSection="$"
             defaultValue={d.price ?? ''}
           />
         )}
-      </Group>
+      </div>
       <TextInput name="url" label="Link" placeholder="https://" defaultValue={d.url ?? ''} />
       <Textarea
         name="notes"
@@ -67,7 +64,7 @@ function Fields({ d, showPrice }: FieldsProps) {
         minRows={2}
         defaultValue={d.notes ?? ''}
       />
-    </Stack>
+    </>
   );
 }
 
@@ -76,10 +73,12 @@ interface AddProps {
   canImport: boolean;
   legoBrandId: string | null;
   showPrice: boolean;
+  /** Called once a wish is saved (closes the phone sheet). */
+  onSaved?: () => void;
 }
 
 /** Adds to the viewer's own list. Picking a catalog set prefills the name, number and link. */
-export function AddWish({ catalogReady, canImport, legoBrandId, showPrice }: AddProps) {
+export function AddWish({ catalogReady, canImport, legoBrandId, showPrice, onSaved }: AddProps) {
   const [state, action, pending] = useActionState(addWishAction, {});
   const [picked, setPicked] = useState<CatalogHit | null>(null);
   const [scanned, setScanned] = useState<string | null>(null);
@@ -91,7 +90,10 @@ export function AddWish({ catalogReady, canImport, legoBrandId, showPrice }: Add
       setRound((r) => r + 1);
       setPicked(null);
       setScanned(null);
+      toastDone('Added to your wishlist.');
+      onSaved?.();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
 
   const d: WishDefaults = picked
@@ -104,42 +106,50 @@ export function AddWish({ catalogReady, canImport, legoBrandId, showPrice }: Add
     : { title: scanned ?? '' };
 
   return (
-    <form action={action}>
-      <Stack gap="md" maw={760}>
-        <CatalogLookup
-          catalogReady={catalogReady}
-          canImport={canImport}
-          onPick={(h) => {
-            setScanned(null);
-            setPicked(h);
-          }}
-          onTitle={(t) => {
-            setPicked(null);
-            setScanned(t);
-          }}
-        />
-        <Paper withBorder p="md" key={`${round}-${picked?.setNum ?? scanned ?? 'manual'}`}>
-          <Stack gap="sm">
-            {state.error && (
-              <Alert color="red" variant="light" role="alert">
-                {state.error}
-              </Alert>
-            )}
-            {state.saved && (
-              <Alert color="green" variant="light" role="status">
-                Added to your wishlist.
-              </Alert>
-            )}
-            <Fields d={d} showPrice={showPrice} />
-            <Group>
-              <Button type="submit" loading={pending}>
-                Add to my wishlist
-              </Button>
-            </Group>
-          </Stack>
-        </Paper>
-      </Stack>
+    <form action={action} className={ui.stack}>
+      <CatalogLookup
+        catalogReady={catalogReady}
+        canImport={canImport}
+        onPick={(h) => {
+          setScanned(null);
+          setPicked(h);
+        }}
+        onTitle={(t) => {
+          setPicked(null);
+          setScanned(t);
+        }}
+      />
+      <div
+        className={`${ui.panel} ${ui.pad}`}
+        key={`${round}-${picked?.setNum ?? scanned ?? 'manual'}`}
+      >
+        {state.error && <Note variant="error">{state.error}</Note>}
+        <Fields d={d} showPrice={showPrice} />
+        <Button type="submit" loading={pending} className={classes.submit}>
+          Add to my wishlist
+        </Button>
+      </div>
     </form>
+  );
+}
+
+/** Under 1024 the form lives in a sheet that "Add a wish" opens. */
+export function AddWishSheet(props: AddProps) {
+  const [opened, setOpened] = useState(false);
+  return (
+    <>
+      <Button leftSection={<IconPlus size={20} stroke={2} />} onClick={() => setOpened(true)}>
+        Add a wish
+      </Button>
+      <Modal
+        opened={opened}
+        onClose={() => setOpened(false)}
+        title="Add to my wishlist"
+        size={600}
+      >
+        <AddWish {...props} onSaved={() => setOpened(false)} />
+      </Modal>
+    </>
   );
 }
 
@@ -164,27 +174,21 @@ export function EditWish({
   useCloseOnSave(state, () => setOpened(false));
   return (
     <>
-      <Button variant="subtle" size="compact-sm" onClick={() => setOpened(true)}>
+      <Button variant="ghost" size="compact-md" onClick={() => setOpened(true)}>
         Edit
       </Button>
-      <Modal opened={opened} onClose={() => setOpened(false)} title={`Edit ${d.title}`} centered>
-        <form action={action}>
-          <Stack gap="sm">
-            {state.error && (
-              <Alert color="red" variant="light" role="alert">
-                {state.error}
-              </Alert>
-            )}
-            <Fields d={d} showPrice={showPrice} />
-            <Group justify="flex-end">
-              <Button variant="default" onClick={() => setOpened(false)}>
-                Cancel
-              </Button>
-              <Button type="submit" loading={pending}>
-                Save wish
-              </Button>
-            </Group>
-          </Stack>
+      <Modal opened={opened} onClose={() => setOpened(false)} title={`Edit ${d.title}`} size={600}>
+        <form action={action} className={ui.stack}>
+          {state.error && <Note variant="error">{state.error}</Note>}
+          <Fields d={d} showPrice={showPrice} />
+          <DialogFoot>
+            <Button variant="default" onClick={() => setOpened(false)}>
+              Cancel
+            </Button>
+            <Button type="submit" loading={pending}>
+              Save wish
+            </Button>
+          </DialogFoot>
         </form>
       </Modal>
     </>
@@ -193,7 +197,7 @@ export function EditWish({
 
 const today = () => new Date().toLocaleDateString('en-CA');
 
-/** "I bought this": a private mark. Only the person who makes it ever sees it. */
+/** "I bought this": a private mark. Only the person who makes it ever receives this markup. */
 export function BoughtButton({
   id,
   title,
@@ -210,23 +214,25 @@ export function BoughtButton({
 
   if (mark) {
     return (
-      <Group gap="xs" align="center">
-        <Text size="sm" role="status">
-          You bought this on{' '}
+      <div className={classes.mark} role="status">
+        <Tag>
+          <IconLock size={16} stroke={2} aria-hidden />
+          You bought this
+        </Tag>
+        <span>
+          {' '}
+          on{' '}
           {new Date(`${mark.purchasedOn}T12:00:00`).toLocaleDateString('en-US', {
             month: 'short',
             day: 'numeric',
             year: 'numeric',
           })}
-          {mark.note ? ` · ${mark.note}` : ''}
-          <Text span size="xs" c="dimmed">
-            {' '}
-            (only you can see this)
-          </Text>
-        </Text>
+        </span>
+        {mark.note && <span>{mark.note}</span>}
+        <span className={ui.muted}>Only you see this.</span>
         <Button
-          variant="subtle"
-          size="compact-sm"
+          variant="default"
+          size="compact-md"
           loading={undoing}
           onClick={async () => {
             setUndoing(true);
@@ -236,37 +242,36 @@ export function BoughtButton({
         >
           Undo
         </Button>
-      </Group>
+      </div>
     );
   }
   return (
     <>
-      <Button variant="light" size="compact-sm" onClick={() => setOpened(true)}>
+      <Button variant="default" size="compact-md" onClick={() => setOpened(true)}>
         I bought this
       </Button>
-      <Modal opened={opened} onClose={() => setOpened(false)} title={`I bought ${title}`} centered>
-        <form action={action}>
-          <Stack gap="sm">
-            <Text size="sm" c="dimmed">
-              Only you will see this. It is not shown to anyone else, and not written to the
-              activity log.
-            </Text>
-            {state.error && (
-              <Alert color="red" variant="light" role="alert">
-                {state.error}
-              </Alert>
-            )}
-            <TextInput name="purchasedOn" label="Date" type="date" defaultValue={today()} />
-            <TextInput name="note" label="Note to yourself" placeholder="Where it is hidden" />
-            <Group justify="flex-end">
-              <Button variant="default" onClick={() => setOpened(false)}>
-                Cancel
-              </Button>
-              <Button type="submit" loading={pending}>
-                Mark as bought
-              </Button>
-            </Group>
-          </Stack>
+      <Modal opened={opened} onClose={() => setOpened(false)} title={`I bought ${title}`} size={440}>
+        <form action={action} className={ui.stack}>
+          <Note>
+            <span className={classes.lockLine}>
+              <IconLock size={20} stroke={1.75} aria-hidden />
+              <span>
+                Only you will see this. It is not shown to anyone else, and not written to the
+                activity log.
+              </span>
+            </span>
+          </Note>
+          {state.error && <Note variant="error">{state.error}</Note>}
+          <TextInput name="purchasedOn" label="Date" type="date" defaultValue={today()} />
+          <TextInput name="note" label="Note to yourself" placeholder="Where it is hidden" />
+          <DialogFoot>
+            <Button variant="default" onClick={() => setOpened(false)}>
+              Cancel
+            </Button>
+            <Button type="submit" loading={pending}>
+              Mark as bought
+            </Button>
+          </DialogFoot>
         </form>
       </Modal>
     </>
@@ -289,42 +294,36 @@ export function GotItButton({
   const [state, action, pending] = useActionState(gotItAction.bind(null, id), {});
   return (
     <>
-      <Button variant="light" size="compact-sm" onClick={() => setOpened(true)}>
+      <Button variant="default" size="compact-md" onClick={() => setOpened(true)}>
         We got it
       </Button>
-      <Modal opened={opened} onClose={() => setOpened(false)} title={`We got ${title}`} centered>
-        <form action={action}>
-          <Stack gap="sm">
-            <Alert color="yellow" variant="light">
-              This moves the wish into the collection, where everyone in the household can see it.
-              Anyone&rsquo;s private &ldquo;I bought this&rdquo; marks on it are deleted. If it is
-              still a surprise, hide it from kid profiles.
-            </Alert>
-            {state.error && (
-              <Alert color="red" variant="light" role="alert">
-                {state.error}
-              </Alert>
-            )}
-            <Select
-              name="brandId"
-              label="Brand"
-              data={brands}
-              defaultValue={defaultBrandId}
-              searchable
-              required
-              allowDeselect={false}
-            />
-            <Checkbox name="addCopy" label="Add a sealed copy" defaultChecked />
-            <Checkbox name="hideFromKids" label="Hide it from kid profiles for now" />
-            <Group justify="flex-end">
-              <Button variant="default" onClick={() => setOpened(false)}>
-                Cancel
-              </Button>
-              <Button type="submit" loading={pending}>
-                Add to the collection
-              </Button>
-            </Group>
-          </Stack>
+      <Modal opened={opened} onClose={() => setOpened(false)} title={`We got ${title}`} size={440}>
+        <form action={action} className={ui.stack}>
+          <Note variant="mind">
+            This moves the wish into the collection, where everyone in the household can see it.
+            Anyone&rsquo;s private &ldquo;I bought this&rdquo; marks on it are deleted. If it is
+            still a surprise, hide it from kid profiles.
+          </Note>
+          {state.error && <Note variant="error">{state.error}</Note>}
+          <Select
+            name="brandId"
+            label="Brand"
+            data={brands}
+            defaultValue={defaultBrandId}
+            searchable
+            required
+            allowDeselect={false}
+          />
+          <Checkbox name="addCopy" label="Add a sealed copy" defaultChecked />
+          <Checkbox name="hideFromKids" label="Hide it from kid profiles for now" />
+          <DialogFoot>
+            <Button variant="default" onClick={() => setOpened(false)}>
+              Cancel
+            </Button>
+            <Button type="submit" loading={pending}>
+              Add to the collection
+            </Button>
+          </DialogFoot>
         </form>
       </Modal>
     </>
