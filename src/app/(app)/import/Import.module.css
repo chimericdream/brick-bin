@@ -1,0 +1,41 @@
+.p {
+  margin: 0;
+}
+
+.h2 {
+  margin: 0;
+  font-size: var(--app-fs-h2);
+}
+
+.done {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.columns {
+  display: grid;
+  gap: var(--app-s3);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.fact {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 10px var(--app-s4);
+}
+
+.rowsTable {
+  min-width: 560px;
+}
+
+.skipped {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--app-s3);
+}

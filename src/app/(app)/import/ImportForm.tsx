@@ -1,10 +1,16 @@
 'use client';
 
 import { useRef, useState, useTransition } from 'react';
-import { Alert, Button, Group, Paper, Select, Stack, Table, Text } from '@mantine/core';
+import { Button, Select } from '@mantine/core';
+import { IconCheck, IconDownload } from '@tabler/icons-react';
 import Link from 'next/link';
 
+import { Note } from '@/components/Note';
+import { Tag } from '@/components/sets/Badges';
+import ui from '@/components/ui/ui.module.css';
+
 import { previewImportAction, runImportAction, type ImportState, type Preview } from './actions';
+import classes from './Import.module.css';
 
 const MAX_BYTES = 2 * 1024 * 1024;
 
@@ -103,28 +109,41 @@ export function ImportForm() {
   if (state.result) {
     const r = state.result;
     return (
-      <Stack gap="md" maw={760}>
-        <Alert color="green" variant="light" role="status" title="Import finished">
-          {r.setsCreated} new {r.setsCreated === 1 ? 'set' : 'sets'}, {r.copiesAdded}{' '}
-          {r.copiesAdded === 1 ? 'copy' : 'copies'} added
-          {r.wishesAdded > 0 && `, ${r.wishesAdded} on your wishlist`}
-          {r.brandsCreated > 0 &&
-            `, ${r.brandsCreated} new ${r.brandsCreated === 1 ? 'brand' : 'brands'}`}
-          .
-        </Alert>
+      <div className={ui.narrow}>
+        <section className={`${ui.panel} ${ui.pad}`} aria-labelledby="h-done" role="status">
+          <div className={ui.panelHead}>
+            <h2 id="h-done" className={classes.done}>
+              <IconCheck size={22} stroke={2.5} aria-hidden />
+              Import finished
+            </h2>
+          </div>
+          <p className={classes.p}>
+            {r.setsCreated} new {r.setsCreated === 1 ? 'set' : 'sets'}, {r.copiesAdded}{' '}
+            {r.copiesAdded === 1 ? 'copy' : 'copies'} added
+            {r.wishesAdded > 0 && `, ${r.wishesAdded} on your wishlist`}
+            {r.brandsCreated > 0 &&
+              `, ${r.brandsCreated} new ${r.brandsCreated === 1 ? 'brand' : 'brands'}`}
+            .
+          </p>
+        </section>
         {r.failedCsv && (
-          <Alert color="yellow" variant="light" role="status">
-            {r.failed} {r.failed === 1 ? 'row was' : 'rows were'} skipped.{' '}
-            <Button
-              size="compact-sm"
-              variant="light"
-              onClick={() => download('rows-not-imported.csv', r.failedCsv!)}
-            >
-              Download the skipped rows
-            </Button>
-          </Alert>
+          <Note variant="mind">
+            <span className={classes.skipped}>
+              <b>
+                {r.failed} {r.failed === 1 ? 'row was' : 'rows were'} skipped.
+              </b>
+              <Button
+                size="compact-md"
+                variant="default"
+                leftSection={<IconDownload size={16} stroke={1.75} />}
+                onClick={() => download('rows-not-imported.csv', r.failedCsv!)}
+              >
+                Download the skipped rows
+              </Button>
+            </span>
+          </Note>
         )}
-        <Group>
+        <div className={ui.actions}>
           <Button component={Link} href="/sets">
             Open the library
           </Button>
@@ -139,22 +158,33 @@ export function ImportForm() {
           >
             Import another file
           </Button>
-        </Group>
-      </Stack>
+        </div>
+      </div>
     );
   }
 
   return (
-    <Stack gap="md" maw={820}>
-      <Paper withBorder p="md">
-        <Stack gap="xs">
-          <label htmlFor="csv-file">
-            <Text fw={700}>CSV file</Text>
+    <div className={ui.narrow}>
+      {!p && (
+        <p className={classes.p}>
+          Bring in a collection from a CSV file: a Rebrickable set list, a Brickset collection
+          export, or any spreadsheet with a column of set numbers. You see exactly what will happen
+          before anything is saved.
+        </p>
+      )}
+      <section className={`${ui.panel} ${ui.pad}`} aria-label="File and settings">
+        <div className={ui.field}>
+          <label htmlFor="csv-file" className={ui.label}>
+            CSV file
           </label>
+          <span className={ui.small}>
+            Up to 2,000 rows and 2 MB. Nothing is saved until you press Import.
+          </span>
           <input
             id="csv-file"
             type="file"
             accept=".csv,text/csv"
+            className={ui.file}
             onChange={(e) => {
               const f = e.currentTarget.files?.[0] ?? null;
               setFile(f);
@@ -164,151 +194,158 @@ export function ImportForm() {
               if (f) check(f, { format: null, mapping: {} });
             }}
           />
-          <Text size="sm" c="dimmed">
-            Up to 2,000 rows and 2 MB. Nothing is saved until you press Import.
-          </Text>
-        </Stack>
-      </Paper>
+        </div>
+        {p && file && (
+          <>
+            <Select
+              label="File format"
+              description={
+                p.format === p.detected
+                  ? `Detected from the column names.`
+                  : `The file looks like ${FORMATS.find((f) => f.value === p.detected)?.label}.`
+              }
+              data={FORMATS}
+              value={format}
+              allowDeselect={false}
+              onChange={(v) => {
+                setFormat(v);
+                check(file, { format: v, mapping: {} });
+              }}
+            />
+            {format === 'generic' && (
+              <fieldset className={classes.columns}>
+                <legend className={ui.label}>Columns in the file</legend>
+                <div className={ui.row2}>
+                  {FIELDS.map((f) => (
+                    <ColumnSelect
+                      key={f.key}
+                      f={f}
+                      headers={p.headers}
+                      mapping={mapping}
+                      onChange={(m) => {
+                        setMapping(m);
+                        check(file, { format, mapping: m });
+                      }}
+                    />
+                  ))}
+                </div>
+              </fieldset>
+            )}
+            <Select
+              label="Build state for the copies"
+              description="Applied to every copy this file creates. You can change them one by one afterwards."
+              data={STATES}
+              value={buildState}
+              allowDeselect={false}
+              onChange={(v) => setBuildState(v ?? 'sealed')}
+            />
+          </>
+        )}
+      </section>
 
-      {state.error && (
-        <Alert color="red" variant="light" role="alert">
-          {state.error}
-        </Alert>
+      {!p && (
+        <Note>
+          <b>Two things to know first</b>
+          LEGO sets are matched against the catalog, so import it first in Settings. Cover images
+          are not downloaded during an import; open a set to add one.
+        </Note>
       )}
+
+      {state.error && <Note variant="error">{state.error}</Note>}
 
       {p && file && (
         <>
-          <Paper withBorder p="md">
-            <Stack gap="sm">
-              <Select
-                label="File format"
-                description={
-                  p.format === p.detected
-                    ? `Detected from the column names.`
-                    : `The file looks like ${FORMATS.find((f) => f.value === p.detected)?.label}.`
-                }
-                data={FORMATS}
-                value={format}
-                allowDeselect={false}
-                onChange={(v) => {
-                  setFormat(v);
-                  check(file, { format: v, mapping: {} });
-                }}
-              />
-              {format === 'generic' && (
-                <Group grow align="flex-start">
-                  <Stack gap="xs">
-                    {FIELDS.slice(0, 5).map((f) => (
-                      <ColumnSelect
-                        key={f.key}
-                        f={f}
-                        headers={p.headers}
-                        mapping={mapping}
-                        onChange={(m) => {
-                          setMapping(m);
-                          check(file, { format, mapping: m });
-                        }}
-                      />
-                    ))}
-                  </Stack>
-                  <Stack gap="xs">
-                    {FIELDS.slice(5).map((f) => (
-                      <ColumnSelect
-                        key={f.key}
-                        f={f}
-                        headers={p.headers}
-                        mapping={mapping}
-                        onChange={(m) => {
-                          setMapping(m);
-                          check(file, { format, mapping: m });
-                        }}
-                      />
-                    ))}
-                  </Stack>
-                </Group>
-              )}
-              <Select
-                label="Build state for the copies"
-                description="Applied to every copy this file creates. You can change them one by one afterwards."
-                data={STATES}
-                value={buildState}
-                allowDeselect={false}
-                onChange={(v) => setBuildState(v ?? 'sealed')}
-              />
-            </Stack>
-          </Paper>
+          {p.tooMany && (
+            <Note variant="mind">
+              Only the first 2,000 rows are read. Import the rest in a second file.
+            </Note>
+          )}
 
-          <Paper withBorder p="md" aria-labelledby="h-preview">
-            <Stack gap="sm">
-              <h2 id="h-preview">Preview</h2>
-              <ul>
-                <li>{p.summary.newSets} new sets</li>
-                <li>{p.summary.existingSets} rows add copies to sets you already have</li>
-                <li>{p.summary.copies} copies in all</li>
-                {p.summary.wishlist > 0 && <li>{p.summary.wishlist} wishlist entries</li>}
-                {p.summary.newBrands.length > 0 && (
-                  <li>New brands: {p.summary.newBrands.join(', ')}</li>
-                )}
-                <li>
-                  {p.summary.failed} {p.summary.failed === 1 ? 'row' : 'rows'} cannot be imported
+          <section aria-labelledby="h-preview" className={ui.stack}>
+            <h2 id="h-preview" className={classes.h2}>
+              Preview
+            </h2>
+            <ul className={`${ui.panel} ${ui.rows}`}>
+              <li className={classes.fact}>{p.summary.newSets} new sets</li>
+              <li className={classes.fact}>
+                {p.summary.existingSets} rows add copies to sets you already have
+              </li>
+              <li className={classes.fact}>{p.summary.copies} copies in all</li>
+              {p.summary.wishlist > 0 && (
+                <li className={classes.fact}>{p.summary.wishlist} wishlist entries</li>
+              )}
+              {p.summary.newBrands.length > 0 && (
+                <li className={classes.fact}>New brands: {p.summary.newBrands.join(', ')}</li>
+              )}
+              {p.summary.failed > 0 && (
+                <li className={classes.fact}>
+                  <Tag variant="dash">
+                    {p.summary.failed} {p.summary.failed === 1 ? 'row' : 'rows'} cannot be imported
+                  </Tag>
                 </li>
-              </ul>
-              {p.tooMany && (
-                <Alert color="yellow" variant="light" role="status">
-                  Only the first 2,000 rows are read. Import the rest in a second file.
-                </Alert>
               )}
-              <Table striped aria-label="First rows">
-                <Table.Thead>
-                  <Table.Tr>
-                    <Table.Th>Line</Table.Th>
-                    <Table.Th>Row</Table.Th>
-                    <Table.Th>What happens</Table.Th>
-                    <Table.Th>Problem</Table.Th>
-                  </Table.Tr>
-                </Table.Thead>
-                <Table.Tbody>
-                  {p.rows.map((r, i) => (
-                    <Table.Tr key={`${r.line}-${i}`}>
-                      <Table.Td>{r.line}</Table.Td>
-                      <Table.Td>{r.label}</Table.Td>
-                      <Table.Td>{r.action}</Table.Td>
-                      <Table.Td>{r.note}</Table.Td>
-                    </Table.Tr>
-                  ))}
-                </Table.Tbody>
-              </Table>
+            </ul>
+          </section>
+
+          <section aria-labelledby="h-first" className={ui.stack}>
+            <h2 id="h-first" className={classes.h2}>
+              First rows
+            </h2>
+            <div className={`${ui.panel} ${ui.pad}`}>
+              <div className={ui.tableWrap}>
+                <table className={`${ui.table} ${classes.rowsTable}`} aria-label="First rows">
+                  <thead>
+                    <tr>
+                      <th scope="col" className={ui.r}>
+                        Line
+                      </th>
+                      <th scope="col">Row</th>
+                      <th scope="col">What happens</th>
+                      <th scope="col">Problem</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {p.rows.map((r, i) => (
+                      <tr key={`${r.line}-${i}`}>
+                        <td className={ui.r}>{r.line}</td>
+                        <td>{r.label}</td>
+                        <td>{r.action}</td>
+                        <td>{r.note || <span className={ui.muted}>—</span>}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
               {p.summary.rows > p.rows.length && (
-                <Text size="sm" c="dimmed">
-                  Showing the first {p.rows.length} rows.
-                </Text>
+                <p className={ui.small}>Showing the first {p.rows.length} rows.</p>
               )}
-              <Group>
-                <Button
-                  disabled={!importable}
-                  loading={pending}
-                  onClick={() =>
-                    start(async () => {
-                      setState(await runImportAction(body(file)));
-                    })
-                  }
-                >
-                  Import
-                </Button>
-                {p.failedCsv && (
-                  <Button
-                    variant="default"
-                    onClick={() => download('rows-not-imported.csv', p.failedCsv!)}
-                  >
-                    Download the rows that cannot be imported
-                  </Button>
-                )}
-              </Group>
-            </Stack>
-          </Paper>
+            </div>
+          </section>
+
+          <div className={ui.actionbar}>
+            <Button
+              disabled={!importable}
+              loading={pending}
+              onClick={() =>
+                start(async () => {
+                  setState(await runImportAction(body(file)));
+                })
+              }
+            >
+              Import
+            </Button>
+            {p.failedCsv && (
+              <Button
+                variant="default"
+                onClick={() => download('rows-not-imported.csv', p.failedCsv!)}
+              >
+                Download the rows that cannot be imported
+              </Button>
+            )}
+          </div>
         </>
       )}
-    </Stack>
+    </div>
   );
 }
 
