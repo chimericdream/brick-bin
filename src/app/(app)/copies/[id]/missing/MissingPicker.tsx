@@ -1,24 +1,12 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import {
-  Alert,
-  Button,
-  Checkbox,
-  Group,
-  NumberInput,
-  Paper,
-  Select,
-  Stack,
-  Tabs,
-  Text,
-  TextInput,
-  Textarea,
-  Title,
-} from '@mantine/core';
+import { Button, Checkbox, NumberInput, Select, Tabs, TextInput, Textarea } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
 
+import { Note } from '@/components/Note';
 import { FigureImage, PartImage, Swatch } from '@/components/sets/PartImage';
+import ui from '@/components/ui/ui.module.css';
 
 import { addMissingAction, type MissingState } from './actions';
 import classes from './Missing.module.css';
@@ -98,29 +86,30 @@ export function MissingPicker({
   );
 
   return (
-    <section aria-labelledby="add-heading" className={classes.section}>
-      <Title order={2} id="add-heading" size="h3">
-        Add missing pieces
-      </Title>
-      <Text size="sm" c="dimmed" mb="xs">
-        Catalog data from <a href="https://rebrickable.com">Rebrickable</a>
-      </Text>
+    <section aria-labelledby="add-heading" className={`${ui.section} ${ui.stack}`}>
+      <div className={ui.sectionHead}>
+        <h2 id="add-heading">Add missing pieces</h2>
+        <p className={ui.small}>
+          Catalog data from <a href="https://rebrickable.com/">Rebrickable</a>
+        </p>
+      </div>
 
       <div aria-live="polite">
         {notice?.added && (
-          <Alert color="green" variant="light" role="status" mb="sm">
+          <p role="status" className={classes.added}>
             Added {notice.added}.
-          </Alert>
+          </p>
         )}
-        {notice?.error && (
-          <Alert color="red" variant="light" role="alert" mb="sm">
-            {notice.error}
-          </Alert>
-        )}
+        {notice?.error && <Note variant="error">{notice.error}</Note>}
       </div>
 
-      <Paper withBorder p="md">
-        <Tabs value={tab} onChange={setTab} keepMounted={false}>
+      <div className={`${ui.panel} ${classes.picker}`}>
+        <Tabs
+          value={tab}
+          onChange={setTab}
+          keepMounted={false}
+          classNames={{ list: classes.tabs, tab: classes.tab }}
+        >
           <Tabs.List>
             {linked && <Tabs.Tab value="parts">Set parts</Tabs.Tab>}
             {linked && <Tabs.Tab value="minifigs">Minifigs</Tabs.Tab>}
@@ -128,23 +117,23 @@ export function MissingPicker({
             <Tabs.Tab value="other">Other</Tabs.Tab>
           </Tabs.List>
           {linked && (
-            <Tabs.Panel value="parts" pt="md">
+            <Tabs.Panel value="parts" className={classes.panel}>
               <InventoryTab copyId={copyId} add={add} busy={busy} setNum={setNum} />
             </Tabs.Panel>
           )}
           {linked && (
-            <Tabs.Panel value="minifigs" pt="md">
+            <Tabs.Panel value="minifigs" className={classes.panel}>
               <MinifigsTab copyId={copyId} add={add} busy={busy} />
             </Tabs.Panel>
           )}
-          <Tabs.Panel value="catalog" pt="md">
+          <Tabs.Panel value="catalog" className={classes.panel}>
             <CatalogTab add={add} busy={busy} linked={linked} />
           </Tabs.Panel>
-          <Tabs.Panel value="other" pt="md">
+          <Tabs.Panel value="other" className={classes.panel}>
             <OtherTab add={add} busy={busy} />
           </Tabs.Panel>
         </Tabs>
-      </Paper>
+      </div>
     </section>
   );
 }
@@ -209,26 +198,26 @@ function InventoryTab({
 
   if (data && data.version === null) {
     return (
-      <Text c="dimmed">
+      <p className={ui.muted}>
         The catalog has no parts list for {setNum ?? 'this set'} yet. Use the Whole catalog tab to
         find a part.
-      </Text>
+      </p>
     );
   }
 
   return (
-    <Stack gap="sm">
-      <Group align="flex-end" gap="sm" wrap="wrap">
+    <div className={ui.stack}>
+      <div className={classes.filters}>
         <TextInput
           label="Search the set’s parts"
-          placeholder="Part number, name or colour"
-          leftSection={<IconSearch size={16} />}
+          placeholder="Part number, name or color"
+          leftSection={<IconSearch size={20} stroke={1.75} />}
           value={q}
           onChange={(e) => setQ(e.currentTarget.value)}
-          style={{ flex: '1 1 220px' }}
+          className={classes.grow}
         />
         <Select
-          label="Colour"
+          label="Color"
           placeholder="Any"
           clearable
           searchable
@@ -238,7 +227,6 @@ function InventoryTab({
           }))}
           value={color}
           onChange={setColor}
-          style={{ flex: '1 1 160px' }}
         />
         <Select
           label="Category"
@@ -251,66 +239,61 @@ function InventoryTab({
           }))}
           value={cat}
           onChange={setCat}
-          style={{ flex: '1 1 160px' }}
         />
-      </Group>
+      </div>
       <Checkbox
         checked={spares}
         onChange={(e) => setSpares(e.currentTarget.checked)}
         label={`Show spare parts${data?.spareCount ? ` (${data.spareCount})` : ''}`}
       />
-      <Text size="sm" c="dimmed" role="status">
+      <p className={ui.small} role="status">
         {data?.total === undefined
           ? 'Loading'
           : `${data.total} ${data.total === 1 ? 'part' : 'parts'}`}
         {data?.version ? ` · inventory version ${data.version}` : ''}
-      </Text>
+      </p>
 
-      <ul className={classes.grid}>
+      <ul className={`${ui.panel} ${ui.rows}`}>
         {parts.map((p) => {
           const key = `${p.partNum}-${p.colorId}-${p.isSpare}`;
           const n = qty[key] ?? 1;
           return (
-            <li key={key} className={classes.tile} data-part={p.partNum}>
+            <li key={key} className={classes.line} data-act data-part={p.partNum}>
               <PartImage
                 partNum={p.partNum}
                 colorId={p.colorId}
                 imageColorId={p.imageColorId}
-                size={96}
+                size={64}
               />
-              <div className={classes.tileText}>
-                <Text fw={650} lineClamp={2}>
-                  {p.name}
-                </Text>
-                <div className={classes.sub}>
-                  <span className={classes.colorLine}>
+              <div className={classes.lineText}>
+                <p className={classes.name}>{p.name}</p>
+                <div className={classes.meta}>
+                  <span className={classes.ink}>
                     <Swatch rgb={p.rgb} />
                     {p.colorName}
                   </span>
-                  <span>#{p.partNum}</span>
+                  <span className="app-mono">#{p.partNum}</span>
                 </div>
-                <Text size="sm">
+                <p className={classes.for}>
                   In the set: ×{p.quantity}
                   {p.isSpare && <span className={classes.spare}> spare</span>}
-                </Text>
+                </p>
                 {p.imageColorId !== null && p.imageColorId !== p.colorId && (
-                  <Text size="xs" c="dimmed">
-                    Picture is in another colour
-                  </Text>
+                  <p className={ui.small}>Picture is in another color</p>
                 )}
               </div>
-              <div className={classes.tileActions}>
+              <div className={classes.actions}>
                 <NumberInput
                   aria-label={`Quantity of ${p.name}, ${p.colorName}`}
                   min={1}
                   max={9999}
-                  size="xs"
-                  w={70}
+                  className={classes.qtyInput}
                   value={n}
                   onChange={(v) => setQty({ ...qty, [key]: Math.max(1, Number(v) || 1) })}
                 />
                 <Button
                   size="compact-md"
+                  variant="default"
                   loading={busy}
                   onClick={() =>
                     add({
@@ -325,22 +308,18 @@ function InventoryTab({
                 >
                   Add {n}
                 </Button>
-                {n > p.quantity && (
-                  <Text size="xs" c="dimmed">
-                    More than the set has
-                  </Text>
-                )}
+                {n > p.quantity && <span className={ui.small}>More than the set has</span>}
               </div>
             </li>
           );
         })}
       </ul>
       {data && data.total !== undefined && parts.length < data.total && (
-        <Button variant="default" loading={loading} onClick={showMore}>
+        <Button variant="default" loading={loading} onClick={showMore} className={classes.more}>
           Show more
         </Button>
       )}
-    </Stack>
+    </div>
   );
 }
 
@@ -357,23 +336,25 @@ function MinifigsTab({ copyId, add, busy }: { copyId: string; add: AddFn; busy: 
       live = false;
     };
   }, [copyId]);
-  if (figs === null) return <Text c="dimmed">Loading</Text>;
-  if (figs.length === 0) return <Text c="dimmed">This set has no minifigures in the catalog.</Text>;
+  if (figs === null) return <p className={ui.muted}>Loading</p>;
+  if (figs.length === 0)
+    return <p className={ui.muted}>This set has no minifigures in the catalog.</p>;
   return (
-    <ul className={classes.grid}>
+    <ul className={`${ui.panel} ${ui.rows}`}>
       {figs.map((f) => (
-        <li key={f.figNum} className={classes.tile}>
-          <FigureImage size={96} />
-          <div className={classes.tileText}>
-            <Text fw={650}>{f.name}</Text>
-            <div className={classes.sub}>
-              <span>{f.figNum}</span>
+        <li key={f.figNum} className={classes.line} data-act>
+          <FigureImage size={64} />
+          <div className={classes.lineText}>
+            <p className={classes.name}>{f.name}</p>
+            <div className={classes.meta}>
+              <span className="app-mono">{f.figNum}</span>
             </div>
-            <Text size="sm">In the set: ×{f.quantity}</Text>
+            <p className={classes.for}>In the set: ×{f.quantity}</p>
           </div>
-          <div className={classes.tileActions}>
+          <div className={classes.actions}>
             <Button
               size="compact-md"
+              variant="default"
               loading={busy}
               onClick={() =>
                 add({ kind: 'minifig', figNum: f.figNum, quantity: 1, fromInventory: true })
@@ -427,16 +408,16 @@ function CatalogTab({ add, busy, linked }: { add: AddFn; busy: boolean; linked: 
   const selected = colors.find((c) => String(c.id) === colorId);
 
   return (
-    <Stack gap="sm">
-      <Text size="sm" c="dimmed">
+    <div className={ui.stack}>
+      <p className={ui.small}>
         {linked
           ? 'For a part that is not in the set’s own list.'
-          : 'Search any LEGO part by number or name, then pick a colour. Most off-brand parts follow the same shapes.'}
-      </Text>
+          : 'Search any LEGO part by number or name, then pick a color. Most off-brand parts follow the same shapes.'}
+      </p>
       <TextInput
         label="Search parts"
         placeholder="3001 or Plate 1 x 2"
-        leftSection={<IconSearch size={16} />}
+        leftSection={<IconSearch size={20} stroke={1.75} />}
         value={q}
         onChange={(e) => {
           setQ(e.currentTarget.value);
@@ -449,10 +430,11 @@ function CatalogTab({ add, busy, linked }: { add: AddFn; busy: boolean; linked: 
           {hits.map((h) => (
             <li key={h.partNum}>
               <button type="button" className={classes.hit} onClick={() => choose(h)}>
-                <strong>{h.name}</strong>
-                <span className={classes.sub}>
-                  #{h.partNum}
+                <b>{h.name}</b>
+                <span className={classes.meta}>
+                  <span className="app-mono">#{h.partNum}</span>
                   {h.categoryName ? ` · ${h.categoryName}` : ''}
+                  {linked ? ' · Not in this set’s inventory' : ''}
                 </span>
               </button>
             </li>
@@ -460,64 +442,60 @@ function CatalogTab({ add, busy, linked }: { add: AddFn; busy: boolean; linked: 
         </ul>
       )}
       {chosen && (
-        <Paper withBorder p="sm">
-          <Group gap="md" align="flex-start" wrap="wrap">
-            <PartImage
-              partNum={chosen.partNum}
-              colorId={Number(colorId || 0)}
-              imageColorId={colors.length ? Number(colorId || 0) : null}
-              size={96}
+        <div className={`${ui.panel} ${classes.chosen}`}>
+          <PartImage
+            partNum={chosen.partNum}
+            colorId={Number(colorId || 0)}
+            imageColorId={colors.length ? Number(colorId || 0) : null}
+            size={88}
+          />
+          <div className={ui.stack}>
+            <p className={classes.name}>
+              {chosen.name} <span className={`${ui.muted} app-mono`}>#{chosen.partNum}</span>
+            </p>
+            {linked && <p className={ui.small}>Not in this set’s inventory</p>}
+            <Select
+              label="Color"
+              searchable
+              data={colors.map((c) => ({
+                value: String(c.id),
+                label: `${c.name}${c.known ? '' : ' (not seen in this part)'}`,
+              }))}
+              value={colorId}
+              onChange={setColorId}
+              leftSection={selected ? <Swatch rgb={selected.rgb} /> : undefined}
             />
-            <Stack gap="xs" style={{ flex: '1 1 240px' }}>
-              <Text fw={650}>
-                {chosen.name}{' '}
-                <Text span c="dimmed">
-                  #{chosen.partNum}
-                </Text>
-              </Text>
-              <Select
-                label="Colour"
-                searchable
-                data={colors.map((c) => ({
-                  value: String(c.id),
-                  label: `${c.name}${c.known ? '' : ' (not seen in this part)'}`,
-                }))}
-                value={colorId}
-                onChange={setColorId}
-                leftSection={selected ? <Swatch rgb={selected.rgb} /> : undefined}
-              />
-              <NumberInput
-                label="How many?"
-                min={1}
-                max={9999}
-                value={count}
-                onChange={setCount}
-                w={120}
-              />
-              <Group>
-                <Button
-                  loading={busy}
-                  disabled={!colorId}
-                  onClick={() =>
-                    add({
-                      kind: 'part',
-                      partNum: chosen.partNum,
-                      colorId: Number(colorId),
-                      quantity: Number(count) || 1,
-                    })
-                  }
-                >
-                  Add to missing
-                </Button>
-                <Button variant="default" onClick={() => setChosen(null)}>
-                  Pick another
-                </Button>
-              </Group>
-            </Stack>
-          </Group>
-        </Paper>
+            <NumberInput
+              label="How many?"
+              min={1}
+              max={9999}
+              value={count}
+              onChange={setCount}
+              w={120}
+            />
+            <div className={ui.actions}>
+              <Button
+                loading={busy}
+                disabled={!colorId}
+                onClick={() =>
+                  add({
+                    kind: 'part',
+                    partNum: chosen.partNum,
+                    colorId: Number(colorId),
+                    quantity: Number(count) || 1,
+                  })
+                }
+              >
+                Add to missing
+              </Button>
+              <Button variant="default" onClick={() => setChosen(null)}>
+                Pick another
+              </Button>
+            </div>
+          </div>
+        </div>
       )}
-    </Stack>
+    </div>
   );
 }
 
@@ -527,11 +505,11 @@ function OtherTab({ add, busy }: { add: AddFn; busy: boolean }) {
   const [description, setDescription] = useState('');
   const [count, setCount] = useState<number | string>(1);
   return (
-    <Stack gap="sm" maw={520}>
-      <Text size="sm" c="dimmed">
+    <div className={`${ui.stack} ${classes.other}`}>
+      <p className={ui.small}>
         For something the catalog does not have: an off-brand special part, a sticker sheet, a
         printed tile.
-      </Text>
+      </p>
       <Textarea
         label="What is missing?"
         placeholder="Sticker sheet, printed tile 2 x 2"
@@ -542,7 +520,7 @@ function OtherTab({ add, busy }: { add: AddFn; busy: boolean }) {
       />
       <NumberInput label="How many?" min={1} max={9999} value={count} onChange={setCount} w={120} />
       <Button
-        w="fit-content"
+        className={classes.fit}
         loading={busy}
         disabled={!description.trim()}
         onClick={async () => {
@@ -552,6 +530,6 @@ function OtherTab({ add, busy }: { add: AddFn; busy: boolean }) {
       >
         Add to missing
       </Button>
-    </Stack>
+    </div>
   );
 }

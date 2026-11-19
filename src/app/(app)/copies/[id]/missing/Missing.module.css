@@ -1,153 +1,224 @@
-.crumbs {
-  display: flex;
-  flex-wrap: wrap;
+/* A line: part tile, then name over a meta line, then the quantity. Row actions wrap under it
+   on phones and sit at the right from 768. */
+.line {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) auto;
   align-items: center;
-  gap: 6px;
-  color: var(--app-muted);
-  font-size: 13px;
+  gap: 12px;
+  padding: 12px var(--app-s4);
 
-  & a {
-    color: var(--app-accent-ink);
+  @media (min-width: 768px) {
+    &[data-act] {
+      grid-template-columns: 64px minmax(0, 1fr) auto auto;
+    }
   }
 }
 
-.badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 10px;
-}
-
-.section {
-  margin-top: 28px;
-}
-
-.list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px 14px;
-  padding: 12px;
-
-  & + & {
-    border-top: 1px solid var(--app-rule);
-  }
-}
-
-.rowText {
-  flex: 1 1 200px;
+.lineText {
+  display: grid;
+  gap: 2px;
   min-width: 0;
+  overflow-wrap: anywhere;
 }
 
-.sub {
+.name {
+  margin: 0;
+  font-weight: 750;
+}
+
+.meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px 12px;
+  gap: 2px 12px;
   color: var(--app-muted);
-  font-size: 13px;
+  font-size: var(--app-fs-small);
 }
 
-.colorLine {
+.ink {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  color: var(--app-ink);
 }
 
+.notes,
+.for {
+  margin: 0;
+  font-size: var(--app-fs-small);
+}
+
+.spare {
+  color: var(--app-muted);
+}
+
+/* ×4: big, tabular, with a smaller × */
 .qty {
-  font-family: var(--app-display);
-  font-size: 22px;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+
+  & small {
+    margin-right: 1px;
+    font-size: 0.7em;
+    font-weight: 700;
+  }
 }
 
 .actions {
-  flex-wrap: wrap;
-}
-
-.history {
-  margin-top: 20px;
-
-  & summary {
-    min-height: 44px;
-    cursor: pointer;
-    font-weight: 600;
-  }
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 12px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-
-  @media (max-width: 420px) {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-.tile {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 10px 12px;
-  padding: 10px;
-  border: 1px solid var(--app-border);
-  border-radius: var(--app-radius-tile);
-  background: var(--app-surface);
-}
-
-.tileText {
-  min-width: 0;
-}
-
-.tileActions {
   display: flex;
   flex-wrap: wrap;
   grid-column: 1 / -1;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+
+  @media (min-width: 768px) {
+    grid-column: auto;
+    justify-content: flex-end;
+  }
 }
 
-.spare {
-  margin-left: 6px;
-  padding: 1px 6px;
-  border: 1px solid var(--app-control);
-  border-radius: 6px;
+.push {
+  margin-left: auto;
+
+  @media (min-width: 768px) {
+    margin-left: 4px;
+  }
+}
+
+.qtyInput {
+  width: 96px;
+
+  & input {
+    font-weight: 700;
+    text-align: center;
+  }
+}
+
+.added {
+  margin: 0;
+  padding: var(--app-s3) var(--app-s4);
+  border-radius: var(--app-r);
+  background: var(--app-surface);
+  font-weight: 650;
+}
+
+/* ---------- The picker ---------- */
+
+.picker {
+  padding: 0 var(--app-s4) var(--app-s4);
+}
+
+/* Tabs on a 1px rule; the current one has a 4px ink bar. Scrolls sideways on a narrow phone. */
+.tabs {
+  flex-wrap: nowrap;
+  gap: 4px;
+  margin: 0 calc(-1 * var(--app-s4));
+  padding: 0 var(--app-s4);
+  overflow-x: auto;
+  border-bottom: 1px solid var(--app-line);
+  scrollbar-width: none;
+
+  &::before {
+    display: none;
+  }
+}
+
+.tab {
+  flex: none;
+  min-height: 48px;
+  margin-bottom: -1px;
+  padding: 0 12px;
+  border: 0;
+  border-bottom: 4px solid transparent;
+  border-radius: 0;
+  background: none;
   color: var(--app-muted);
-  font-size: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+
+  &:hover {
+    background: var(--app-surface);
+    color: var(--app-ink);
+  }
+
+  &[data-active] {
+    border-bottom-color: var(--app-ink);
+    color: var(--app-ink);
+    font-weight: 800;
+  }
+}
+
+.panel {
+  padding-top: var(--app-s4);
+}
+
+.filters {
+  display: grid;
+  gap: var(--app-s3);
+
+  @media (min-width: 640px) {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr);
+    align-items: end;
+  }
+}
+
+.grow {
+  min-width: 0;
+}
+
+.more {
+  justify-self: start;
 }
 
 .hits {
   margin: 0;
   padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--app-line);
+  border-radius: var(--app-r);
+  background: var(--app-paper);
   list-style: none;
-  border: 1px solid var(--app-border);
-  border-radius: var(--app-radius-control);
-  background: var(--app-surface);
 
   & li + li {
-    border-top: 1px solid var(--app-rule);
+    border-top: 1px solid var(--app-line);
   }
 }
 
 .hit {
-  display: flex;
-  flex-direction: column;
+  display: grid;
   width: 100%;
-  min-height: 48px;
-  padding: 8px 12px;
+  min-height: 56px;
+  padding: 10px 12px;
   border: 0;
-  background: transparent;
+  background: none;
   color: var(--app-ink);
+  font: inherit;
   text-align: left;
   cursor: pointer;
 
-  @mixin hover {
-    background: var(--app-tint);
+  &:hover {
+    background: var(--app-surface);
   }
+
+  &:focus-visible {
+    outline-offset: -3px;
+  }
+}
+
+.chosen {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr);
+  align-items: start;
+  gap: var(--app-s4);
+  padding: var(--app-s4);
+}
+
+.other {
+  max-width: 520px;
+}
+
+.fit {
+  justify-self: start;
 }

@@ -1,8 +1,7 @@
-import { Text, Title } from '@mantine/core';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import { CompletenessBadge, BuildBadge } from '@/components/sets/Badges';
+import { PageHead } from '@/components/layout/PageHead';
+import { CompletenessBadge, StateTag } from '@/components/sets/Badges';
 import { getCatalogColors, partImageColors, pickImageColor } from '@/server/catalog/reference';
 import { requireContext } from '@/server/auth/current';
 import { completenessOf } from '@/server/data/completeness';
@@ -11,7 +10,6 @@ import { listMissing } from '@/server/data/missing';
 
 import { MissingList, type MissingRow } from './MissingList';
 import { MissingPicker } from './MissingPicker';
-import classes from './Missing.module.css';
 
 export const dynamic = 'force-dynamic';
 
@@ -52,7 +50,7 @@ export default async function MissingPage({ params }: { params: Promise<{ id: st
           ? (() => {
               const used = pickImageColor(images.get(r.rbPartNum!) ?? [], r.rbColorId!);
               return used !== null && used !== r.rbColorId
-                ? (colors.get(used)?.name ?? `colour ${used}`)
+                ? (colors.get(used)?.name ?? `color ${used}`)
                 : null;
             })()
           : null,
@@ -71,21 +69,25 @@ export default async function MissingPage({ params }: { params: Promise<{ id: st
 
   return (
     <>
-      <nav aria-label="Breadcrumb" className={classes.crumbs}>
-        <Link href="/sets">Library</Link>›<Link href={`/sets/${copy.set.id}`}>{copy.set.name}</Link>
-        ›<span>Missing pieces</span>
-      </nav>
-      <Title order={1} mt="xs">
-        Missing pieces
-      </Title>
-      <Text c="dimmed">
-        {copy.set.name}
-        {copy.total > 1 ? ` · copy ${copy.position} of ${copy.total}` : ''}
-      </Text>
-      <div className={classes.badges}>
-        <BuildBadge state={copy.copy.buildState} />
-        <CompletenessBadge completeness={completeness} />
-      </div>
+      <PageHead
+        crumbs={[
+          { label: 'Library', href: '/sets' },
+          { label: copy.set.name, href: `/sets/${copy.set.id}` },
+        ]}
+        title="Missing pieces"
+        sub={
+          <>
+            {copy.set.name}
+            {copy.total > 1 ? ` · copy ${copy.position} of ${copy.total}` : ''}
+          </>
+        }
+        extra={
+          <>
+            <StateTag state={copy.copy.buildState} />
+            <CompletenessBadge completeness={completeness} />
+          </>
+        }
+      />
 
       <MissingList
         copyId={id}

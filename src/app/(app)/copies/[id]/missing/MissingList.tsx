@@ -1,11 +1,15 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { Alert, Button, Group, Modal, NumberInput, Paper, Stack, Text, Title } from '@mantine/core';
-import { IconCheck } from '@tabler/icons-react';
+import { Button, Modal, NumberInput } from '@mantine/core';
+import { IconCheck, IconChevronRight } from '@tabler/icons-react';
 
 import { ConfirmDelete } from '@/components/ConfirmDelete';
+import { DialogFoot } from '@/components/DialogFoot';
+import { Note } from '@/components/Note';
 import { FigureImage, PartImage, Swatch } from '@/components/sets/PartImage';
+import { EmptyState } from '@/components/ui/EmptyState';
+import ui from '@/components/ui/ui.module.css';
 
 import {
   markCheckedAction,
@@ -24,7 +28,7 @@ export interface MissingRow {
   colorId: number | null;
   colorName: string | null;
   rgb: string | null;
-  /** The colour the picture is in (null = none), and its name when it differs from `colorId`. */
+  /** The color the picture is in (null = none), and its name when it differs from `colorId`. */
   imageColorId: number | null;
   imageColorName: string | null;
   quantity: number;
@@ -47,7 +51,7 @@ const today = () => {
 
 function Row({ row, children }: { row: MissingRow; children?: React.ReactNode }) {
   return (
-    <li className={classes.row}>
+    <li className={classes.line} data-act={children ? true : undefined}>
       {row.kind === 'part' && row.partNum && row.colorId !== null ? (
         <PartImage
           partNum={row.partNum}
@@ -58,26 +62,27 @@ function Row({ row, children }: { row: MissingRow; children?: React.ReactNode })
       ) : (
         <FigureImage size={64} />
       )}
-      <div className={classes.rowText}>
-        <Text fw={650}>{row.title}</Text>
-        <div className={classes.sub}>
+      <div className={classes.lineText}>
+        <p className={classes.name}>{row.title}</p>
+        <div className={classes.meta}>
           {row.colorName && (
-            <span className={classes.colorLine}>
+            <span className={classes.ink}>
               <Swatch rgb={row.rgb} />
               {row.colorName}
             </span>
           )}
-          {row.partNum && <span>#{row.partNum}</span>}
-          {row.figNum && <span>{row.figNum}</span>}
+          {row.partNum && <span className="app-mono">#{row.partNum}</span>}
+          {row.figNum && <span className="app-mono">{row.figNum}</span>}
           {row.kind === 'other' && <span>Other piece</span>}
           {row.imageColorName && <span>picture shown in {row.imageColorName}</span>}
         </div>
-        {row.notes && <Text size="sm">{row.notes}</Text>}
+        {row.notes && <p className={classes.notes}>{row.notes}</p>}
       </div>
-      <strong className={classes.qty} aria-label={`Quantity ${row.quantity}`}>
-        ×{row.quantity}
-      </strong>
-      {children}
+      <span className={classes.qty} aria-label={`Quantity ${row.quantity}`}>
+        <small aria-hidden>×</small>
+        {row.quantity}
+      </span>
+      {children && <div className={classes.actions}>{children}</div>}
     </li>
   );
 }
@@ -122,48 +127,42 @@ export function MissingList({
   };
 
   return (
-    <section aria-labelledby="open-heading" className={classes.section}>
-      <Title order={2} id="open-heading" size="h3">
-        Still missing{' '}
-        <Text span c="dimmed" fw={400}>
-          {open.reduce((n, r) => n + r.quantity, 0)}
-        </Text>
-      </Title>
+    <section aria-labelledby="open-heading" className={ui.stack}>
+      <div className={ui.sectionHead}>
+        <h2 id="open-heading">
+          Still missing
+          <small className={ui.count}>{open.reduce((n, r) => n + r.quantity, 0)}</small>
+        </h2>
+      </div>
 
       {sealed && (
-        <Alert color="blue" variant="light" mt="sm">
+        <Note variant="mind">
           This copy is marked Sealed, so it shows as Sealed in the library whatever is listed here.
-        </Alert>
+        </Note>
       )}
-      {error && !dialog && (
-        <Alert color="red" variant="light" role="alert" mt="sm">
-          {error}
-        </Alert>
-      )}
+      {error && !dialog && <Note variant="error">{error}</Note>}
 
-      <Paper withBorder p="xs" mt="sm">
-        {open.length === 0 ? (
-          <Text c="dimmed" p="md">
-            Nothing is listed as missing from this copy.
-          </Text>
-        ) : (
-          <ul className={classes.list}>
-            {open.map((row) => (
-              <Row key={row.id} row={row}>
-                {canEdit && (
-                  <Group gap={6} className={classes.actions}>
-                    {(['found', 'bought', 'substituted'] as const).map((r) => (
-                      <Button
-                        key={r}
-                        size="compact-md"
-                        variant="default"
-                        loading={pending}
-                        onClick={() => begin(row, r)}
-                        aria-label={`${LABEL[r]}: ${row.title}${row.colorName ? `, ${row.colorName}` : ''}`}
-                      >
-                        {LABEL[r]}
-                      </Button>
-                    ))}
+      {open.length === 0 ? (
+        <EmptyState inline title="Nothing is listed as missing from this copy." />
+      ) : (
+        <ul className={`${ui.panel} ${ui.rows}`}>
+          {open.map((row) => (
+            <Row key={row.id} row={row}>
+              {canEdit && (
+                <>
+                  {(['found', 'bought', 'substituted'] as const).map((r) => (
+                    <Button
+                      key={r}
+                      size="compact-md"
+                      variant="default"
+                      loading={pending}
+                      onClick={() => begin(row, r)}
+                      aria-label={`${LABEL[r]}: ${row.title}${row.colorName ? `, ${row.colorName}` : ''}`}
+                    >
+                      {LABEL[r]}
+                    </Button>
+                  ))}
+                  <span className={classes.push}>
                     <ConfirmDelete
                       title={`Remove ${row.title}?`}
                       triggerLabel="Remove"
@@ -174,19 +173,19 @@ export function MissingList({
                       Use this for a row entered by mistake. It is deleted, not moved to the trash.
                       To record that a piece turned up, use Found instead.
                     </ConfirmDelete>
-                  </Group>
-                )}
-              </Row>
-            ))}
-          </ul>
-        )}
-      </Paper>
+                  </span>
+                </>
+              )}
+            </Row>
+          ))}
+        </ul>
+      )}
 
       {canEdit && (
-        <Group mt="md" gap="sm" align="center">
+        <div className={ui.actions}>
           <Button
-            leftSection={<IconCheck size={16} />}
-            variant="light"
+            leftSection={<IconCheck size={20} stroke={2} />}
+            variant="default"
             loading={pending}
             onClick={() =>
               start(async () => finish(await markCheckedAction(copyId, setId, today())))
@@ -194,21 +193,22 @@ export function MissingList({
           >
             Everything else is here
           </Button>
-          <Text size="sm" c="dimmed">
+          <p className={ui.small}>
             {checkedOn ? `Pieces last checked ${checkedOn}.` : 'Pieces have not been checked yet.'}
-          </Text>
-        </Group>
+          </p>
+        </div>
       )}
 
       {resolved.length > 0 && (
-        <details className={classes.history}>
-          <summary>Resolved ({resolved.length})</summary>
-          <ul className={classes.list}>
+        <details className={ui.more}>
+          <summary>
+            <IconChevronRight size={20} stroke={1.75} aria-hidden />
+            Resolved ({resolved.length})
+          </summary>
+          <ul className={`${ui.panel} ${ui.rows}`}>
             {resolved.map((row) => (
               <Row key={row.id} row={row}>
-                <Text size="sm" c="dimmed">
-                  {row.resolution ? LABEL[row.resolution] : ''}
-                </Text>
+                <span className={ui.small}>{row.resolution ? LABEL[row.resolution] : ''}</span>
               </Row>
             ))}
           </ul>
@@ -219,15 +219,11 @@ export function MissingList({
         opened={dialog !== null}
         onClose={() => setDialog(null)}
         title={dialog ? `${LABEL[dialog.resolution]}: ${dialog.row.title}` : ''}
-        centered
+        size={440}
       >
         {dialog && (
-          <Stack gap="sm">
-            {error && (
-              <Alert color="red" variant="light" role="alert">
-                {error}
-              </Alert>
-            )}
+          <div className={ui.stack}>
+            {error && <Note variant="error">{error}</Note>}
             <NumberInput
               label="How many?"
               description={`${dialog.row.quantity} are missing. Fewer leaves the rest on the list.`}
@@ -237,7 +233,7 @@ export function MissingList({
               onChange={setCount}
               data-autofocus
             />
-            <Group justify="flex-end">
+            <DialogFoot>
               <Button variant="default" onClick={() => setDialog(null)}>
                 Cancel
               </Button>
@@ -259,8 +255,8 @@ export function MissingList({
               >
                 {LABEL[dialog.resolution]}
               </Button>
-            </Group>
-          </Stack>
+            </DialogFoot>
+          </div>
         )}
       </Modal>
     </section>
