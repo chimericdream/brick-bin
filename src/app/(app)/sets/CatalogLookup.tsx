@@ -1,19 +1,14 @@
 'use client';
 
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
-import {
-  Alert,
-  Button,
-  Group,
-  Modal,
-  Paper,
-  Stack,
-  Text,
-  TextInput,
-  UnstyledButton,
-} from '@mantine/core';
+import { ActionIcon, Button, Modal, TextInput, UnstyledButton } from '@mantine/core';
 import { IconBarcode, IconSearch } from '@tabler/icons-react';
 import Link from 'next/link';
+
+import { DialogFoot } from '@/components/DialogFoot';
+import { toastFailed } from '@/components/feedback/toast';
+import { Note } from '@/components/Note';
+import ui from '@/components/ui/ui.module.css';
 
 import classes from './CatalogLookup.module.css';
 
@@ -115,7 +110,7 @@ export function CatalogLookup({ catalogReady, canImport, onPick, onTitle }: Prop
           `Scanned “${data.title}”, but no catalog set matched. The name is filled in for you.`,
         );
       } else {
-        setMessage('That barcode was not recognised. Search by number or name instead.');
+        setMessage('That barcode was not recognized. Search by number or name instead.');
       }
     } catch {
       setMessage('The barcode lookup failed.');
@@ -125,16 +120,16 @@ export function CatalogLookup({ catalogReady, canImport, onPick, onTitle }: Prop
   }
 
   return (
-    <Paper withBorder p="md">
-      <Stack gap="xs">
-        <Group justify="space-between" align="center">
-          <Text fw={700}>Look up a LEGO set</Text>
-          <Text size="xs" c="dimmed">
-            Catalog data from <a href="https://rebrickable.com">Rebrickable</a>
-          </Text>
-        </Group>
-        {!catalogReady ? (
-          <Alert color="blue" variant="light" role="status">
+    <section className={`${ui.panel} ${ui.pad}`} aria-labelledby="lookup-heading">
+      <div className={ui.panelHead}>
+        <h2 id="lookup-heading">Look up a LEGO set</h2>
+        <p className={ui.small}>
+          Catalog data from <a href="https://rebrickable.com/">Rebrickable</a>
+        </p>
+      </div>
+      {!catalogReady ? (
+        <div role="status">
+          <Note>
             The catalog has not been imported yet, so lookup is off.{' '}
             {canImport ? (
               <>
@@ -144,74 +139,85 @@ export function CatalogLookup({ catalogReady, canImport, onPick, onTitle }: Prop
               'Ask an admin to import it.'
             )}{' '}
             Other brands are always added by hand below.
-          </Alert>
-        ) : (
-          <>
-            <Group gap="xs" wrap="nowrap" align="flex-end">
-              <TextInput
-                label="Set number or name"
-                placeholder="10294 or Titanic"
-                value={query}
-                onChange={(e) => onType(e.currentTarget.value)}
-                leftSection={<IconSearch size={16} />}
-                style={{ flex: 1 }}
-              />
-              {canScan && (
-                <Button
-                  variant="default"
-                  leftSection={<IconBarcode size={18} />}
+          </Note>
+        </div>
+      ) : (
+        <div className={classes.lookup}>
+          <TextInput
+            label="Set number or name"
+            placeholder="10294 or Titanic"
+            value={query}
+            onChange={(e) => onType(e.currentTarget.value)}
+            leftSection={<IconSearch size={20} stroke={1.75} />}
+            rightSectionWidth={canScan ? 46 : undefined}
+            rightSection={
+              canScan ? (
+                <ActionIcon
+                  variant="subtle"
+                  size={44}
+                  aria-label="Scan a barcode"
                   onClick={() => setScanning(true)}
                 >
-                  Scan barcode
-                </Button>
-              )}
-            </Group>
-            {message && (
-              <Text size="sm" c="dimmed" role="status">
-                {message}
-              </Text>
-            )}
-            {busy && hits.length === 0 && (
-              <Text size="sm" c="dimmed" role="status">
-                Searching
-              </Text>
-            )}
-            {hits.length > 0 && (
-              <ul className={classes.hits} aria-label="Catalog matches">
-                {hits.map((h) => (
-                  <li key={h.setNum}>
-                    <UnstyledButton type="button" className={classes.hit} onClick={() => onPick(h)}>
-                      <span>
-                        <strong>{h.name}</strong>
-                        <span className={classes.meta}>
-                          {h.number}
-                          {h.year ? ` · ${h.year}` : ''}
-                          {h.pieces ? ` · ${h.pieces.toLocaleString('en-US')} pieces` : ''}
-                          {h.theme ? ` · ${h.theme}` : ''}
-                          {h.wishers && h.wishers.length > 0
-                            ? ` · On ${h.wishers.join(' and ')}’s wishlist`
-                            : ''}
-                        </span>
-                      </span>
-                    </UnstyledButton>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </>
-        )}
-      </Stack>
-      <Modal
-        opened={scanning}
-        onClose={() => setScanning(false)}
-        title="Scan the barcode on the box"
-        centered
-      >
+                  <IconBarcode size={24} stroke={1.75} />
+                </ActionIcon>
+              ) : undefined
+            }
+          />
+          {message && (
+            <p className={ui.small} role="status">
+              {message}
+            </p>
+          )}
+          {busy && hits.length === 0 && (
+            <p className={ui.small} role="status">
+              Searching
+            </p>
+          )}
+          {hits.length > 0 && (
+            <ul className={classes.hits} aria-label="Catalog matches">
+              {hits.map((h) => (
+                <li key={h.setNum}>
+                  <UnstyledButton type="button" className={classes.hit} onClick={() => onPick(h)}>
+                    <b>{h.name}</b>
+                    <span className={classes.meta}>
+                      <span className="app-mono">{h.number}</span>
+                      {h.year ? ` · ${h.year}` : ''}
+                      {h.pieces ? ` · ${h.pieces.toLocaleString('en-US')} pieces` : ''}
+                      {h.theme ? ` · ${h.theme}` : ''}
+                      {h.wishers && h.wishers.length > 0
+                        ? ` · On ${h.wishers.join(' and ')}’s wishlist`
+                        : ''}
+                    </span>
+                  </UnstyledButton>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+      <Modal opened={scanning} onClose={() => setScanning(false)} title="Scan a barcode" size={440}>
         {scanning && (
-          <Scanner onCode={scanned} onError={(m) => (setScanning(false), setMessage(m))} />
+          <div className={classes.scanBody}>
+            <Scanner
+              onCode={scanned}
+              onError={(m) => {
+                setScanning(false);
+                toastFailed(m);
+              }}
+            />
+            <p className={classes.scanText}>
+              Point the camera at the barcode on the box. When it reads, the number goes into the
+              lookup and this closes.
+            </p>
+          </div>
         )}
+        <DialogFoot>
+          <Button variant="default" onClick={() => setScanning(false)}>
+            Cancel
+          </Button>
+        </DialogFoot>
       </Modal>
-    </Paper>
+    </section>
   );
 }
 
@@ -251,5 +257,10 @@ function Scanner({
     };
   }, [onCode, onError]);
 
-  return <video ref={video} playsInline muted style={{ width: '100%', borderRadius: 8 }} />;
+  return (
+    <div className={classes.scan} role="img" aria-label="Camera view">
+      <video ref={video} playsInline muted className={classes.video} />
+      <span className={classes.frame} aria-hidden />
+    </div>
+  );
 }

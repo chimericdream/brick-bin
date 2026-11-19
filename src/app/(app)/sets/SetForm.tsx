@@ -2,28 +2,26 @@
 
 import { useActionState, useState } from 'react';
 import {
-  Alert,
-  Anchor,
   Button,
   Checkbox,
   FileInput,
-  Group,
   NumberInput,
-  Paper,
   Select,
-  SimpleGrid,
-  Stack,
   TagsInput,
-  Text,
   Textarea,
   TextInput,
-  Title,
 } from '@mantine/core';
+import { IconPlus } from '@tabler/icons-react';
 import Link from 'next/link';
+
+import { Note } from '@/components/Note';
+import ui from '@/components/ui/ui.module.css';
 
 import type { ActionState } from './actions';
 import { CatalogLookup, type CatalogHit } from './CatalogLookup';
 import { CopyFields, type Option } from './CopyFields';
+import { HowMany } from './HowMany';
+import classes from './SetForm.module.css';
 
 export interface SetDefaults {
   brandId?: string;
@@ -92,80 +90,82 @@ export function SetForm({
   const fieldsKey = picked?.setNum ?? scannedName ?? 'manual';
 
   return (
-    <form action={formAction} encType="multipart/form-data">
-      <Stack gap="lg" maw={760}>
-        {state.error && (
-          <Alert color="red" variant="light" role="alert">
-            {state.error}
-            {state.duplicate && (
-              <>
-                {' '}
-                <Anchor component={Link} href={`/sets/${state.duplicate.id}`}>
-                  Open it to add another copy
-                </Anchor>
-                .
-              </>
-            )}
-          </Alert>
-        )}
+    <form action={formAction} encType="multipart/form-data" className={ui.narrow}>
+      {state.error && (
+        <Note variant="error">
+          {state.error}
+          {state.duplicate && (
+            <>
+              {' '}
+              <Link href={`/sets/${state.duplicate.id}`}>Open it to add another copy</Link>.
+            </>
+          )}
+        </Note>
+      )}
 
-        {creating && lookup && (
-          <CatalogLookup
-            catalogReady={lookup.catalogReady}
-            canImport={lookup.canImport}
-            onPick={(h) => {
-              setScannedName(null);
-              setNewBrand(false);
-              setPicked(h);
-            }}
-            onTitle={(t) => {
-              setPicked(null);
-              setScannedName(t);
-            }}
-          />
-        )}
+      {creating && lookup && (
+        <CatalogLookup
+          catalogReady={lookup.catalogReady}
+          canImport={lookup.canImport}
+          onPick={(h) => {
+            setScannedName(null);
+            setNewBrand(false);
+            setPicked(h);
+          }}
+          onTitle={(t) => {
+            setPicked(null);
+            setScannedName(t);
+          }}
+        />
+      )}
 
-        <Paper withBorder p="md" key={fieldsKey}>
-          <Stack gap="sm">
-            {d.rbSetNum && (
+      <section className={`${ui.panel} ${ui.pad}`} key={fieldsKey} aria-labelledby="set-heading">
+        <div className={ui.panelHead}>
+          <h2 id="set-heading">The set</h2>
+        </div>
+        {d.rbSetNum && (
+          <>
+            <input type="hidden" name="rbSetNum" value={d.rbSetNum} />
+            <div role="status">
+              <Note>
+                Linked to Rebrickable set <span className="app-mono">{d.rbSetNum}</span>.{' '}
+                {creating &&
+                  'The theme is added for you, and the cover is downloaded once when you save. '}
+                {picked && (
+                  <button
+                    type="button"
+                    className={classes.textButton}
+                    onClick={() => setPicked(null)}
+                  >
+                    Unlink
+                  </button>
+                )}
+              </Note>
+            </div>
+          </>
+        )}
+        <div className={ui.row2}>
+          <div className={ui.field}>
+            {newBrand ? (
+              <TextInput
+                name="newBrandName"
+                label="New brand"
+                placeholder="Mould King"
+                required
+                data-autofocus
+                rightSection={
+                  <button
+                    type="button"
+                    className={classes.textButton}
+                    onClick={() => setNewBrand(false)}
+                  >
+                    Cancel
+                  </button>
+                }
+                rightSectionWidth={72}
+              />
+            ) : (
               <>
-                <input type="hidden" name="rbSetNum" value={d.rbSetNum} />
-                <Alert color="blue" variant="light" role="status">
-                  Linked to Rebrickable set {d.rbSetNum}.{' '}
-                  {creating &&
-                    'The theme is added for you, and the cover is downloaded once when you save. '}
-                  {picked && (
-                    <Anchor component="button" type="button" onClick={() => setPicked(null)}>
-                      Unlink
-                    </Anchor>
-                  )}
-                </Alert>
-              </>
-            )}
-            <Title order={2} size="h4">
-              The set
-            </Title>
-            <SimpleGrid cols={{ base: 1, sm: 2 }}>
-              {newBrand ? (
-                <TextInput
-                  name="newBrandName"
-                  label="New brand"
-                  placeholder="Mould King"
-                  required
-                  data-autofocus
-                  rightSection={
-                    <Anchor
-                      component="button"
-                      type="button"
-                      size="xs"
-                      onClick={() => setNewBrand(false)}
-                    >
-                      Cancel
-                    </Anchor>
-                  }
-                  rightSectionWidth={64}
-                />
-              ) : (
                 <Select
                   name="brandId"
                   label="Brand"
@@ -175,158 +175,145 @@ export function SetForm({
                   searchable
                   required
                 />
-              )}
-              <TextInput
-                name="setNumber"
-                label="Set number"
-                description="As printed on the box. Optional for unnumbered kits."
-                placeholder="10294"
-                defaultValue={d.setNumber ?? ''}
-              />
-            </SimpleGrid>
-            {!newBrand && (
-              <Anchor
-                component="button"
-                type="button"
-                size="sm"
-                onClick={() => setNewBrand(true)}
-                ta="left"
-              >
-                + New brand
-              </Anchor>
+                <Button
+                  variant="subtle"
+                  size="compact-md"
+                  className={classes.newBrand}
+                  leftSection={<IconPlus size={16} stroke={2} />}
+                  onClick={() => setNewBrand(true)}
+                >
+                  New brand
+                </Button>
+              </>
             )}
-            <TextInput name="name" label="Name" required defaultValue={d.name ?? ''} />
-            <Select
-              name="themeId"
-              label="Theme"
-              placeholder="None"
-              data={themes}
-              defaultValue={d.themeId ?? null}
-              searchable
-              clearable
-            />
-            <SimpleGrid cols={{ base: 2, sm: 4 }}>
-              <NumberInput
-                name="year"
-                label="Year"
-                min={1900}
-                max={2200}
-                hideControls
-                defaultValue={d.year ?? ''}
-              />
-              <NumberInput
-                name="pieceCount"
-                label="Pieces"
-                min={0}
-                hideControls
-                thousandSeparator=","
-                defaultValue={d.pieceCount ?? ''}
-              />
-              <NumberInput
-                name="minifigCount"
-                label="Minifigs"
-                min={0}
-                hideControls
-                defaultValue={d.minifigCount ?? ''}
-              />
-              <NumberInput
-                name="minAge"
-                label="Min age"
-                min={0}
-                hideControls
-                defaultValue={d.minAge ?? ''}
-              />
-            </SimpleGrid>
-            <Textarea
-              name="description"
-              label="Description"
-              autosize
-              minRows={3}
-              defaultValue={d.description ?? ''}
-            />
-            <SimpleGrid cols={{ base: 1, sm: 2 }}>
-              <TextInput
-                name="retailPrice"
-                label="Retail price"
-                placeholder="0.00"
-                inputMode="decimal"
-                leftSection="$"
-                defaultValue={d.retailPrice ?? ''}
-              />
-              <TextInput
-                name="designer"
-                label="Designer"
-                description="For example a MOC designer"
-                defaultValue={d.designer ?? ''}
-              />
-            </SimpleGrid>
-            <TagsInput
-              name="tags"
-              label="Tags"
-              placeholder="Christmas 2025"
-              data={tagSuggestions}
-              defaultValue={d.tags ?? []}
-            />
-            <FileInput
-              name="cover"
-              label="Cover image"
-              description="JPEG, PNG or WebP, up to 8 MB"
-              accept="image/jpeg,image/png,image/webp"
-              clearable
-            />
-            <Textarea
-              name="notes"
-              label="Notes"
-              autosize
-              minRows={2}
-              defaultValue={d.notes ?? ''}
-            />
-            <Checkbox
-              name="hiddenFromRestricted"
-              label="Hide from kid profiles"
-              description="Kid profiles will not see this set, its copies or its cover. Useful for a present."
-              defaultChecked={d.hiddenFromRestricted ?? false}
-            />
-          </Stack>
-        </Paper>
+          </div>
+          <TextInput
+            name="setNumber"
+            label="Set number"
+            description="As printed on the box. Optional for unnumbered kits."
+            placeholder="10294"
+            defaultValue={d.setNumber ?? ''}
+            classNames={{ input: classes.mono }}
+          />
+        </div>
+        <TextInput name="name" label="Name" required defaultValue={d.name ?? ''} />
+        <Select
+          name="themeId"
+          label="Theme"
+          placeholder="None"
+          data={themes}
+          defaultValue={d.themeId ?? null}
+          searchable
+          clearable
+        />
+        <div className={ui.row4}>
+          <NumberInput
+            name="year"
+            label="Year"
+            min={1900}
+            max={2200}
+            hideControls
+            defaultValue={d.year ?? ''}
+          />
+          <NumberInput
+            name="pieceCount"
+            label="Pieces"
+            min={0}
+            hideControls
+            thousandSeparator=","
+            defaultValue={d.pieceCount ?? ''}
+          />
+          <NumberInput
+            name="minifigCount"
+            label="Minifigs"
+            min={0}
+            hideControls
+            defaultValue={d.minifigCount ?? ''}
+          />
+          <NumberInput
+            name="minAge"
+            label="Min age"
+            min={0}
+            hideControls
+            defaultValue={d.minAge ?? ''}
+          />
+        </div>
+        <Textarea
+          name="description"
+          label="Description"
+          autosize
+          minRows={3}
+          defaultValue={d.description ?? ''}
+        />
+        <div className={ui.row2}>
+          <TextInput
+            name="retailPrice"
+            label="Retail price"
+            placeholder="0.00"
+            inputMode="decimal"
+            leftSection="$"
+            defaultValue={d.retailPrice ?? ''}
+          />
+          <TextInput
+            name="designer"
+            label="Designer"
+            description="For example a MOC designer"
+            defaultValue={d.designer ?? ''}
+          />
+        </div>
+        <TagsInput
+          name="tags"
+          label="Tags"
+          placeholder="Christmas 2025"
+          data={tagSuggestions}
+          defaultValue={d.tags ?? []}
+        />
+        <FileInput
+          name="cover"
+          label="Cover image"
+          description="JPEG, PNG or WebP, up to 8 MB"
+          accept="image/jpeg,image/png,image/webp"
+          clearable
+        />
+        <Textarea name="notes" label="Notes" autosize minRows={2} defaultValue={d.notes ?? ''} />
+        <Checkbox
+          name="hiddenFromRestricted"
+          label="Hide from kid profiles"
+          description="Kid profiles will not see this set, its copies or its cover. Useful for a present."
+          defaultChecked={d.hiddenFromRestricted ?? false}
+        />
+      </section>
 
-        {creating && (
-          <Paper withBorder p="md">
-            <Stack gap="sm">
-              <Checkbox
-                name="addCopy"
-                label="Add a copy I own"
-                checked={addCopy}
-                onChange={(e) => setAddCopy(e.currentTarget.checked)}
-              />
-              {addCopy && (
-                <>
-                  <NumberInput
-                    name="quantity"
-                    label="How many?"
-                    description="Creates that many identical copies at once."
-                    min={1}
-                    max={50}
-                    defaultValue={1}
-                    maw={200}
-                  />
-                  <CopyFields prefix="copy." members={members} locations={locations} />
-                </>
-              )}
-            </Stack>
-          </Paper>
+      {creating && (
+        <section className={`${ui.panel} ${ui.pad}`} aria-label="A copy I own">
+          <Checkbox
+            name="addCopy"
+            label="Add a copy I own"
+            checked={addCopy}
+            onChange={(e) => setAddCopy(e.currentTarget.checked)}
+          />
+          {addCopy && (
+            <>
+              <HowMany />
+              <CopyFields prefix="copy." members={members} locations={locations} />
+            </>
+          )}
+        </section>
+      )}
+
+      <div className={ui.actionbar}>
+        <Button type="submit" loading={pending}>
+          {creating ? 'Add set' : 'Save changes'}
+        </Button>
+        <Button component={Link} href={setId ? `/sets/${setId}` : '/sets'} variant="default">
+          Cancel
+        </Button>
+        {state.saved && (
+          <span className={ui.small} role="status">
+            Saved
+          </span>
         )}
-
-        <Group>
-          <Button type="submit" loading={pending}>
-            {creating ? 'Add set' : 'Save changes'}
-          </Button>
-          <Button component={Link} href={setId ? `/sets/${setId}` : '/sets'} variant="default">
-            Cancel
-          </Button>
-          {state.saved && <Text c="dimmed">Saved</Text>}
-        </Group>
-      </Stack>
+      </div>
     </form>
   );
 }

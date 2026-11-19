@@ -410,16 +410,6 @@
   gap: var(--app-s4);
 }
 
-.howMany {
-  max-width: 220px;
-
-  & input {
-    text-align: center;
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
-  }
-}
-
 .field {
   display: grid;
   gap: 6px;

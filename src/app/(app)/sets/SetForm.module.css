@@ -1,0 +1,26 @@
+/* A link-styled button: Unlink, Cancel. */
+.textButton {
+  min-height: 32px;
+  padding: 0 4px;
+  border: 0;
+  background: none;
+  color: var(--app-ink);
+  font: inherit;
+  font-weight: 650;
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 0.18em;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration-thickness: 3px;
+  }
+}
+
+.newBrand {
+  justify-self: start;
+}
+
+.mono {
+  font-family: var(--app-mono);
+}

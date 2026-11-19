@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 
+import { PageHead } from '@/components/layout/PageHead';
 import { centsToInput } from '@/lib/money';
 import { requireContext } from '@/server/auth/current';
 import { getSet } from '@/server/data/sets';
@@ -20,7 +21,13 @@ export default async function EditSetPage({ params }: { params: Promise<{ id: st
   const options = await loadFormOptions(ctx);
   return (
     <>
-      <h1>Edit set</h1>
+      <PageHead
+        crumbs={[
+          { label: 'Library', href: '/sets' },
+          { label: set.name, href: `/sets/${id}` },
+        ]}
+        title="Edit set"
+      />
       <SetForm
         action={saveSetAction.bind(null, id)}
         setId={id}
