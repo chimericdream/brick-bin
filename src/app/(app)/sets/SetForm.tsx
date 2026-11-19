@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState, useState } from 'react';
+import { startTransition, useActionState, useState } from 'react';
 import {
   Button,
   Checkbox,
@@ -13,7 +13,9 @@ import {
 } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
 import Link from 'next/link';
+import { unstable_rethrow } from 'next/navigation';
 
+import { toastFailed } from '@/components/feedback/toast';
 import { Note } from '@/components/Note';
 import ui from '@/components/ui/ui.module.css';
 
@@ -67,7 +69,21 @@ export function SetForm({
   defaults = {},
   lookup = null,
 }: Props) {
-  const [state, formAction, pending] = useActionState(action, {});
+  const [state, formAction, pending] = useActionState(
+    async (prev: ActionState, fd: FormData): Promise<ActionState> => {
+      try {
+        return await action(prev, fd);
+      } catch (e) {
+        // A redirect after saving is how a save ends; anything else means nothing was saved.
+        unstable_rethrow(e);
+        toastFailed('Couldn’t save the set. Nothing was changed.', () =>
+          startTransition(() => formAction(fd)),
+        );
+        return prev;
+      }
+    },
+    {},
+  );
   const [newBrand, setNewBrand] = useState(false);
   const [addCopy, setAddCopy] = useState(true);
   const creating = setId === null;
