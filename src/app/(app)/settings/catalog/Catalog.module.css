@@ -1,193 +1,85 @@
-.hero {
-  padding: 20px;
-  border: 1px solid var(--app-border);
-  border-radius: var(--app-radius-card);
-  background: var(--app-surface);
+.p {
+  margin: 0;
+}
 
-  & h2 {
-    margin: 0;
-    font-size: clamp(24px, 3vw, 34px);
-    line-height: 1.15;
-  }
+.h2 {
+  margin: 0;
+  font-size: var(--app-fs-h2);
 }
 
 .ago {
+  margin-left: 6px;
   color: var(--app-muted);
+  font-size: var(--app-fs-body);
   font-weight: 500;
+  letter-spacing: 0;
 }
 
-.lead {
-  margin: 6px 0 0;
-  color: var(--app-muted);
+.history {
+  min-width: 640px;
 }
 
-.facts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 32px;
-  margin: 16px 0 0;
-
-  & dt {
-    color: var(--app-muted);
-    font-size: 13px;
-  }
-
-  & dd {
-    margin: 0;
-    font-family: var(--app-display);
-    font-size: 20px;
-    font-weight: 700;
-  }
+.notes,
+.problems {
+  margin: 4px 0 0;
+  padding-left: 1.2em;
+  font-size: var(--app-fs-small);
 }
 
-.section {
-  margin-top: 28px;
-
-  & h2 {
-    margin: 0 0 8px;
-    font-size: 22px;
-  }
-}
-
-.muted {
-  margin: 0 0 8px;
-  color: var(--app-muted);
-}
-
-.panel {
-  margin-top: 20px;
-  padding: 20px;
-  border: 1px solid var(--app-border);
-  border-radius: var(--app-radius-card);
-  background: var(--app-surface);
-
-  & h2 {
-    margin: 0 0 6px;
-    font-size: 22px;
-  }
-}
-
-.steps {
-  margin: 8px 0 12px;
-  padding-left: 20px;
-  color: var(--app-ink);
-}
-
+/* The pasted page source: mono, on paper, in the field frame. */
 .paste {
   width: 100%;
   min-height: 140px;
   padding: 10px 12px;
-  border: 1px solid var(--app-control);
-  border-radius: var(--app-radius-control);
-  background: var(--app-surface);
+  border: 1px solid var(--app-edge);
+  border-radius: var(--app-r);
+  background: var(--app-paper);
   color: var(--app-ink);
-  font-family: ui-monospace, 'Cascadia Mono', 'Segoe UI Mono', monospace;
-  font-size: 13px;
+  font-family: var(--app-mono);
+  font-size: 0.875rem;
   resize: vertical;
-}
 
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
-  margin-top: 12px;
-}
+  &:hover {
+    border-color: var(--app-ink);
+  }
 
-.preview {
-  margin-top: 14px;
-  padding: 12px 14px;
-  border-radius: var(--app-radius-control);
-  background: var(--app-tint);
-  color: var(--app-ink);
+  &:focus-visible {
+    border-color: var(--app-ink);
+    outline-offset: 0;
+  }
 
-  & p {
-    margin: 0 0 6px;
+  &:disabled {
+    border-color: var(--app-line);
+    background: var(--app-surface);
+    color: var(--app-muted);
   }
 }
 
-.problem {
-  margin-top: 14px;
-  padding: 12px 14px;
-  border-radius: var(--app-radius-control);
-  background: var(--app-danger-bg);
-  color: var(--app-danger-ink);
-
-  & ul {
-    margin: 6px 0 0;
-    padding-left: 20px;
-  }
+.block {
+  display: block;
+  margin-top: 4px;
 }
 
-.warn {
-  margin-top: 14px;
-  padding: 12px 14px;
-  border: 1px solid var(--app-notice-border);
-  border-radius: var(--app-radius-control);
-  background: var(--app-notice-bg);
-  color: var(--app-notice-ink);
+.runTitle {
+  margin: 0;
+  font-size: var(--app-fs-h3);
+  font-weight: 750;
 }
 
 .progress {
-  margin-top: 6px;
-
-  & progress {
-    width: 100%;
-    height: 12px;
-    accent-color: var(--app-accent);
-  }
+  height: 14px;
+  border-radius: 2px;
+  background: var(--app-surface-2);
 }
 
-.tableWrap {
-  overflow-x: auto;
-  border: 1px solid var(--app-border);
-  border-radius: var(--app-radius-card);
-  background: var(--app-surface);
-}
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
-
-  & th,
-  & td {
-    padding: 10px 12px;
-    border-bottom: 1px solid var(--app-rule);
-    text-align: left;
-    vertical-align: top;
-  }
-
-  & th {
-    color: var(--app-muted);
-    font-weight: 600;
-  }
-
-  & tr:last-child td {
-    border-bottom: 0;
-  }
-}
-
-.result {
-  font-weight: 600;
-
-  &[data-status='failed'] {
-    color: var(--app-danger);
-  }
-
-  &[data-status='succeeded'] {
-    color: var(--app-ok-ink);
-  }
-}
-
-.notes {
-  margin: 4px 0 0;
-  padding-left: 16px;
-  color: var(--app-muted);
-}
-
-.attribution {
-  margin-top: 28px;
-  color: var(--app-muted);
-  font-size: 13px;
+.progressFill {
+  --brick: var(--app-ink);
+  --pitch: 14px;
+  --stud-h: 4px;
+  --stud-inset: 0px;
+  display: block;
+  height: 100%;
+  margin: 0;
+  border-radius: 2px;
+  background: var(--brick);
 }

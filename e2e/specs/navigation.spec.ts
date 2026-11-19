@@ -15,8 +15,14 @@ test.describe('phone navigation', () => {
     }
     await expect(page.getByRole('button', { name: 'Sign out' })).toBeVisible();
 
+    // On a phone, /settings is the list of its areas; each area is its own page.
     await page.getByRole('link', { name: 'Settings' }).click();
+    await expect(page).toHaveURL(/\/settings$/);
+    const areas = page.getByRole('navigation', { name: 'Settings' });
+    await expect(areas.getByRole('link')).toHaveCount(6);
+    await areas.getByRole('link', { name: /^Places/ }).click();
     await expect(page).toHaveURL(/\/settings\/places$/);
+    await expect(page.getByRole('heading', { name: 'Places', level: 1 })).toBeVisible();
   });
 
   test('NAV-02 a kid’s More tab holds only the theme and Sign out', async ({ kidPage }) => {

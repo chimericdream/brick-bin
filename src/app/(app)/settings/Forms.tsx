@@ -1,11 +1,13 @@
 'use client';
 
 import { useActionState, useState, useTransition } from 'react';
-import { Alert, Button, Group, Select, Stack, TextInput } from '@mantine/core';
+import { Button, Select, TextInput } from '@mantine/core';
 
 import { ConfirmDelete } from '@/components/ConfirmDelete';
+import { Note } from '@/components/Note';
 
 import type { FormState } from './actions';
+import classes from './Settings.module.css';
 
 type Action = (prev: FormState, fd: FormData) => Promise<FormState>;
 interface Option {
@@ -41,48 +43,34 @@ export function NameForm({
     return result;
   }, {});
   return (
-    <form action={formAction} key={nonce}>
-      <Stack gap="xs">
-        {state.error && (
-          <Alert color="red" variant="light" role="alert">
-            {state.error}
-          </Alert>
-        )}
-        <Group align="flex-end" gap="sm" wrap="wrap">
-          <TextInput
-            name="name"
-            label={label}
-            placeholder={placeholder}
-            defaultValue={defaults?.name ?? ''}
-            required
-            style={{ flex: '1 1 200px' }}
+    <form action={formAction} key={nonce} className={classes.form}>
+      {state.error && <Note variant="error">{state.error}</Note>}
+      <div className={classes.addRow}>
+        <TextInput
+          name="name"
+          label={label}
+          placeholder={placeholder}
+          defaultValue={defaults?.name ?? ''}
+          required
+        />
+        {extra?.map(([name, text, value]) => (
+          <TextInput key={name} name={name} label={text} defaultValue={value ?? ''} />
+        ))}
+        {parents && (
+          <Select
+            name="parentId"
+            label={parentLabel}
+            placeholder="Top level"
+            data={parents}
+            defaultValue={defaults?.parentId ?? null}
+            searchable
+            clearable
           />
-          {extra?.map(([name, text, value]) => (
-            <TextInput
-              key={name}
-              name={name}
-              label={text}
-              defaultValue={value ?? ''}
-              style={{ flex: '1 1 200px' }}
-            />
-          ))}
-          {parents && (
-            <Select
-              name="parentId"
-              label={parentLabel}
-              placeholder="Top level"
-              data={parents}
-              defaultValue={defaults?.parentId ?? null}
-              searchable
-              clearable
-              style={{ flex: '1 1 200px' }}
-            />
-          )}
-          <Button type="submit" loading={pending}>
-            {submit}
-          </Button>
-        </Group>
-      </Stack>
+        )}
+        <Button type="submit" loading={pending} variant={defaults ? 'default' : undefined}>
+          {submit}
+        </Button>
+      </div>
     </form>
   );
 }
@@ -94,9 +82,12 @@ export function DeleteWithGuard({
   action,
   children,
   confirmLabel,
+  name,
 }: {
   title: string;
   triggerLabel: string;
+  /** What is deleted, so the button's name says it ("Delete Shelf 2"). */
+  name?: string;
   action: () => Promise<FormState>;
   children: React.ReactNode;
   confirmLabel?: string;
@@ -104,7 +95,8 @@ export function DeleteWithGuard({
   return (
     <ConfirmDelete
       title={title}
-      triggerLabel={triggerLabel}
+      triggerLabel={name ? `${triggerLabel} ${name}` : triggerLabel}
+      triggerText={name ? triggerLabel : undefined}
       compact
       confirmLabel={confirmLabel}
       action={async () => {
@@ -147,11 +139,7 @@ export function ActionButton({
       >
         {children}
       </Button>
-      {error && (
-        <Alert color="red" variant="light" role="alert" mt="xs">
-          {error}
-        </Alert>
-      )}
+      {error && <Note variant="error">{error}</Note>}
     </>
   );
 }
@@ -160,40 +148,20 @@ export function ActionButton({
 export function MergeThemesForm({ action, themes }: { action: Action; themes: Option[] }) {
   const [state, formAction, pending] = useActionState(action, {});
   return (
-    <form action={formAction}>
-      <Stack gap="xs" mt="sm">
-        {state.error && (
-          <Alert color="red" variant="light" role="alert">
-            {state.error}
-          </Alert>
-        )}
-        {state.ok && (
-          <Alert color="green" variant="light">
-            Merged.
-          </Alert>
-        )}
-        <Group align="flex-end" gap="sm" wrap="wrap">
-          <Select
-            name="fromId"
-            label="Merge this theme"
-            data={themes}
-            searchable
-            required
-            style={{ flex: '1 1 220px' }}
-          />
-          <Select
-            name="intoId"
-            label="Into"
-            data={themes}
-            searchable
-            required
-            style={{ flex: '1 1 220px' }}
-          />
-          <Button type="submit" loading={pending}>
-            Merge
-          </Button>
-        </Group>
-      </Stack>
+    <form action={formAction} className={classes.form}>
+      {state.error && <Note variant="error">{state.error}</Note>}
+      {state.ok && (
+        <p role="status" className={classes.ok}>
+          Merged.
+        </p>
+      )}
+      <div className={classes.addRow}>
+        <Select name="fromId" label="Merge this theme" data={themes} searchable required />
+        <Select name="intoId" label="Into" data={themes} searchable required />
+        <Button type="submit" loading={pending} variant="default">
+          Merge
+        </Button>
+      </div>
     </form>
   );
 }

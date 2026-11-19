@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
-import { Text } from '@mantine/core';
+import { IconChevronRight } from '@tabler/icons-react';
 
+import { EmptyState } from '@/components/ui/EmptyState';
 import { requireContext } from '@/server/auth/current';
 import { listLocationOptions, listLocationsWithCounts } from '@/server/data/places';
 
@@ -27,7 +28,7 @@ export default async function PlacesPage() {
     return d;
   };
   return (
-    <>
+    <div className={classes.stack}>
       <NameForm
         action={createPlaceAction}
         label="New place"
@@ -35,37 +36,40 @@ export default async function PlacesPage() {
         submit="Add place"
         parents={options}
       />
-      <ul className={classes.list}>
-        {places.length === 0 && (
-          <li>
-            <Text c="dimmed">
-              No places yet. Add where your sets are kept: a room, a shelf, a bin.
-            </Text>
-          </li>
-        )}
-        {places.map((p) => (
-          <li key={p.id} style={{ paddingLeft: 16 + depth(p.id) * 24 }}>
-            <div>
-              <strong>{p.name}</strong>{' '}
-              <span className={classes.muted}>
-                {p.copies} here{p.total !== p.copies ? ` · ${p.total} including sub-places` : ''}
-              </span>
-            </div>
-            <DeleteWithGuard
-              title={`Delete ${p.name}?`}
-              triggerLabel="Delete"
-              action={deletePlaceAction.bind(null, p.id)}
-            >
-              It moves to the trash. A place that still holds copies cannot be deleted.
-            </DeleteWithGuard>
-          </li>
-        ))}
-      </ul>
-      {places.length > 0 && (
-        <details className={classes.section}>
-          <summary>Rename or move a place</summary>
+      {places.length === 0 ? (
+        <EmptyState inline title="No places yet.">
+          Add where your sets are kept: a room, a shelf, a bin.
+        </EmptyState>
+      ) : (
+        <ul className={classes.list}>
           {places.map((p) => (
-            <div key={p.id} style={{ marginTop: 12 }}>
+            <li key={p.id} data-depth={Math.min(depth(p.id), 4) || undefined}>
+              <div className={classes.main}>
+                <strong>{p.name}</strong>{' '}
+                <span className={classes.muted}>
+                  {p.copies} here{p.total !== p.copies ? ` · ${p.total} including sub-places` : ''}
+                </span>
+              </div>
+              <DeleteWithGuard
+                title={`Delete ${p.name}?`}
+                triggerLabel="Delete"
+                name={p.name}
+                action={deletePlaceAction.bind(null, p.id)}
+              >
+                It moves to the trash. A place that still holds copies cannot be deleted.
+              </DeleteWithGuard>
+            </li>
+          ))}
+        </ul>
+      )}
+      {places.length > 0 && (
+        <details className={classes.more}>
+          <summary>
+            <IconChevronRight size={20} stroke={1.75} aria-hidden />
+            Rename or move a place
+          </summary>
+          {places.map((p) => (
+            <div key={p.id} className={classes.morePanel}>
               <NameForm
                 action={renamePlaceAction.bind(null, p.id)}
                 label="Name"
@@ -77,6 +81,6 @@ export default async function PlacesPage() {
           ))}
         </details>
       )}
-    </>
+    </div>
   );
 }
