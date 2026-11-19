@@ -1,69 +1,105 @@
-.door {
+/* Sign-in and setup: the art panel on the field, then the form. Side by side from 900. */
+.gate {
   display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(420px, 1fr);
-  min-height: 100vh;
+  grid-template-rows: auto 1fr;
+  min-height: 100dvh;
   background: var(--app-ground);
 
-  @media (max-width: 860px) {
-    display: block;
+  @media (min-width: 900px) {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    grid-template-rows: none;
   }
 }
 
-.wall {
-  background: var(--app-sunk);
-  border-right: 1px solid var(--app-border);
+.art {
+  display: grid;
+  gap: 12px;
+  padding: 20px var(--app-gutter) 0;
+  background: var(--app-field);
+  color: var(--app-field-ink);
 
-  @media (max-width: 860px) {
-    display: none;
+  @media (min-width: 900px) {
+    align-content: space-between;
+    padding: 48px 48px 0;
   }
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  font-size: 1.375rem;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+
+.pitch {
+  display: none;
+
+  @media (min-width: 900px) {
+    display: grid;
+    gap: var(--app-s3);
+  }
+}
+
+.headline {
+  margin: 0;
+  font-size: clamp(1.75rem, 1.2rem + 2.4vw, 3.25rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.98;
+}
+
+.line {
+  max-width: 30em;
+  margin: 0;
+  color: var(--app-field-muted);
+  font-size: var(--app-fs-lead);
+}
+
+.pile {
+  justify-self: center;
+  width: 100%;
+  max-width: 560px;
+  height: auto;
 }
 
 .form {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  display: grid;
+  align-content: start;
+  gap: var(--app-s4);
+  justify-self: center;
   width: 100%;
-  max-width: 560px;
-  padding: 48px 8%;
+  max-width: 480px;
+  padding: var(--app-s5) var(--app-gutter) var(--app-s6);
 
-  & h1 {
-    margin: 22px 0 6px;
-    font-size: 28px;
-  }
-
-  @media (max-width: 860px) {
-    max-width: none;
-    justify-content: flex-start;
-    padding: 28px 20px 60px;
+  @media (min-width: 900px) {
+    align-content: center;
+    padding: 48px;
   }
 }
 
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: var(--app-ink);
-  font-family: var(--app-display);
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+.title {
+  margin: 0;
+  font-size: 1.75rem;
+}
 
-  & svg {
-    color: var(--app-accent);
-  }
+.lead,
+.foot {
+  margin: 0;
 }
 
 .lead {
-  margin: 0;
   color: var(--app-muted);
 }
 
-.body {
-  margin-top: 22px;
+.foot,
+.credit {
+  color: var(--app-muted);
+  font-size: var(--app-fs-small);
 }
 
-.foot {
-  margin: 28px 0 0;
-  color: var(--app-muted);
-  font-size: 13px;
+.credit {
+  margin: var(--app-s3) 0 0;
 }
