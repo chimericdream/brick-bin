@@ -72,3 +72,23 @@
   - No changes in `src/server` or `drizzle/`.
   - Vitest: 352/353 twice. `catalog/import.test.ts` "returns at once…" times out under full-suite load and passes 10/10 when run alone. No server code was touched, so I treat it as a pre-existing timing flake.
 - Gate 2 (slice 1 review): waiting on the human, with four developer questions (kid missing-pieces link, kid More page, missing-pieces link target, accessible-name changes).
+- Gate 2: the human approved slice 1 and took the PM's recommendations:
+  1. Kid missing-pieces link: keep as is.
+  2. Kid More page: approved.
+  3. Missing-pieces link target: keep the app's.
+  4. Accessible-name changes: approved.
+- Developer resumed on slice 2.
+- Slice 2 done: 15 commits, `9aebf11`..`7498d31`.
+  - PM verification: typecheck, lint, format and build pass. Vitest is 352/353, with the same `import.test.ts` load flake (2 of 3 PM full runs).
+  - The `src/server` diff is wording only ("Colour" → "Color", including the CSV header). No drizzle changes.
+- Developer questions:
+  1. Wishlist sheet under 1024: check it in the slice 3 phone pass.
+  2. People role lines are new copy the developer wrote: kept for now and put to the human.
+- No human stop needed, so the developer was sent on to slice 3.
+- Slice 3 done: `6de147f`, `56d8769`, `b25dc3d`.
+  - Built: accessibility fixes (build-state menu focus, focusable scrolling tables), WISH-11 and WISH-12 for the phone wishlist sheet, and `docs/design/brick-bin/` replaced with the new design.
+  - PR https://github.com/chimericdream/brick-bin/pull/6, head `b25dc3d`.
+  - CI: `check` and `e2e` (4 shards) green. Mergeable. The developer reports 115 e2e locally.
+  - PM verification: lint, format, typecheck and 353/353 unit tests pass.
+  - No drizzle changes. No CDN URLs in the UI; the only ones are the existing on-demand Rebrickable catalog import on the server.
+- Open for the human: the People role lines (new copy). The human merges the PR.
