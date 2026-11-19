@@ -62,3 +62,13 @@
 
 ## Phase 2
 
+- Launched the Developer (Opus 5.5) on slice 1 with brief 03, the machine-safety rule, the final path and four relayed facts.
+- Slice 1 done: 6 commits, `ae3bcd4`..`8033a48`.
+  - Built: tokens, theme, fonts, shared brick components, shell, More, Library, set detail.
+  - The developer reports e2e at 113/113.
+  - Specs edited deliberately: library, sets, navigation, visibility, collection, instructions, and the shots script.
+- PM verification:
+  - typecheck, lint (exit 0), format:check (after I fixed this log's trailing blank line) and build pass.
+  - No changes in `src/server` or `drizzle/`.
+  - Vitest: 352/353 twice. `catalog/import.test.ts` "returns at once…" times out under full-suite load and passes 10/10 when run alone. No server code was touched, so I treat it as a pre-existing timing flake.
+- Gate 2 (slice 1 review): waiting on the human, with four developer questions (kid missing-pieces link, kid More page, missing-pieces link target, accessible-name changes).
