@@ -49,7 +49,7 @@ export function FigureImage({ size = 72 }: { size?: number }) {
   );
 }
 
-/** A colour dot with an inner ring so White and Lavender show an edge. */
+/** A small square of the part's colour, with an edge so White and Lavender still show. */
 export function Swatch({ rgb, label }: { rgb: string | null; label?: string }) {
   return (
     <span

@@ -18,6 +18,7 @@ export function PageHead({
   crumbs,
   actions,
   actionsFromTablet = false,
+  extra,
 }: {
   title: React.ReactNode;
   sub?: React.ReactNode;
@@ -26,6 +27,8 @@ export function PageHead({
   actions?: React.ReactNode;
   /** Hide the actions on phones, where the tab bar or the page body offers them instead. */
   actionsFromTablet?: boolean;
+  /** Tags under the line (a copy's build state and completeness), drawn for the field. */
+  extra?: React.ReactNode;
 }) {
   return (
     <header
@@ -47,6 +50,7 @@ export function PageHead({
         )}
         <h1 className={classes.title}>{title}</h1>
         {sub && <p className={classes.sub}>{sub}</p>}
+        {extra && <div className={classes.extra}>{extra}</div>}
       </div>
       {actions && <div className={classes.actions}>{actions}</div>}
     </header>
