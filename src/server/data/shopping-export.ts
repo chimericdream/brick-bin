@@ -57,7 +57,7 @@ const setsText = (g: ShoppingGroup) => {
 
 export function toPlainCsv(groups: ShoppingGroup[]): string {
   return csv([
-    'Type,Part or figure,Name,Colour,Element id,Quantity,Sets,Alternates',
+    'Type,Part or figure,Name,Color,Element id,Quantity,Sets,Alternates',
     ...groups.map((g) =>
       csvLine([
         g.kind === 'part' ? 'Part' : g.kind === 'minifig' ? 'Minifigure' : 'Other',

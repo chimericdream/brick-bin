@@ -172,7 +172,7 @@ export function parseDownloadsPage(html: string, opts: ParseOptions): DownloadsL
       listing.ldraw.push({
         url,
         colorId,
-        colorName: name ?? `Colour ${colorId}`,
+        colorName: name ?? `Color ${colorId}`,
         date: dateNear(a),
         sizeText: size,
       });

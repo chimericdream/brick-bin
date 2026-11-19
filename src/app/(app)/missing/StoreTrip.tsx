@@ -1,10 +1,13 @@
 'use client';
 
 import { useEffect, useState, useSyncExternalStore, useTransition } from 'react';
-import { Alert, Button, Group, Modal, NumberInput, Stack, Text } from '@mantine/core';
+import { Button, Modal, NumberInput } from '@mantine/core';
 import { IconCheck } from '@tabler/icons-react';
 
+import { DialogFoot } from '@/components/DialogFoot';
+import { Note } from '@/components/Note';
 import { FigureImage, PartImage, Swatch } from '@/components/sets/PartImage';
+import ui from '@/components/ui/ui.module.css';
 import { allocateOldestFirst } from '@/lib/allocate';
 
 import { markBoughtAction } from './actions';
@@ -46,7 +49,7 @@ function writeTicks(keys: string[]) {
 }
 
 /**
- * Store-trip mode: big pictures, tick things off as they go in the basket, then "Done" offers to mark
+ * Store-trip mode: big pictures, check things off as they go in the cart, then "Done" offers to mark
  * what was ticked as bought. Ticks are kept in the browser only, never sent anywhere.
  */
 export function StoreTrip({ groups }: { groups: TripGroup[] }) {
@@ -110,13 +113,13 @@ export function StoreTrip({ groups }: { groups: TripGroup[] }) {
     });
 
   return (
-    <div>
-      <ul className={classes.trip}>
+    <div className={classes.trip}>
+      <ul className={`${ui.panel} ${ui.rows}`}>
         {groups.map((g) => {
           const on = ticked.includes(g.key);
           return (
-            <li key={g.key} className={classes.tripRow} data-ticked={on || undefined}>
-              <label className={classes.tripLabel}>
+            <li key={g.key} data-checked={on || undefined}>
+              <label className={classes.tripLine}>
                 <input
                   type="checkbox"
                   checked={on}
@@ -124,26 +127,28 @@ export function StoreTrip({ groups }: { groups: TripGroup[] }) {
                   className={classes.tripCheck}
                   aria-label={`${g.title}${g.colorName ? `, ${g.colorName}` : ''}, quantity ${g.quantity}`}
                 />
-                {g.kind === 'part' && g.partNum && g.colorId !== null ? (
-                  <PartImage
-                    partNum={g.partNum}
-                    colorId={g.colorId}
-                    imageColorId={g.imageColorId}
-                    size={112}
-                  />
-                ) : (
-                  <FigureImage size={112} />
-                )}
-                <span className={classes.tripText}>
-                  <strong>{g.title}</strong>
+                <span className={classes.tripPart}>
+                  {g.kind === 'part' && g.partNum && g.colorId !== null ? (
+                    <PartImage
+                      partNum={g.partNum}
+                      colorId={g.colorId}
+                      imageColorId={g.imageColorId}
+                      size={72}
+                    />
+                  ) : (
+                    <FigureImage size={72} />
+                  )}
+                </span>
+                <span className={classes.text}>
+                  <strong className={classes.name}>{g.title}</strong>
                   <span className={classes.meta}>
                     {g.colorName && (
-                      <span className={classes.color}>
+                      <span className={classes.ink}>
                         <Swatch rgb={g.rgb} />
                         {g.colorName}
                       </span>
                     )}
-                    {g.partNum && <span>#{g.partNum}</span>}
+                    {g.partNum && <span className="app-mono">#{g.partNum}</span>}
                   </span>
                   {g.hints.length > 0 && (
                     <span className={classes.hint}>
@@ -151,7 +156,10 @@ export function StoreTrip({ groups }: { groups: TripGroup[] }) {
                     </span>
                   )}
                 </span>
-                <span className={classes.tripQty}>×{g.quantity}</span>
+                <span className={classes.qty} aria-hidden>
+                  <small>×</small>
+                  {g.quantity}
+                </span>
               </label>
             </li>
           );
@@ -159,14 +167,28 @@ export function StoreTrip({ groups }: { groups: TripGroup[] }) {
       </ul>
 
       <div className={classes.tripBar} data-noprint>
-        <Text fw={600}>
-          {ticked.length} of {groups.length} ticked
-        </Text>
+        <div className={classes.tripCount} aria-live="polite">
+          {ticked.length} of {groups.length} checked off
+          <div
+            className={classes.progress}
+            role="progressbar"
+            aria-label="Checked off"
+            aria-valuemin={0}
+            aria-valuemax={groups.length}
+            aria-valuenow={ticked.length}
+          >
+            {ticked.length > 0 && (
+              <span
+                className={`${classes.progressFill} app-studs`}
+                style={{ width: `${(ticked.length / Math.max(groups.length, 1)) * 100}%` }}
+              />
+            )}
+          </div>
+        </div>
         <Button
-          leftSection={<IconCheck size={18} />}
+          leftSection={<IconCheck size={20} stroke={2} />}
           disabled={ticked.length === 0}
           onClick={beginDone}
-          size="md"
         >
           Done
         </Button>
@@ -175,56 +197,47 @@ export function StoreTrip({ groups }: { groups: TripGroup[] }) {
       <Modal
         opened={open}
         onClose={() => setOpen(false)}
-        title="Mark the ticked pieces as bought"
-        centered
-        size="lg"
+        title="Mark the checked pieces as bought"
+        size={600}
       >
-        <Stack gap="sm">
-          {error && (
-            <Alert color="red" variant="light" role="alert">
-              {error}
-            </Alert>
-          )}
-          <Text size="sm" c="dimmed">
+        <div className={ui.stack}>
+          {error && <Note variant="error">{error}</Note>}
+          <p className={ui.small}>
             Each part fills the oldest missing rows first. Change a number if a different copy
             should get them.
-          </Text>
+          </p>
           {tickedGroups.map((g) => (
-            <div key={g.key}>
-              <Text fw={650}>
+            <div key={g.key} className={classes.bought}>
+              <p className={classes.name}>
                 {g.title}
                 {g.colorName ? `, ${g.colorName}` : ''}
-              </Text>
+              </p>
               {g.sources.map((s) => (
-                <Group key={s.itemId} justify="space-between" gap="sm" py={2}>
-                  <Text size="sm">
-                    {s.label}{' '}
-                    <Text span c="dimmed">
-                      (missing {s.quantity})
-                    </Text>
-                  </Text>
+                <div key={s.itemId} className={classes.boughtRow}>
+                  <span>
+                    {s.label} <span className={ui.muted}>(missing {s.quantity})</span>
+                  </span>
                   <NumberInput
                     aria-label={`Bought for ${s.label}`}
                     min={0}
                     max={s.quantity}
-                    size="xs"
-                    w={80}
+                    w={96}
                     value={counts[s.itemId] ?? 0}
                     onChange={(v) => setCounts({ ...counts, [s.itemId]: Number(v) || 0 })}
                   />
-                </Group>
+                </div>
               ))}
             </div>
           ))}
-          <Group justify="flex-end">
+          <DialogFoot>
             <Button variant="default" onClick={() => setOpen(false)}>
               Cancel
             </Button>
             <Button loading={pending} onClick={confirm}>
               Mark as bought
             </Button>
-          </Group>
-        </Stack>
+          </DialogFoot>
+        </div>
       </Modal>
     </div>
   );

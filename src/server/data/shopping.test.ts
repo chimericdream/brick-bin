@@ -331,7 +331,7 @@ describe('exports', () => {
     const groups = await sample();
     const text = toPlainCsv(groups);
     const lines = text.trimEnd().split('\r\n');
-    expect(lines[0]).toBe('Type,Part or figure,Name,Colour,Element id,Quantity,Sets,Alternates');
+    expect(lines[0]).toBe('Type,Part or figure,Name,Color,Element id,Quantity,Sets,Alternates');
     expect(lines).toContain('Part,3001,Brick 2 x 4,Black,300126,4,Titanic x4,3001old');
     // Quoted because of the inner quotes, with the apostrophe guard in front of the formula.
     expect(text).toContain('"\'=HYPERLINK(""x"")"');
