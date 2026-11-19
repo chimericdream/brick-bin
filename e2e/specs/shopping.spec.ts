@@ -148,7 +148,7 @@ test.describe('shopping list', () => {
     const plain = await page.request.get('/api/missing/export?format=csv');
     const csv = await plain.text();
     expect(csv.split('\r\n')[0]).toBe(
-      'Type,Part or figure,Name,Colour,Element id,Quantity,Sets,Alternates',
+      'Type,Part or figure,Name,Color,Element id,Quantity,Sets,Alternates',
     );
     expect(csv).toContain('Part,3023,Plate 1 x 2,Red,,4,Titanic x3; Hogwarts x1,');
     expect((await page.request.get('/api/missing/export?format=nope')).status()).toBe(400);

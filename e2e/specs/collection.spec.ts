@@ -63,8 +63,9 @@ test.describe('collection and value', () => {
     await page.goto('/collection');
     const stale = page.getByRole('region', { name: 'Value not set in over a year' });
     await expect(stale.locator('tbody tr')).toHaveCount(2);
-    await expect(stale).toContainText('$50.00 · Apr 2023');
-    await expect(stale).toContainText('no estimate · never valued');
+    // A table with Estimate and Last valued columns now, in place of "$50.00 · Apr 2023".
+    await expect(stale.getByRole('row', { name: /\$50\.00 Apr 2023/ })).toBeVisible();
+    await expect(stale.getByRole('row', { name: /No estimate Never/ })).toBeVisible();
     await expect(stale).not.toContainText('Fresh');
   });
 

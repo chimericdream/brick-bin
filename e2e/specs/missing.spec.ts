@@ -315,7 +315,7 @@ test.describe('missing pieces', () => {
     await db.seedPartImage(0, '3023'); // Black plate image only
     await page.goto(url);
     const black = tile(page, 'Brick 2 x 4', 'Black');
-    await expect(black).toContainText('Picture is in another colour'); // shown in Red
+    await expect(black).toContainText('Picture is in another color'); // shown in Red
     await expect(black.locator('img')).toHaveAttribute('src', '/api/part-image/4/3001');
     const red = tile(page, 'Plate 1 x 2', 'Red');
     await expect(red.locator('img')).toHaveAttribute('src', '/api/part-image/0/3023');
