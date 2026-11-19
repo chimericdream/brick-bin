@@ -334,7 +334,7 @@ export default async function ShoppingPage({ searchParams }: { searchParams: Pro
               </div>
               <span className={classes.qty} aria-label={`Quantity ${g.quantity}`}>
                 <small aria-hidden>×</small>
-                <span aria-hidden>{g.quantity}</span>
+                {g.quantity}
               </span>
             </li>
           ))}
