@@ -568,13 +568,16 @@ test('capture the app screens', async ({ browser, db, rebrickable }) => {
             scheme,
             'library-filtered',
             '/sets',
-            'Library with the Technic filter applied.',
+            'Library with a build state and a brand filter on.',
             async () => {
+              await p.getByRole('button', { name: /^Sealed/ }).click();
+              await p.waitForURL(/state=sealed/);
               await p
-                .getByRole('checkbox', { name: /Technic/ })
-                .first()
+                .getByRole('complementary', { name: 'Filters' })
+                .getByRole('link', { name: /^LEGO/ })
                 .click();
-              await p.waitForLoadState('load');
+              await p.waitForURL(/brand=/);
+              await settle(p);
             },
             true,
           );
@@ -603,7 +606,7 @@ test('capture the app screens', async ({ browser, db, rebrickable }) => {
           'The one-tap build-state menu on a copy.',
           async () => {
             await p
-              .getByRole('button', { name: /Build state: Built/ })
+              .getByRole('button', { name: /Build state of copy \d: Built/ })
               .first()
               .click();
           },

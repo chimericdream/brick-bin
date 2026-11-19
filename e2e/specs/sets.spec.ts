@@ -28,7 +28,7 @@ test.describe('adding sets', () => {
     await page.getByRole('button', { name: 'Add set' }).click();
 
     await expect(page.getByRole('heading', { name: 'Crawler Crane', level: 1 })).toBeVisible();
-    await expect(page.getByText('No copies yet')).toBeVisible();
+    await expect(page.getByText('No copies of this set.')).toBeVisible();
     const [brand] = await db.sql`select name, is_lego from brands where name = 'Mould King'`;
     expect(brand!.is_lego).toBe(false);
   });
@@ -64,9 +64,10 @@ test.describe('set detail and copies', () => {
   }) => {
     const id = await db.seedSet({ name: 'Harbour Lighthouse', copies: [{ buildState: 'sealed' }] });
     await page.goto(`/sets/${id}`);
-    await page.getByRole('button', { name: /Build state: Sealed/ }).click();
-    await page.getByRole('menuitem', { name: /Built/ }).click();
-    await expect(page.getByRole('button', { name: /Build state: Built/ })).toBeVisible();
+    await page.getByRole('button', { name: /Build state of copy 1: Sealed/ }).click();
+    await page.getByRole('menuitemradio', { name: /Built/ }).click();
+    await expect(page.getByRole('button', { name: /Build state of copy 1: Built/ })).toBeVisible();
+    await expect(page.getByText('Copy 1 is now Built.')).toBeVisible();
     const [row] =
       await db.sql`select changes from audit_log where entity_type = 'copy' and action = 'update'`;
     expect(row!.changes).toEqual({ buildState: ['sealed', 'built'] });
@@ -119,7 +120,7 @@ test.describe('set detail and copies', () => {
 
     await page.getByRole('button', { name: 'Remove copy' }).click();
     await page.getByRole('button', { name: 'Move to trash' }).click();
-    await expect(page.getByText('No copies yet')).toBeVisible();
+    await expect(page.getByText('No copies of this set.')).toBeVisible();
 
     await page.getByRole('button', { name: 'Delete set' }).click();
     await page.getByRole('button', { name: 'Move to trash' }).click();

@@ -318,7 +318,12 @@ test.describe('instructions', () => {
     await row.getByRole('button', { name: 'Restore' }).click();
     await expect(row).toHaveCount(0);
     await page.goto(`/sets/${id}`);
-    await expect(page.getByRole('listitem').filter({ hasText: 'Book' })).toBeVisible();
+    await expect(
+      page
+        .getByRole('region', { name: /Instructions/ })
+        .getByRole('listitem')
+        .filter({ hasText: 'Book' }),
+    ).toBeVisible();
 
     await page.getByRole('button', { name: 'Remove', exact: true }).click();
     await page.getByRole('button', { name: 'Move to trash' }).click();

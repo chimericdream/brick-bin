@@ -30,7 +30,7 @@ test.describe('library', () => {
     await expect(tile(page, 'Wanted')).toContainText('No copies');
   });
 
-  test('LIB-02 a tile shows one badge row per copy, three at most, then "+N more"', async ({
+  test('LIB-02 copies collapse into one state tag per build state, with a count', async ({
     page,
     db,
   }) => {
@@ -42,11 +42,11 @@ test.describe('library', () => {
     await db.seedSet({ name: 'Solo', copies: [{ buildState: 'sealed' }] });
     await page.goto('/sets');
     const bag = tile(page, 'Polybag');
-    await expect(bag.getByText('Sealed')).toHaveCount(3);
-    await expect(bag.getByText('+2 more copies')).toBeVisible();
-    await expect(bag.getByLabel(/^Copy \d$/)).toHaveCount(3);
-    await expect(tile(page, 'Pair').getByLabel(/^Copy \d$/)).toHaveCount(2);
-    await expect(tile(page, 'Solo').getByLabel(/^Copy \d$/)).toHaveCount(0);
+    await expect(bag.getByText('Sealed')).toHaveCount(1);
+    await expect(bag.getByText('Sealed')).toContainText('×5');
+    // Fixed order: opened before built.
+    await expect(tile(page, 'Pair').locator('[data-st]')).toHaveText(['Opened', 'Built']);
+    await expect(tile(page, 'Solo').getByText('Sealed')).not.toContainText('×');
   });
 
   test('LIB-03 facet links filter, show counts, and clear', async ({ page, db }) => {
@@ -55,18 +55,24 @@ test.describe('library', () => {
     await db.seedSet({ name: 'K built', brand: 'CaDA', copies: [{ buildState: 'built' }] });
     await page.goto('/sets');
     const panel = page.getByRole('complementary', { name: 'Filters' });
-    await expect(panel.getByRole('link', { name: /^Built\s*2$/ })).toBeVisible();
+    const sorter = page.getByRole('group', { name: 'Filter by build state' });
+    await expect(sorter.getByRole('button', { name: /^Built\s*2$/ })).toBeVisible();
 
     await panel.getByRole('link', { name: /^CaDA/ }).click();
     await expect(page).toHaveURL(/brand=/);
     await expect(page.getByRole('listitem').filter({ hasText: 'K built' })).toBeVisible();
     await expect(page.getByText('L built')).toHaveCount(0);
     // The build-state counts now cover CaDA only; the brand counts still offer LEGO.
-    await expect(panel.getByRole('link', { name: /^Built\s*1$/ })).toBeVisible();
+    await expect(sorter.getByRole('button', { name: /^Built\s*1$/ })).toBeVisible();
     await expect(panel.getByRole('link', { name: /^LEGO\s*2$/ })).toBeVisible();
 
-    await panel.getByRole('link', { name: /^Sealed/ }).click();
-    await expect(page.getByText('No sets match these filters.')).toBeVisible();
+    await sorter.getByRole('button', { name: /^Sealed/ }).click();
+    await expect(page).toHaveURL(/state=sealed/);
+    await expect(sorter.getByRole('button', { name: /^Sealed/ })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+    await expect(page.getByText('Nothing in the bin matches that.')).toBeVisible();
     await page.getByRole('link', { name: 'Clear all filters' }).click();
     await expect(page).toHaveURL(/\/sets$/);
     await expect(page.getByText('3 sets', { exact: true })).toBeVisible();
@@ -83,7 +89,7 @@ test.describe('library', () => {
     // A navigation can land mid-read; poll again rather than fail.
     const order = () =>
       page
-        .locator('ul > li strong')
+        .locator('ul > li h3')
         .allTextContents()
         .then((names) => names.filter(Boolean))
         .catch(() => []);
@@ -111,12 +117,12 @@ test.describe('library', () => {
     await db.seedMany(60);
     await page.goto('/sets');
     await expect(page.getByText('60 sets', { exact: true })).toBeVisible();
-    await expect(page.locator('ul > li strong')).toHaveCount(24);
-    await expect(page.getByText('Showing 1 to 24 of 60')).toBeVisible();
+    await expect(page.locator('ul > li h3')).toHaveCount(24);
+    await expect(page.getByText('1 to 24 of 60 sets')).toBeVisible();
     await page.getByRole('link', { name: 'Next' }).click();
     await expect(page).toHaveURL(/page=2/);
     await page.getByRole('link', { name: 'Next' }).click();
-    await expect(page.getByText('Showing 49 to 60 of 60')).toBeVisible();
+    await expect(page.getByText('49 to 60 of 60 sets')).toBeVisible();
     await expect(page.getByRole('link', { name: 'Next' })).toHaveCount(0);
   });
 
@@ -124,7 +130,7 @@ test.describe('library', () => {
     await db.seedSet({ name: 'Calm' });
     await page.goto('/sets?brand=%27%3B--&state=exploded&page=-1&q=%25_%5C&sort=drop&from=zzz');
     await expect(page.getByRole('heading', { name: 'Library', level: 1 })).toBeVisible();
-    await expect(page.getByText('No sets match these filters.')).toBeVisible();
+    await expect(page.getByText('Nothing in the bin matches that.')).toBeVisible();
   });
 });
 
@@ -157,7 +163,7 @@ test.describe('library for a kid', () => {
     await expect(kidPage.getByRole('option', { name: 'Estimated value' })).toHaveCount(0);
     await expect(kidPage.getByRole('link', { name: 'Add set' })).toHaveCount(0);
     await kidPage.goto('/sets?q=Secret');
-    await expect(kidPage.getByText('No sets match these filters.')).toBeVisible();
+    await expect(kidPage.getByText('Nothing in the bin matches that.')).toBeVisible();
     await kidPage.goto('/sets?sort=value');
     await expect(kidPage.getByText('Open Set')).toBeVisible();
   });
@@ -172,17 +178,25 @@ test.describe('library for a kid', () => {
 test.describe('library on phones', () => {
   test.use({ viewport: { width: 390, height: 800 } });
 
-  test('LIB-07 two columns, and filters open as a sheet', async ({ page, db }) => {
+  test('LIB-07 sets are rows, the sorter stays in view, and filters open as a sheet', async ({
+    page,
+    db,
+  }) => {
     await db.seedSet({ name: 'One', copies: [{ buildState: 'built' }] });
-    await db.seedSet({ name: 'Two', copies: [{ buildState: 'sealed' }] });
+    await db.seedSet({ name: 'Two', brand: 'CaDA', copies: [{ buildState: 'sealed' }] });
     await page.goto('/sets');
     const a = await tile(page, 'One').boundingBox();
     const b = await tile(page, 'Two').boundingBox();
-    expect(Math.abs(a!.y - b!.y)).toBeLessThan(4); // same row: two columns
-    await expect(page.getByRole('link', { name: /^Built/ })).toBeHidden();
+    expect(b!.y).toBeGreaterThan(a!.y + a!.height - 4); // one row per set
+    await expect(page.getByRole('link', { name: /^CaDA/ })).toBeHidden();
     await page.getByRole('button', { name: 'Filters' }).click();
-    await expect(page.getByRole('link', { name: /^Built\s*1$/ })).toBeVisible();
-    await page.getByRole('link', { name: /^Built\s*1$/ }).click();
+    const sheet = page.getByRole('dialog', { name: 'Filters' });
+    await expect(sheet.getByRole('link', { name: /^CaDA\s*1$/ })).toBeVisible();
+    await sheet.getByRole('link', { name: /^CaDA\s*1$/ }).click();
+    await expect(page).toHaveURL(/brand=/);
+    await sheet.getByRole('button', { name: 'Show 1 set' }).click();
+    await expect(sheet).toBeHidden();
+    await page.getByRole('button', { name: /^Built\s*0$/ }).click();
     await expect(page).toHaveURL(/state=built/);
   });
 
