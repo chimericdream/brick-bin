@@ -1,10 +1,10 @@
-import { Group, Text, Title } from '@mantine/core';
-import { IconPencil } from '@tabler/icons-react';
-import Link from 'next/link';
+import { IconEyeOff, IconPencil, IconTrash } from '@tabler/icons-react';
 import { notFound } from 'next/navigation';
 
-import { ConfirmDelete } from '@/components/ConfirmDelete';
+import { ConfirmDelete, TRASH_SENTENCE } from '@/components/ConfirmDelete';
 import { LinkButton } from '@/components/Links';
+import { PageHead } from '@/components/layout/PageHead';
+import { Tag } from '@/components/sets/Badges';
 import { SetCover } from '@/components/sets/SetCover';
 import { centsToInput, formatMoney } from '@/lib/money';
 import { requireContext } from '@/server/auth/current';
@@ -29,6 +29,9 @@ const shortDate = (iso: string | null) =>
   iso
     ? new Date(`${iso}T12:00:00`).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
     : null;
+
+/** A missing value is a muted dash. */
+const Dash = () => <span className={classes.muted}>—</span>;
 
 export default async function SetDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -115,92 +118,128 @@ export default async function SetDetailPage({ params }: { params: Promise<{ id: 
     },
   }));
 
+  // Money never reaches a kid's page: the rows are only built for people who may edit.
+  const showRetail = !restricted && set.retailPriceCents !== null;
+  const showDesigner = !restricted && Boolean(set.designer);
+  const showCatalog = Boolean(set.rbSetNum && brand.isLego && canEdit);
+  const showHidden = set.hiddenFromRestricted && canEdit;
+  const hasKv = showRetail || showDesigner || tags.length > 0 || showCatalog || showHidden;
+
   return (
     <>
-      <nav aria-label="Breadcrumb" className={classes.crumbs}>
-        <Link href="/sets">Library</Link>›<span>{brand.name}</span>
-        {themePath.map((t) => (
-          <span key={t.id}>› {t.name}</span>
-        ))}
-      </nav>
-      <Group justify="space-between" align="flex-start" mt="xs" wrap="wrap">
-        <div>
-          <Title order={1}>{set.name}</Title>
-          <Text c="dimmed">
+      <PageHead
+        crumbs={[
+          { label: 'Library', href: '/sets' },
+          { label: brand.name },
+          ...themePath.map((t) => ({ label: t.name })),
+        ]}
+        title={set.name}
+        sub={
+          <>
             {brand.name}
-            {set.setNumber ? ` ${set.setNumber}` : ''}
-          </Text>
-        </div>
-        {canEdit && (
-          <Group gap="xs">
+            {set.setNumber && (
+              <>
+                {' '}
+                <span className="app-mono">{set.setNumber}</span>
+              </>
+            )}
+          </>
+        }
+        actions={
+          canEdit && (
             <LinkButton
               href={`/sets/${id}/edit`}
               variant="default"
-              leftSection={<IconPencil size={16} />}
+              leftSection={<IconPencil size={20} stroke={1.75} />}
             >
               Edit set
             </LinkButton>
-          </Group>
-        )}
-      </Group>
+          )
+        }
+      />
 
-      <div className={classes.top}>
-        <div>
-          <SetCover setId={id} hasCover={set.coverImage !== null} alt={`${set.name} box`} eager />
+      <section className={classes.about} aria-label="About this set">
+        <div className={classes.cover}>
+          <SetCover
+            setId={id}
+            hasCover={set.coverImage !== null}
+            alt={`Box art for ${set.name}`}
+            eager
+          />
         </div>
-        <div>
-          <dl className={classes.facts4}>
+        <div className={classes.aboutText}>
+          <dl className={classes.facts}>
             <div>
               <dt>Year</dt>
-              <dd>{set.year ?? '–'}</dd>
+              <dd>{set.year ?? <Dash />}</dd>
             </div>
             <div>
               <dt>Pieces</dt>
-              <dd>{set.pieceCount?.toLocaleString('en-US') ?? '–'}</dd>
+              <dd>{set.pieceCount?.toLocaleString('en-US') ?? <Dash />}</dd>
             </div>
             <div>
               <dt>Minifigs</dt>
-              <dd>{set.minifigCount ?? '–'}</dd>
+              <dd>{set.minifigCount ?? <Dash />}</dd>
             </div>
             <div>
               <dt>Age</dt>
-              <dd>{set.minAge ? `${set.minAge}+` : '–'}</dd>
+              <dd>{set.minAge ? `${set.minAge}+` : <Dash />}</dd>
             </div>
           </dl>
-          {set.description && (
-            <Text mt="sm" maw="60ch" style={{ whiteSpace: 'pre-line' }}>
-              {set.description}
-            </Text>
-          )}
-          {tags.length > 0 && (
-            <Text size="sm" c="dimmed" mt="sm">
-              Tags: {tags.join(', ')}
-            </Text>
-          )}
-          {!restricted && (set.retailPriceCents !== null || set.designer) && (
-            <Text size="sm" c="dimmed" mt="sm">
-              {set.retailPriceCents !== null && (
-                <>Retail price {formatMoney(set.retailPriceCents)}</>
+          {hasKv && (
+            <dl className={`${classes.kv} ${classes.kvPanel}`}>
+              {showRetail && (
+                <>
+                  <dt>Retail price</dt>
+                  <dd className="app-num">{formatMoney(set.retailPriceCents)}</dd>
+                </>
               )}
-              {set.retailPriceCents !== null && set.designer && ' · '}
-              {set.designer && <>Designer: {set.designer}</>}
-            </Text>
+              {showDesigner && (
+                <>
+                  <dt>Designer</dt>
+                  <dd>{set.designer}</dd>
+                </>
+              )}
+              {tags.length > 0 && (
+                <>
+                  <dt>Tags</dt>
+                  <dd className={classes.chips}>
+                    {tags.map((t) => (
+                      <Tag key={t} variant="quiet">
+                        {t}
+                      </Tag>
+                    ))}
+                  </dd>
+                </>
+              )}
+              {showCatalog && (
+                <>
+                  <dt>Catalog</dt>
+                  <dd>
+                    Linked to Rebrickable <span className="app-mono">{set.rbSetNum}</span>. Catalog
+                    data from <a href="https://rebrickable.com/">Rebrickable</a>.
+                    <div className={classes.resync}>
+                      <ResyncButton setId={id} setNum={set.rbSetNum!} />
+                    </div>
+                  </dd>
+                </>
+              )}
+              {showHidden && (
+                <>
+                  <dt>Kid profiles</dt>
+                  <dd>
+                    <Tag>
+                      <IconEyeOff size={16} stroke={1.75} aria-hidden />
+                      Hidden from kids
+                    </Tag>
+                  </dd>
+                </>
+              )}
+            </dl>
           )}
-          {set.rbSetNum && brand.isLego && canEdit && (
-            <Group mt="sm" gap="sm" align="center">
-              <Text size="sm" c="dimmed">
-                Linked to Rebrickable {set.rbSetNum}. Catalog data from Rebrickable.
-              </Text>
-              <ResyncButton setId={id} setNum={set.rbSetNum} />
-            </Group>
-          )}
-          {set.hiddenFromRestricted && canEdit && (
-            <Text size="sm" c="dimmed" mt="sm">
-              Hidden from kid profiles.
-            </Text>
-          )}
+          {set.description && <p className={classes.description}>{set.description}</p>}
         </div>
-      </div>
+      </section>
 
       <CopiesPanel
         setId={id}
@@ -219,22 +258,23 @@ export default async function SetDetailPage({ params }: { params: Promise<{ id: 
       />
 
       {canEdit && (
-        <Group mt="xl" justify="space-between" align="center">
+        <div className={classes.bottom}>
           {edited ? (
-            <Text size="sm" c="dimmed">
+            <p className={classes.small}>
               Last edited by {edited.actorName ?? 'someone'} on{' '}
               {edited.at.toLocaleDateString('en-US', {
                 day: 'numeric',
                 month: 'short',
                 year: 'numeric',
               })}
-            </Text>
+            </p>
           ) : (
             <span />
           )}
           <ConfirmDelete
             title={`Delete ${set.name}?`}
             triggerLabel="Delete set"
+            triggerLeftSection={<IconTrash size={16} stroke={1.75} />}
             blocked={
               copies.length > 0
                 ? `This set still has ${copies.length} ${copies.length === 1 ? 'copy' : 'copies'}. Remove ${copies.length === 1 ? 'it' : 'them'} first.`
@@ -242,9 +282,9 @@ export default async function SetDetailPage({ params }: { params: Promise<{ id: 
             }
             action={trashSetAction.bind(null, id)}
           >
-            It moves to the trash. You can restore it from Settings &gt; Trash.
+            {TRASH_SENTENCE}
           </ConfirmDelete>
-        </Group>
+        </div>
       )}
     </>
   );

@@ -1,36 +1,26 @@
 'use client';
 
-import { useActionState, useState, useTransition } from 'react';
-import {
-  Alert,
-  Avatar,
-  Button,
-  Group,
-  Menu,
-  Modal,
-  NumberInput,
-  Paper,
-  Stack,
-  Text,
-  Title,
-  UnstyledButton,
-} from '@mantine/core';
+import { useActionState, useRef, useState } from 'react';
+import { ActionIcon, Button, Modal, NumberInput, type NumberInputHandlers } from '@mantine/core';
 import {
   IconAlertTriangle,
   IconCheck,
-  IconChevronDown,
   IconMapPin,
+  IconMinus,
   IconPencil,
   IconPlus,
 } from '@tabler/icons-react';
 import Link from 'next/link';
 
-import { ConfirmDelete } from '@/components/ConfirmDelete';
-import { BUILD_STATE_INFO, BuildBadge, CompletenessBadge } from '@/components/sets/Badges';
-import { BUILD_STATES, type BuildState, type Completeness } from '@/server/data/completeness';
+import { ConfirmDelete, TRASH_SENTENCE } from '@/components/ConfirmDelete';
+import { DialogFoot } from '@/components/DialogFoot';
+import { Note } from '@/components/Note';
+import { CompletenessBadge, StateTag, missingLabel, tagClass } from '@/components/sets/Badges';
+import type { BuildState, Completeness } from '@/server/data/completeness';
 
-import { buildStateAction, saveCopyAction, trashCopyAction, type ActionState } from '../actions';
+import { saveCopyAction, trashCopyAction, type ActionState } from '../actions';
 import { CopyFields, type CopyDefaults, type Option } from '../CopyFields';
+import { BuildStateControl } from './BuildStateControl';
 import classes from './Detail.module.css';
 
 export interface CopyView {
@@ -57,42 +47,45 @@ interface Props {
   locations: Option[];
 }
 
-function BuildStateMenu({ setId, copy }: { setId: string; copy: CopyView }) {
-  const [pending, startTransition] = useTransition();
+/** "How many?": minus, the number, plus, in one frame. */
+function HowMany() {
+  const handlers = useRef<NumberInputHandlers>(undefined);
   return (
-    <Menu position="bottom-end" withinPortal>
-      <Menu.Target>
-        <UnstyledButton
-          className={classes.stateButton}
-          aria-label={`Build state: ${BUILD_STATE_INFO[copy.buildState].label}. Change`}
-          aria-busy={pending}
+    <NumberInput
+      name="quantity"
+      label="How many?"
+      description="Creates that many identical copies at once."
+      min={1}
+      max={50}
+      defaultValue={1}
+      clampBehavior="strict"
+      allowDecimal={false}
+      hideControls
+      handlersRef={handlers}
+      className={classes.howMany}
+      leftSectionWidth={44}
+      rightSectionWidth={44}
+      leftSection={
+        <ActionIcon
+          variant="subtle"
+          size={42}
+          aria-label="One fewer"
+          onClick={() => handlers.current?.decrement()}
         >
-          <BuildBadge state={copy.buildState} />
-          <IconChevronDown size={16} aria-hidden />
-        </UnstyledButton>
-      </Menu.Target>
-      <Menu.Dropdown>
-        {BUILD_STATES.map((state) => {
-          const info = BUILD_STATE_INFO[state];
-          const Glyph = info.icon;
-          return (
-            <Menu.Item
-              key={state}
-              leftSection={<Glyph size={18} aria-hidden />}
-              rightSection={state === copy.buildState ? <IconCheck size={16} aria-hidden /> : null}
-              onClick={() => startTransition(() => buildStateAction(setId, copy.id, state))}
-            >
-              <Text fw={600} size="sm">
-                {info.label}
-              </Text>
-              <Text size="xs" c="dimmed">
-                {info.hint}
-              </Text>
-            </Menu.Item>
-          );
-        })}
-      </Menu.Dropdown>
-    </Menu>
+          <IconMinus size={20} stroke={2} />
+        </ActionIcon>
+      }
+      rightSection={
+        <ActionIcon
+          variant="subtle"
+          size={42}
+          aria-label="One more"
+          onClick={() => handlers.current?.increment()}
+        >
+          <IconPlus size={20} stroke={2} />
+        </ActionIcon>
+      }
+    />
   );
 }
 
@@ -121,40 +114,64 @@ function CopyDialog({
       opened={opened}
       onClose={onClose}
       title={copy ? `Edit copy ${copy.position}` : 'Add a copy'}
-      size="lg"
-      centered
+      size={600}
     >
-      <form action={formAction}>
-        <Stack gap="md">
-          {state.error && (
-            <Alert color="red" variant="light" role="alert">
-              {state.error}
-            </Alert>
-          )}
-          {!copy && (
-            <NumberInput
-              name="quantity"
-              label="How many?"
-              description="Creates that many identical copies at once."
-              min={1}
-              max={50}
-              defaultValue={1}
-              maw={200}
-            />
-          )}
-          <CopyFields members={members} locations={locations} defaults={copy?.defaults} />
-          <Group justify="flex-end">
-            <Button variant="default" onClick={onClose}>
-              Cancel
-            </Button>
-            <Button type="submit" loading={pending}>
-              {copy ? 'Save copy' : 'Add copy'}
-            </Button>
-          </Group>
-        </Stack>
+      <form action={formAction} className={classes.form}>
+        {state.error && <Note variant="error">{state.error}</Note>}
+        {!copy && <HowMany />}
+        <CopyFields members={members} locations={locations} defaults={copy?.defaults} />
+        <DialogFoot>
+          <Button variant="default" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button type="submit" loading={pending}>
+            {copy ? 'Save copy' : 'Add copy'}
+          </Button>
+        </DialogFoot>
       </form>
     </Modal>
   );
+}
+
+/** "Has the box" with a check, or "No box" with a dash. */
+function Tick({ yes, label, no }: { yes: boolean; label: string; no: string }) {
+  return (
+    <li>
+      {yes ? (
+        <IconCheck size={16} stroke={2.5} aria-hidden />
+      ) : (
+        <IconMinus size={16} stroke={2.5} aria-hidden />
+      )}
+      {yes ? label : no}
+    </li>
+  );
+}
+
+function Pieces({ copy }: { copy: CopyView }) {
+  const c = copy.completeness;
+  if (c.kind === 'missing') {
+    // The tag is the way into the list of what is missing (read only for kids).
+    return (
+      <Link href={`/copies/${copy.id}/missing`} className={tagClass('dash')}>
+        {missingLabel(c.pieces)}
+      </Link>
+    );
+  }
+  if (c.kind === 'complete') {
+    return (
+      <span className={classes.stack}>
+        <CompletenessBadge completeness={c} />
+        <span className={classes.small} aria-hidden>
+          checked{' '}
+          {new Date(`${c.checkedOn}T12:00:00`).toLocaleDateString('en-US', {
+            month: 'short',
+            year: 'numeric',
+          })}
+        </span>
+      </span>
+    );
+  }
+  return <CompletenessBadge completeness={c} />;
 }
 
 export function CopiesPanel({ setId, copies, canEdit, members, locations }: Props) {
@@ -162,151 +179,151 @@ export function CopiesPanel({ setId, copies, canEdit, members, locations }: Prop
   const [adding, setAdding] = useState(false);
 
   return (
-    <section aria-labelledby="copies-heading">
-      <Group justify="space-between" mb="sm">
-        <Title order={2} id="copies-heading" size="h3">
-          Copies{' '}
-          <Text span c="dimmed" fw={400}>
-            {copies.length}
-          </Text>
-        </Title>
+    <section aria-labelledby="copies-heading" className={classes.section}>
+      <div className={classes.sectionHead}>
+        <h2 id="copies-heading">
+          Copies <small className={classes.count}>{copies.length}</small>
+        </h2>
         {canEdit && (
-          <Button leftSection={<IconPlus size={16} />} onClick={() => setAdding(true)}>
+          <Button leftSection={<IconPlus size={20} stroke={2} />} onClick={() => setAdding(true)}>
             Add copy
           </Button>
         )}
-      </Group>
+      </div>
 
       {copies.length === 0 && (
-        <Paper withBorder p="lg">
-          <Text c="dimmed">No copies yet. This set is in the catalog but you do not own one.</Text>
-        </Paper>
+        <div className={`${classes.empty} app-baseplate`}>
+          <div className={classes.emptyCard}>
+            <h3>No copies of this set.</h3>
+            <p>
+              The design is in the library, but nobody has said they own a box of it.
+              {canEdit && ' Add a copy to give it a build state and a place.'}
+            </p>
+            {canEdit && (
+              <Button
+                variant="default"
+                leftSection={<IconPlus size={20} stroke={2} />}
+                onClick={() => setAdding(true)}
+              >
+                Add copy
+              </Button>
+            )}
+          </div>
+        </div>
       )}
 
-      <Stack gap="md">
-        {copies.map((copy) => (
-          <Paper
-            key={copy.id}
-            withBorder
-            p="md"
-            component="article"
-            aria-label={`Copy ${copy.position}`}
-          >
-            <div className={classes.copyHead}>
-              <Group gap="sm" wrap="nowrap">
-                <Avatar color="bin" radius="xl" size={36} aria-hidden>
-                  {(copy.ownerName ?? 'Ours').slice(0, 1).toUpperCase()}
-                </Avatar>
-                <div>
-                  <Text fw={600}>
-                    {copy.ownerName ? `${copy.ownerName}’s copy` : 'Ours'}
-                    {copies.length > 1 && (
-                      <Text span c="dimmed" fw={400}>
-                        {' '}
-                        · copy {copy.position} of {copies.length}
-                      </Text>
-                    )}
-                  </Text>
-                  {copy.locationPath && (
-                    <Text size="sm" c="dimmed" className={classes.place}>
-                      <IconMapPin size={14} aria-hidden /> {copy.locationPath}
-                    </Text>
-                  )}
-                </div>
-              </Group>
-              {canEdit ? (
-                <BuildStateMenu setId={setId} copy={copy} />
-              ) : (
-                <BuildBadge state={copy.buildState} />
+      {copies.map((copy) => (
+        <article
+          key={copy.id}
+          className={classes.copy}
+          aria-label={`Copy ${copy.position} of ${copies.length}`}
+        >
+          <div className={classes.copyHead}>
+            <span className={classes.tile} aria-hidden>
+              {(copy.ownerName ?? 'Ours').slice(0, 1).toUpperCase()}
+            </span>
+            <div className={classes.who}>
+              <h3>
+                {copy.ownerName ? `${copy.ownerName}’s copy` : 'Ours'}
+                {copies.length > 1 && (
+                  <small>
+                    {' '}
+                    copy {copy.position} of {copies.length}
+                  </small>
+                )}
+              </h3>
+              {copy.locationPath && (
+                <p className={classes.place}>
+                  <IconMapPin size={16} stroke={1.75} aria-hidden />
+                  {copy.locationPath}
+                </p>
               )}
             </div>
-
-            <dl className={classes.facts}>
-              <div>
-                <dt>Pieces</dt>
-                <dd>
-                  {copy.completeness.kind === 'missing' ? (
-                    // The badge is the way into the list of what is missing, for kids too (read only).
-                    <Link href={`/copies/${copy.id}/missing`} className={classes.badgeLink}>
-                      <CompletenessBadge completeness={copy.completeness} />
-                    </Link>
-                  ) : (
-                    <CompletenessBadge completeness={copy.completeness} />
-                  )}
-                </dd>
-              </div>
-              <div>
-                <dt>Box and booklets</dt>
-                <dd>
-                  <span>{copy.hasBox ? '✓ Has the box' : '✗ No box'}</span>
-                  <br />
-                  <span>
-                    {copy.hasInstructions ? '✓ Has paper booklets' : '✗ No paper booklets'}
-                  </span>
-                </dd>
-              </div>
-              <div>
-                <dt>Condition notes</dt>
-                <dd>
-                  {copy.conditionNotes ?? (
-                    <Text span c="dimmed">
-                      None
-                    </Text>
-                  )}
-                </dd>
-              </div>
-              {copy.money ? (
-                <div>
-                  <dt>Paid / value</dt>
-                  <dd>
-                    {copy.money.paid || '–'} / {copy.money.value || '–'}
-                    {copy.money.valued && (
-                      <Text size="xs" c="dimmed">
-                        valued {copy.money.valued}
-                      </Text>
-                    )}
-                  </dd>
-                </div>
+            <div className={classes.state}>
+              {canEdit ? (
+                <BuildStateControl
+                  setId={setId}
+                  copyId={copy.id}
+                  position={copy.position}
+                  state={copy.buildState}
+                />
               ) : (
-                <div>
-                  <dt>Acquired</dt>
-                  <dd>{copy.acquiredOn ?? '–'}</dd>
-                </div>
+                <StateTag state={copy.buildState} />
               )}
-            </dl>
+            </div>
+          </div>
 
-            {canEdit && (
-              <Group gap="xs" mt="sm">
-                <Button
-                  variant="default"
-                  size="compact-md"
-                  leftSection={<IconPencil size={16} />}
-                  onClick={() => setEditing(copy)}
-                >
-                  Edit copy
-                </Button>
-                <Button
-                  component={Link}
-                  href={`/copies/${copy.id}/missing`}
-                  variant="default"
-                  size="compact-md"
-                  leftSection={<IconAlertTriangle size={16} />}
-                >
-                  Missing pieces
-                </Button>
+          <dl className={classes.kv}>
+            <dt>Pieces</dt>
+            <dd>
+              <Pieces copy={copy} />
+            </dd>
+            <dt>Box and booklets</dt>
+            <dd>
+              <ul className={classes.ticks}>
+                <Tick yes={copy.hasBox} label="Has the box" no="No box" />
+                <Tick
+                  yes={copy.hasInstructions}
+                  label="Has paper booklets"
+                  no="No paper booklets"
+                />
+              </ul>
+            </dd>
+            <dt>Condition notes</dt>
+            <dd>{copy.conditionNotes ?? <span className={classes.muted}>None</span>}</dd>
+            {copy.money ? (
+              <>
+                <dt>Paid / value</dt>
+                <dd>
+                  <b className="app-num">
+                    {copy.money.paid || '—'} / {copy.money.value || '—'}
+                  </b>
+                  {copy.money.valued && (
+                    <span className={classes.small}>valued {copy.money.valued}</span>
+                  )}
+                </dd>
+              </>
+            ) : (
+              <>
+                <dt>Acquired</dt>
+                <dd>{copy.acquiredOn ?? <span className={classes.muted}>—</span>}</dd>
+              </>
+            )}
+          </dl>
+
+          {canEdit && (
+            <div className={classes.copyActions}>
+              <Button
+                variant="default"
+                size="compact-md"
+                leftSection={<IconPencil size={16} stroke={1.75} />}
+                onClick={() => setEditing(copy)}
+              >
+                Edit copy
+              </Button>
+              <Button
+                component={Link}
+                href={`/copies/${copy.id}/missing`}
+                variant="default"
+                size="compact-md"
+                leftSection={<IconAlertTriangle size={16} stroke={1.75} />}
+              >
+                Missing pieces
+              </Button>
+              <span className={classes.push}>
                 <ConfirmDelete
                   title={`Remove copy ${copy.position}?`}
                   triggerLabel="Remove copy"
                   compact
                   action={() => trashCopyAction(setId, copy.id)}
                 >
-                  It moves to the trash. You can restore it from Settings &gt; Trash.
+                  {TRASH_SENTENCE}
                 </ConfirmDelete>
-              </Group>
-            )}
-          </Paper>
-        ))}
-      </Stack>
+              </span>
+            </div>
+          )}
+        </article>
+      ))}
 
       {canEdit && (
         <>
