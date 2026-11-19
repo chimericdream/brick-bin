@@ -1,6 +1,6 @@
-import { Text } from '@mantine/core';
 import { notFound } from 'next/navigation';
 
+import { EmptyState } from '@/components/ui/EmptyState';
 import { describeEntry } from '@/lib/activity';
 import { requireContext } from '@/server/auth/current';
 import { recentActivity } from '@/server/data/audit';
@@ -23,25 +23,29 @@ export default async function ActivityPage() {
   if (ctx.viewer.role === 'restricted') notFound();
   const entries = await recentActivity(ctx, { limit: 100 });
   return (
-    <>
-      <Text c="dimmed" size="sm">
+    <div className={classes.stack}>
+      <p className={classes.muted}>
         The last 100 changes. Passwords and private wishlist purchase marks never appear here.
-      </Text>
-      <ul className={classes.list}>
-        {entries.length === 0 && (
-          <li>
-            <Text c="dimmed">Nothing has changed yet.</Text>
-          </li>
-        )}
-        {entries.map((e) => (
-          <li key={e.id}>
-            <span>
-              <strong>{e.actorName ?? 'Someone'}</strong> {describeEntry(e)}
-            </span>
-            <span className={classes.muted}>{when(e.at)}</span>
-          </li>
-        ))}
-      </ul>
-    </>
+      </p>
+      {entries.length === 0 ? (
+        <EmptyState title="Nothing has happened yet.">
+          <p>Add a set, move a copy, rename a place: each change is noted here with who made it.</p>
+        </EmptyState>
+      ) : (
+        <ul className={classes.list}>
+          {entries.map((e) => (
+            <li key={e.id} className={classes.activity}>
+              <span className={`${classes.who} ${classes.whoSm}`} aria-hidden>
+                {(e.actorName ?? 'S').slice(0, 1).toUpperCase()}
+              </span>
+              <span className={classes.main}>
+                <strong>{e.actorName ?? 'Someone'}</strong> {describeEntry(e)}
+              </span>
+              <span className={classes.time}>{when(e.at)}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
   );
 }

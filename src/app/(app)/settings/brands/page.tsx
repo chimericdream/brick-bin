@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
-import { Text, Title } from '@mantine/core';
+import { IconChevronRight } from '@tabler/icons-react';
 
+import { EmptyState } from '@/components/ui/EmptyState';
 import { requireContext } from '@/server/auth/current';
 import { listBrandsWithCounts } from '@/server/data/brands';
 import { listThemeOptions, listThemesWithCounts } from '@/server/data/themes';
@@ -29,61 +30,67 @@ export default async function BrandsPage() {
   ]);
   const label = new Map(themeOptions.map((o) => [o.value, o.label]));
   return (
-    <>
-      <Title order={2} size="h3">
-        Brands
-      </Title>
-      <NameForm
-        action={createBrandAction}
-        label="New brand"
-        placeholder="Mould King"
-        submit="Add brand"
-        extra={[['websiteUrl', 'Website (optional)']]}
-      />
-      <ul className={classes.list}>
-        {brands.map((b) => (
-          <li key={b.id}>
-            <div>
-              <strong>{b.name}</strong>{' '}
-              <span className={classes.muted}>
-                {b.sets} {b.sets === 1 ? 'set' : 'sets'}
-                {b.isLego ? ' · catalog lookup on' : ''}
-              </span>
+    <div className={classes.stack}>
+      <section aria-labelledby="h-brands" className={classes.stack}>
+        <h2 id="h-brands" className={classes.h2}>
+          Brands
+        </h2>
+        <NameForm
+          action={createBrandAction}
+          label="New brand"
+          placeholder="Mould King"
+          submit="Add brand"
+          extra={[['websiteUrl', 'Website (optional)']]}
+        />
+        <ul className={classes.list}>
+          {brands.map((b) => (
+            <li key={b.id}>
+              <div className={classes.main}>
+                <strong>{b.name}</strong>{' '}
+                <span className={classes.muted}>
+                  {b.sets} {b.sets === 1 ? 'set' : 'sets'}
+                  {b.isLego ? ' · catalog lookup on' : ''}
+                </span>
+              </div>
+              <DeleteWithGuard
+                title={`Delete ${b.name}?`}
+                triggerLabel="Delete"
+                name={b.name}
+                action={deleteBrandAction.bind(null, b.id)}
+                confirmLabel="Delete brand"
+              >
+                An unused brand is deleted for good. A brand that has sets cannot be deleted.
+              </DeleteWithGuard>
+            </li>
+          ))}
+        </ul>
+        <details className={classes.more}>
+          <summary>
+            <IconChevronRight size={20} stroke={1.75} aria-hidden />
+            Rename a brand
+          </summary>
+          {brands.map((b) => (
+            <div key={b.id} className={classes.morePanel}>
+              <NameForm
+                action={updateBrandAction.bind(null, b.id)}
+                label="Name"
+                submit="Save"
+                defaults={{ name: b.name }}
+                extra={[['websiteUrl', 'Website', b.websiteUrl ?? '']]}
+              />
             </div>
-            <DeleteWithGuard
-              title={`Delete ${b.name}?`}
-              triggerLabel="Delete"
-              action={deleteBrandAction.bind(null, b.id)}
-              confirmLabel="Delete brand"
-            >
-              An unused brand is deleted for good. A brand that has sets cannot be deleted.
-            </DeleteWithGuard>
-          </li>
-        ))}
-      </ul>
-      <details className={classes.section}>
-        <summary>Rename a brand</summary>
-        {brands.map((b) => (
-          <div key={b.id} style={{ marginTop: 12 }}>
-            <NameForm
-              action={updateBrandAction.bind(null, b.id)}
-              label="Name"
-              submit="Save"
-              defaults={{ name: b.name }}
-              extra={[['websiteUrl', 'Website', b.websiteUrl ?? '']]}
-            />
-          </div>
-        ))}
-      </details>
+          ))}
+        </details>
+      </section>
 
-      <section className={classes.section}>
-        <Title order={2} size="h3">
+      <section aria-labelledby="h-themes" className={`${classes.stack} ${classes.section}`}>
+        <h2 id="h-themes" className={classes.h2}>
           Themes
-        </Title>
-        <Text size="sm" c="dimmed" mb="sm">
+        </h2>
+        <p className={classes.muted}>
           Themes can nest, like Star Wars › Ultimate Collector Series. Only themes you own sets in
           show up as library filters.
-        </Text>
+        </p>
         <NameForm
           action={createThemeAction}
           label="New theme"
@@ -91,17 +98,13 @@ export default async function BrandsPage() {
           submit="Add theme"
           parents={themeOptions}
         />
-        <ul className={classes.list}>
-          {themes.length === 0 && (
-            <li>
-              <Text c="dimmed">No themes yet.</Text>
-            </li>
-          )}
+        {themes.length === 0 && <EmptyState inline title="No themes yet." />}
+        <ul className={classes.list} hidden={themes.length === 0}>
           {themeOptions.map((o) => {
             const t = themes.find((x) => x.id === o.value)!;
             return (
               <li key={o.value}>
-                <div>
+                <div className={classes.main}>
                   <strong>{o.label}</strong>{' '}
                   <span className={classes.muted}>
                     {t.sets} {t.sets === 1 ? 'set' : 'sets'}
@@ -110,6 +113,7 @@ export default async function BrandsPage() {
                 <DeleteWithGuard
                   title={`Delete ${t.name}?`}
                   triggerLabel="Delete"
+                  name={t.name}
                   action={deleteThemeAction.bind(null, t.id)}
                   confirmLabel="Delete theme"
                 >
@@ -121,16 +125,22 @@ export default async function BrandsPage() {
           })}
         </ul>
         {themes.length > 1 && (
-          <details className={classes.section}>
-            <summary>Merge two themes</summary>
+          <details className={classes.more}>
+            <summary>
+              <IconChevronRight size={20} stroke={1.75} aria-hidden />
+              Merge two themes
+            </summary>
             <MergeThemesForm action={mergeThemesAction} themes={themeOptions} />
           </details>
         )}
         {themes.length > 0 && (
-          <details className={classes.section}>
-            <summary>Rename a theme</summary>
+          <details className={classes.more}>
+            <summary>
+              <IconChevronRight size={20} stroke={1.75} aria-hidden />
+              Rename a theme
+            </summary>
             {themes.map((t) => (
-              <div key={t.id} style={{ marginTop: 12 }}>
+              <div key={t.id} className={classes.morePanel}>
                 <NameForm
                   action={renameThemeAction.bind(null, t.id)}
                   label={label.get(t.id) ?? t.name}
@@ -142,6 +152,6 @@ export default async function BrandsPage() {
           </details>
         )}
       </section>
-    </>
+    </div>
   );
 }

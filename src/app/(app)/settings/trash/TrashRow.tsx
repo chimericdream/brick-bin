@@ -1,9 +1,12 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { Alert, Button, Group } from '@mantine/core';
+import { Button } from '@mantine/core';
+import { IconArrowBackUp } from '@tabler/icons-react';
 
 import { ConfirmDelete } from '@/components/ConfirmDelete';
+import { Note } from '@/components/Note';
+import ui from '@/components/ui/ui.module.css';
 
 import { purgeTrashAction, restoreTrashAction } from '../actions';
 
@@ -33,12 +36,13 @@ export function TrashRow({
     });
 
   return (
-    <div>
-      <Group gap="xs">
+    <div className={ui.stack}>
+      <div className={ui.actions}>
         {canRestore && (
           <Button
             size="compact-md"
             variant="default"
+            leftSection={<IconArrowBackUp size={16} stroke={1.75} />}
             loading={pending}
             onClick={() => restore(false)}
           >
@@ -69,12 +73,8 @@ export function TrashRow({
             This cannot be undone.
           </ConfirmDelete>
         )}
-      </Group>
-      {error && (
-        <Alert color="red" variant="light" role="alert" mt="xs">
-          {error}
-        </Alert>
-      )}
+      </div>
+      {error && <Note variant="error">{error}</Note>}
     </div>
   );
 }
