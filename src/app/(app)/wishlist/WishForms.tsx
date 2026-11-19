@@ -141,12 +141,7 @@ export function AddWishSheet(props: AddProps) {
       <Button leftSection={<IconPlus size={20} stroke={2} />} onClick={() => setOpened(true)}>
         Add a wish
       </Button>
-      <Modal
-        opened={opened}
-        onClose={() => setOpened(false)}
-        title="Add to my wishlist"
-        size={600}
-      >
+      <Modal opened={opened} onClose={() => setOpened(false)} title="Add to my wishlist" size={600}>
         <AddWish {...props} onSaved={() => setOpened(false)} />
       </Modal>
     </>
@@ -250,7 +245,12 @@ export function BoughtButton({
       <Button variant="default" size="compact-md" onClick={() => setOpened(true)}>
         I bought this
       </Button>
-      <Modal opened={opened} onClose={() => setOpened(false)} title={`I bought ${title}`} size={440}>
+      <Modal
+        opened={opened}
+        onClose={() => setOpened(false)}
+        title={`I bought ${title}`}
+        size={440}
+      >
         <form action={action} className={ui.stack}>
           <Note>
             <span className={classes.lockLine}>
