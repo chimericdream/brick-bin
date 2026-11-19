@@ -1,6 +1,6 @@
 'use client';
 
-import { startTransition, useActionState, useState } from 'react';
+import { startTransition, useActionState, useEffect, useRef, useState } from 'react';
 import {
   Button,
   Checkbox,
@@ -69,6 +69,8 @@ export function SetForm({
   defaults = {},
   lookup = null,
 }: Props) {
+  // "Try again" on a failed save sends the same form again.
+  const retry = useRef<((fd: FormData) => void) | null>(null);
   const [state, formAction, pending] = useActionState(
     async (prev: ActionState, fd: FormData): Promise<ActionState> => {
       try {
@@ -76,14 +78,15 @@ export function SetForm({
       } catch (e) {
         // A redirect after saving is how a save ends; anything else means nothing was saved.
         unstable_rethrow(e);
-        toastFailed('Couldn’t save the set. Nothing was changed.', () =>
-          startTransition(() => formAction(fd)),
-        );
+        toastFailed('Couldn’t save the set. Nothing was changed.', () => retry.current?.(fd));
         return prev;
       }
     },
     {},
   );
+  useEffect(() => {
+    retry.current = (fd) => startTransition(() => formAction(fd));
+  }, [formAction]);
   const [newBrand, setNewBrand] = useState(false);
   const [addCopy, setAddCopy] = useState(true);
   const creating = setId === null;
