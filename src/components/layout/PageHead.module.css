@@ -1,0 +1,144 @@
+.head {
+  --brick: var(--app-field);
+  --pitch: 40px;
+  --stud-h: 11px;
+  --stud-inset: 20px;
+  display: grid;
+  gap: var(--app-s4);
+  margin-top: calc(var(--stud-h) + 4px);
+  margin-bottom: var(--app-s4);
+  padding: 16px 16px 20px;
+  border-radius: var(--app-r);
+  color: var(--app-field-ink);
+
+  & :focus-visible {
+    outline-color: var(--app-focus-field);
+  }
+
+  @media (min-width: 768px) {
+    --pitch: 48px;
+    --stud-h: 13px;
+    --stud-inset: 24px;
+    margin-bottom: var(--app-s5);
+    padding: 24px 32px 28px;
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+  }
+}
+
+.text {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--app-fs-h1);
+  overflow-wrap: anywhere;
+}
+
+.sub {
+  margin: 0;
+  color: var(--app-field-muted);
+
+  & a,
+  & b,
+  & strong {
+    color: var(--app-field-ink);
+  }
+}
+
+.actions {
+  display: flex;
+
+  [data-actions-tablet] > & {
+    @media (max-width: 767px) {
+      display: none;
+    }
+  }
+
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--app-s2);
+
+  @media (min-width: 1024px) {
+    justify-content: flex-end;
+  }
+
+  /* On the field, the primary brick is light and the quiet button is a step up from the field. */
+  &
+    :global(.mantine-Button-root):is(
+      :not([data-variant]),
+      [data-variant='filled'],
+      [data-variant='primary']
+    ) {
+    --brick: var(--app-field-ink);
+    color: var(--app-brick-ink);
+  }
+
+  &
+    :global(.mantine-Button-root):is(
+      :not([data-variant]),
+      [data-variant='filled'],
+      [data-variant='primary']
+    ):hover {
+    --brick: var(--app-field-btn-hover);
+  }
+
+  &
+    :global(.mantine-Button-root):is(
+      [data-variant='default'],
+      [data-variant='light'],
+      [data-variant='quiet']
+    ) {
+    background: var(--app-field-2);
+    color: var(--app-field-ink);
+  }
+
+  &
+    :global(.mantine-Button-root):is(
+      [data-variant='default'],
+      [data-variant='light'],
+      [data-variant='quiet']
+    ):hover {
+    background: var(--app-field-line);
+  }
+}
+
+.crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  margin: 0;
+  padding: 0;
+  color: var(--app-field-muted);
+  font-size: var(--app-fs-small);
+  font-weight: 500;
+  list-style: none;
+
+  & li + li::before {
+    content: '';
+    display: inline-block;
+    width: 1.5px;
+    height: 0.95em;
+    margin: 0 10px;
+    background: currentColor;
+    opacity: 0.55;
+    transform: skewX(-18deg) translateY(2px);
+  }
+
+  & a {
+    margin: -6px 0;
+    padding: 6px 0;
+    color: var(--app-field-ink);
+  }
+
+  & [aria-current] {
+    color: var(--app-field-ink);
+    font-weight: 750;
+  }
+}

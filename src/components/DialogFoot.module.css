@@ -1,0 +1,25 @@
+.foot {
+  position: sticky;
+  bottom: calc(-1 * var(--app-s4));
+  z-index: 1;
+  display: grid;
+  gap: var(--app-s2);
+  margin: var(--app-s4) calc(-1 * var(--app-s4)) calc(-1 * var(--app-s4));
+  padding: var(--app-s3) var(--app-s4) calc(var(--app-s4) + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--app-line);
+  background: var(--app-paper);
+
+  & > :last-child {
+    order: -1;
+  }
+
+  @media (min-width: 768px) {
+    display: flex;
+    justify-content: flex-end;
+    padding-bottom: var(--app-s3);
+
+    & > :last-child {
+      order: 0;
+    }
+  }
+}
