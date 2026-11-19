@@ -8,6 +8,7 @@ import ui from '@/components/ui/ui.module.css';
 import { formatMoney } from '@/lib/money';
 import { requireContext } from '@/server/auth/current';
 import { getCollection, type Breakdown } from '@/server/data/collection';
+import { BUILD_STATES } from '@/server/data/completeness';
 
 import classes from './Collection.module.css';
 
@@ -71,6 +72,8 @@ export default async function CollectionPage() {
   if (ctx.viewer.role === 'restricted') notFound();
   const c = await getCollection(ctx);
   const diff = c.differenceCents;
+  // Build states always appear in their fixed order.
+  c.byState.sort((a, b) => BUILD_STATES.indexOf(a.state) - BUILD_STATES.indexOf(b.state));
   const stateTotal = c.byState.reduce((n, s) => n + s.copies, 0);
   const wallLabel = `Copies by build state: ${c.byState
     .filter((s) => s.copies > 0)

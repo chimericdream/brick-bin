@@ -1,5 +1,6 @@
 import {
   ActionIcon,
+  Input,
   Button,
   Checkbox,
   Menu,
@@ -149,29 +150,6 @@ const ink: MantineColorsTuple = [
 const appVars = (values: Record<string, string>) =>
   Object.fromEntries(Object.entries(values).map(([k, v]) => [`--app-${k}`, v]));
 
-/**
- * Old tokens that screens not yet redesigned still read. Each points at its nearest new token.
- * Delete this block once nothing uses them.
- */
-const LEGACY = {
-  '--app-display': 'var(--app-font)',
-  '--app-radius-card': 'var(--app-r)',
-  '--app-radius-tile': 'var(--app-r)',
-  '--app-radius-control': 'var(--app-r)',
-  '--app-sunk': 'var(--app-surface)',
-  '--app-tint': 'var(--app-surface-2)',
-  '--app-accent': 'var(--app-ink)',
-  '--app-on-accent': 'var(--app-ground)',
-  '--app-accent-ink': 'var(--app-ink)',
-  '--app-border': 'var(--app-line)',
-  '--app-rule': 'var(--app-line)',
-  '--app-control': 'var(--app-edge)',
-  '--app-ok-ink': 'var(--app-ink)',
-  '--app-notice-bg': 'var(--app-surface)',
-  '--app-notice-border': 'var(--app-line)',
-  '--app-notice-ink': 'var(--app-ink)',
-};
-
 /** Points Mantine's own variables at the room, so its components follow both themes. */
 const MANTINE = {
   '--mantine-color-body': 'var(--app-ground)',
@@ -261,6 +239,10 @@ export const theme = createTheme({
         };
       },
     }),
+    // Every field is 48px tall under 1024 and 44px above, with 16px text so phones never zoom.
+    Input: Input.extend({
+      vars: () => ({ wrapper: { '--input-height': 'var(--app-ctl)', '--input-fz': '1rem' } }),
+    }),
     ActionIcon: ActionIcon.extend({ defaultProps: { variant: 'subtle', color: 'gray' } }),
     Checkbox: Checkbox.extend({ defaultProps: { radius: 'sm', size: 'md' } }),
     Switch: Switch.extend({ defaultProps: { radius: 'xs' } }),
@@ -282,7 +264,7 @@ export const theme = createTheme({
  * inline script in the root layout sets before first paint.
  */
 export const cssVariablesResolver: CSSVariablesResolver = () => ({
-  variables: { ...appVars(STATIC), ...LEGACY },
+  variables: appVars(STATIC),
   // Mantine sets its own colour variables per scheme, so ours go in the same blocks to win.
   light: { ...appVars(LIGHT), ...MANTINE },
   dark: { ...appVars(DARK), ...MANTINE },

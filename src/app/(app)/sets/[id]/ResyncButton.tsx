@@ -1,9 +1,12 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { Alert, Button, Checkbox, Group, Modal, Stack, Text } from '@mantine/core';
+import { Button, Checkbox, Modal } from '@mantine/core';
 import { IconRefresh } from '@tabler/icons-react';
 
+import { DialogFoot } from '@/components/DialogFoot';
+import { Note } from '@/components/Note';
+import ui from '@/components/ui/ui.module.css';
 import type { ResyncKey, ResyncPreview } from '@/server/catalog/resync';
 
 import { resyncApplyAction, resyncPreviewAction } from '../actions';
@@ -57,38 +60,39 @@ export function ResyncButton({ setId, setNum }: { setId: string; setNum: string 
 
   return (
     <>
-      <Button variant="default" leftSection={<IconRefresh size={16} />} onClick={open}>
+      <Button
+        variant="default"
+        size="compact-md"
+        leftSection={<IconRefresh size={16} stroke={1.75} />}
+        onClick={open}
+      >
         Re-sync from catalog
       </Button>
       <Modal
         opened={opened}
         onClose={() => setOpened(false)}
         title={`Re-sync with Rebrickable ${setNum}`}
-        centered
+        size={600}
       >
-        <Stack gap="sm">
-          {error && (
-            <Alert color="red" variant="light" role="alert">
-              {error}
-            </Alert>
-          )}
+        <div className={ui.stack}>
+          {error && <Note variant="error">{error}</Note>}
           {done && (
-            <Alert color="green" variant="light" role="status">
-              {done}
-            </Alert>
+            <div role="status">
+              <Note>{done}</Note>
+            </div>
           )}
-          {preview === undefined && !done && <Text c="dimmed">Comparing with the catalog</Text>}
+          {preview === undefined && !done && <p className={ui.muted}>Comparing with the catalog</p>}
           {preview === null && !done && (
-            <Text c="dimmed">
+            <p className={ui.muted}>
               The catalog has nothing to compare with. Import it in Settings first.
-            </Text>
+            </p>
           )}
           {preview && preview.fields.length === 0 && !offerCover && (
-            <Text>This set already matches the catalog.</Text>
+            <p className={ui.small}>This set already matches the catalog.</p>
           )}
           {preview && (
             <>
-              {preview.fields.length > 0 && <Text size="sm">Check what to update:</Text>}
+              {preview.fields.length > 0 && <p className={ui.small}>Check what to update:</p>}
               {preview.fields.map((f) => (
                 <Checkbox
                   key={f.key}
@@ -125,7 +129,10 @@ export function ResyncButton({ setId, setNum }: { setId: string; setNum: string 
               )}
             </>
           )}
-          <Group justify="flex-end">
+          <p className={ui.small}>
+            Catalog data from <a href="https://rebrickable.com/">Rebrickable</a>
+          </p>
+          <DialogFoot>
             <Button variant="default" onClick={() => setOpened(false)}>
               {done ? 'Close' : 'Cancel'}
             </Button>
@@ -134,11 +141,8 @@ export function ResyncButton({ setId, setNum }: { setId: string; setNum: string 
                 Update
               </Button>
             )}
-          </Group>
-          <Text size="xs" c="dimmed">
-            Catalog data from Rebrickable
-          </Text>
-        </Stack>
+          </DialogFoot>
+        </div>
       </Modal>
     </>
   );
