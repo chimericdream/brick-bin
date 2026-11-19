@@ -224,3 +224,32 @@ test.describe('wishlist', () => {
     await expect(page.getByText('Nothing on your list yet.')).toBeVisible();
   });
 });
+
+test.describe('wishlist on phones', () => {
+  test.use({ viewport: { width: 390, height: 844 } });
+
+  test('WISH-11 the form opens as a sheet from "Add a wish"', async ({ memberPage: page }) => {
+    await page.goto('/wishlist');
+    // The list comes first; the form waits in a sheet.
+    await expect(page.getByRole('button', { name: 'Add to my wishlist' })).toHaveCount(0);
+    await page.getByRole('button', { name: 'Add a wish' }).first().click();
+    const sheet = page.getByRole('dialog', { name: 'Add to my wishlist' });
+    await sheet.getByRole('textbox', { name: /^Name/ }).fill('Lighthouse');
+    await sheet.getByLabel('Price seen').fill('24.50');
+    await sheet.getByRole('button', { name: 'Add to my wishlist' }).click();
+    await expect(page.getByText('Added to your wishlist.')).toBeVisible();
+    await expect(sheet).toBeHidden();
+    await expect(page.getByRole('region', { name: 'My wishlist', exact: true })).toContainText(
+      'Lighthouse',
+    );
+  });
+
+  test('WISH-12 a kid’s sheet has no price field', async ({ kidPage }) => {
+    await kidPage.setViewportSize({ width: 390, height: 844 });
+    await kidPage.goto('/wishlist');
+    await kidPage.getByRole('button', { name: 'Add a wish' }).first().click();
+    const sheet = kidPage.getByRole('dialog', { name: 'Add to my wishlist' });
+    await expect(sheet.getByRole('textbox', { name: /^Name/ })).toBeVisible();
+    await expect(sheet.getByLabel('Price seen')).toHaveCount(0);
+  });
+});
