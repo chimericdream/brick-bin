@@ -7,7 +7,7 @@ export function PrintButton() {
   return (
     <Button
       variant="default"
-      leftSection={<IconPrinter size={16} />}
+      leftSection={<IconPrinter size={20} stroke={1.75} />}
       onClick={() => window.print()}
     >
       Print

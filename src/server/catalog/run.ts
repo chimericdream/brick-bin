@@ -163,7 +163,7 @@ export async function executeRun(
     let ldrawIndex = 0;
     for (const link of plan.ldrawToFetch) {
       ldrawIndex++;
-      await step(`Colour images ${ldrawIndex} of ${plan.ldrawToFetch.length}: ${link.colorName}`);
+      await step(`Color images ${ldrawIndex} of ${plan.ldrawToFetch.length}: ${link.colorName}`);
       const key = fileKey(link.url);
       const file = (await knownFiles(db)).get(key);
       const zipPath = path.join(paths.tmp, `parts_${link.colorId}.zip`);
@@ -262,7 +262,7 @@ export async function executeRun(
       await addNote(
         db,
         runId,
-        `Colour names differ from the catalog for ${odd.length} colours (for example ${odd[0]!.colorName} is ${colors.get(odd[0]!.colorId)}).`,
+        `Color names differ from the catalog for ${odd.length} colors (for example ${odd[0]!.colorName} is ${colors.get(odd[0]!.colorId)}).`,
       );
     }
     if (listing.unknownZips.length > 0) {

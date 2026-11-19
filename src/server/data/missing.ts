@@ -157,7 +157,7 @@ export async function addMissing(
       getCatalogColor(ctx.db, input.colorId),
     ]);
     if (!part) throw new UnknownCatalogItemError(`Part ${input.partNum}`);
-    if (!color) throw new UnknownCatalogItemError(`Colour ${input.colorId}`);
+    if (!color) throw new UnknownCatalogItemError(`Color ${input.colorId}`);
     snap = {
       ...snap,
       partNum: part.partNum,
