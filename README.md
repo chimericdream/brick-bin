@@ -135,21 +135,22 @@ variables below from `.env` to the app, with three exceptions: `DATABASE_URL` is
 Tailscale stack always sets `COOKIE_SECURE=true`. A variable left out of `.env` keeps the app's
 default.
 
-| Variable                      | Purpose                                                                                       |
-| ----------------------------- | --------------------------------------------------------------------------------------------- |
-| `DATABASE_URL`                | Postgres connection string (required)                                                         |
-| `DATA_DIR`                    | Where covers, instructions and the catalog files live (default `./data`, `/data` in Docker)   |
-| `COOKIE_SECURE`               | `true` when served over HTTPS                                                                 |
-| `AUTO_MIGRATE`                | `false` to skip migrations on start                                                           |
-| `TRASH_RETENTION_DAYS`        | Days a deleted item waits in the trash (default `30`; `0` keeps it until an admin deletes it) |
-| `INSTRUCTIONS_MAX_MB`         | Largest instruction PDF the app stores (default `200`)                                        |
-| `REBRICKABLE_PAGE_FETCH`      | `true` lets the import fetch the downloads page itself (default `false`)                      |
-| `REBRICKABLE_DOWNLOADS_PAGE`  | The downloads page address                                                                    |
-| `REBRICKABLE_ALLOWED_ORIGINS` | Origins the import may download from (https only)                                             |
-| `CATALOG_IMAGE_ORIGIN`        | The only origin set covers are downloaded from                                                |
-| `UPC_BASE_URL`                | Barcode lookup service (tests point it at a mock)                                             |
-| `APP_VERSION`                 | Release label, also sent in the import `User-Agent`                                           |
-| `E2E_DATABASE_URL`            | End-to-end tests only                                                                         |
+| Variable                      | Purpose                                                                                        |
+| ----------------------------- | ---------------------------------------------------------------------------------------------- |
+| `DATABASE_URL`                | Postgres connection string (required)                                                          |
+| `DATA_DIR`                    | Where covers, instructions and the catalog files live (default `./data`, `/data` in Docker)    |
+| `COOKIE_SECURE`               | `true` when served over HTTPS                                                                  |
+| `AUTO_MIGRATE`                | `false` to skip migrations on start                                                            |
+| `ALLOWED_ORIGINS`             | Comma-separated hostnames allowed to submit server actions, e.g. behind a proxy (default none) |
+| `TRASH_RETENTION_DAYS`        | Days a deleted item waits in the trash (default `30`; `0` keeps it until an admin deletes it)  |
+| `INSTRUCTIONS_MAX_MB`         | Largest instruction PDF the app stores (default `200`)                                         |
+| `REBRICKABLE_PAGE_FETCH`      | `true` lets the import fetch the downloads page itself (default `false`)                       |
+| `REBRICKABLE_DOWNLOADS_PAGE`  | The downloads page address                                                                     |
+| `REBRICKABLE_ALLOWED_ORIGINS` | Origins the import may download from (https only)                                              |
+| `CATALOG_IMAGE_ORIGIN`        | The only origin set covers are downloaded from                                                 |
+| `UPC_BASE_URL`                | Barcode lookup service (tests point it at a mock)                                              |
+| `APP_VERSION`                 | Release label, also sent in the import `User-Agent`                                            |
+| `E2E_DATABASE_URL`            | End-to-end tests only                                                                          |
 
 ## Privacy and network use
 

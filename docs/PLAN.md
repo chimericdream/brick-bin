@@ -716,6 +716,7 @@ Mutations are server actions that call the data layer, except the PDF upload.
 | `DATA_DIR`                    | Covers, instruction PDFs, catalog images (default `./data`)                                                                          |
 | `COOKIE_SECURE`               | `true` behind HTTPS                                                                                                                  |
 | `AUTO_MIGRATE`                | `false` to skip migrations on start                                                                                                  |
+| `ALLOWED_ORIGINS`             | Comma-separated hostnames allowed to submit server actions, e.g. behind a proxy; applied at container start (default none)           |
 | `TRASH_RETENTION_DAYS`        | Default 30, `0` = keep until an admin deletes                                                                                        |
 | `REBRICKABLE_PAGE_FETCH`      | `true` lets the import fetch the downloads page itself; default `false` (paste the HTML instead) until Rebrickable confirms it is OK |
 | `INSTRUCTIONS_MAX_MB`         | Upload cap per PDF (default 200)                                                                                                     |

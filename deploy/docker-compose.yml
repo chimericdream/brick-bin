@@ -61,6 +61,7 @@ services:
       COOKIE_SECURE: 'true'
       # Passed on only when set in .env (or the shell); unset, the app keeps its own default.
       AUTO_MIGRATE:
+      ALLOWED_ORIGINS:
       APP_VERSION:
       REBRICKABLE_DOWNLOADS_PAGE:
       REBRICKABLE_ALLOWED_ORIGINS:
