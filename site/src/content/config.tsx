@@ -119,6 +119,22 @@ export const CONFIG_GROUPS: ConfigGroup[] = [
         default: { code: 'true' },
       },
       {
+        name: 'ALLOWED_ORIGINS',
+        purpose: (
+          <>
+            Extra hostnames that may submit forms, as a comma-separated list. Needed when the app is
+            reached through a reverse proxy or a second name.
+          </>
+        ),
+        default: { text: 'None' },
+        compose: (
+          <>
+            Both compose files pass it on only when it&apos;s set. The app reads it each time it
+            starts, so changing it needs a restart, not a rebuild.
+          </>
+        ),
+      },
+      {
         name: 'APP_VERSION',
         purpose: 'Release label, sent in the catalog import’s User-Agent.',
         default: { code: '0.1' },
