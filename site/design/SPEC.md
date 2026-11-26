@@ -50,22 +50,22 @@ All tokens are CSS custom properties on `:root`. In the build, keep the same nam
 
 | Token | Light | Dark | Use |
 | --- | --- | --- | --- |
-| `--ground` | `#F5F5F2` | `#141517` | Page background |
-| `--surface` | `#EAEAE5` | `#1E2023` | Cards, callouts, placeholders, disclosures, table row highlight |
-| `--surface-2` | `#DCDCD5` | `#2A2D31` | Quiet buttons, current item in a sidebar, toggle track, alternate step brick |
-| `--line` | `#CFCFC7` | `#34373C` | 1px rules, table rows, frame borders. Decorative only (1.4:1). |
-| `--ink` | `#121212` | `#EFEFEA` | All running text, headings, 2px rules, dashed outlines |
-| `--muted` | `#4D4D48` | `#ABAEB2` | Captions and secondary notes. Never body copy. |
-| `--field` | `#17191C` | `#0B0C0D` | Hero and footer. Dark in both themes. |
-| `--field-2` | `#26292E` | `#1C1E21` | Panels and controls on a field |
-| `--field-line` | `#3A3E44` | `#2C2F33` | Rules on a field |
-| `--field-ink` | `#F5F5F2` | `#EFEFEA` | Text on a field |
-| `--field-muted` | `#B8BBBF` | `#ABAEB2` | Secondary text on a field |
-| `--btn` / `--btn-ink` | `#121212` / `#F5F5F2` | `#EFEFEA` / `#121212` | Primary button |
+| `--ground` | `#F5F5F2` | `#2A2B29` | Page background |
+| `--surface` | `#EAEAE5` | `#20211F` | Cards, callouts, placeholders, disclosures, table row highlight |
+| `--surface-2` | `#DCDCD5` | `#444641` | Quiet buttons, current item in a sidebar, toggle track, alternate step brick |
+| `--line` | `#CFCFC7` | `#4D4F4A` | 1px rules, table rows, frame borders. Decorative only (1.4:1). |
+| `--ink` | `#121212` | `#F2F2ED` | All running text, headings, 2px rules, dashed outlines |
+| `--muted` | `#4D4D48` | `#B9BBB4` | Captions and secondary notes. Never body copy. |
+| `--field` | `#17191C` | `#0F1012` | Hero and footer. Dark in both themes. |
+| `--field-2` | `#26292E` | `#202327` | Panels and controls on a field |
+| `--field-line` | `#3A3E44` | `#34383D` | Rules on a field |
+| `--field-ink` | `#F5F5F2` | `#F5F5F2` | Text on a field |
+| `--field-muted` | `#B8BBBF` | `#B8BBBF` | Secondary text on a field |
+| `--btn` / `--btn-ink` | `#121212` / `#F5F5F2` | `#F2F2ED` / `#121212` | Primary button |
 | `--btn-hover` | `#34342F` | `#FFFFFF` | Primary button, hover |
 | `--focus` | `#0B5FC4` | `#7CC0FF` | Focus ring. On a field: `#7CC0FF` in both themes. On a bright brick: `#121212`. |
-| `--code-bg` | `#E6E6E0` | `#202326` | Inline code and code blocks |
-| `--dot` | `rgb(18 18 18 / .13)` | `rgb(239 239 234 / .12)` | Baseplate dots |
+| `--code-bg` | `#E6E6E0` | `#232422` | Inline code and code blocks |
+| `--dot` | `rgb(18 18 18 / .13)` | `rgb(242 242 237 / .12)` | Baseplate dots |
 | `--shadow-float` | `0 18px 48px rgb(0 0 0 / .28), 0 2px 6px rgb(0 0 0 / .18)` | same | Reserved. Nothing in the mockups uses it. See 2.6. |
 
 ### 2.2 Color: the bricks (never change with the theme)
@@ -92,13 +92,13 @@ The landing page and the 404 have no section, so `--sec` falls back to `--ink`.
 
 | Pair | Light | Dark |
 | --- | --- | --- |
-| Ink on ground / surface / surface-2 | 17.2 / 15.5 / 13.6 | 15.8 / 14.2 / 12.0 |
-| Muted on ground / surface / surface-2 | 7.8 / 7.0 / 6.2 | 8.2 / 7.3 / 6.2 |
-| Field ink on field | 16.1 | 16+ |
-| Field muted on field / field-2 | 9.1 / 7.6 | 8.8 / 7.5 |
-| Focus ring on ground / surface-2 | 5.6 / 4.4 | 9.4 / 7+ |
+| Ink on ground / surface / surface-2 | 17.2 / 15.5 / 13.6 | 12.7 / 14.4 / 8.5 |
+| Muted on ground / surface / surface-2 | 7.8 / 7.0 / 6.2 | 7.3 / 8.3 / 4.9 |
+| Field ink on field | 16.1 | 17.4 |
+| Field muted on field / field-2 | 9.1 / 7.6 | 9.9 / 8.2 |
+| Focus ring on ground / surface-2 | 5.6 / 4.4 | 7.3 / 4.9 |
 | Brick ink on the five bricks | 7.9 to 10.2 | same |
-| **A section color against the ground** | **1.7 to 2.2** | 8 to 10 |
+| **A section color against the ground** | **1.7 to 2.2** | 6.0 to 7.8 |
 
 The last row matters. On the light ground the brick colors are too pale to carry meaning alone.
 So **every state that uses a section color also has a second cue**: heavier type, a tone step, a
