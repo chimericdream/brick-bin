@@ -11,29 +11,29 @@ site have the same values as the site.
 
 | Token | Light | Dark | Use |
 | --- | --- | --- | --- |
-| `--ground` | `#F5F5F2` | `#141517` | Page background |
-| `--paper` | `#FFFFFF` | `#191B1E` | Lists, tables, panels, inputs, menus, dialogs. **New in the app.** |
-| `--surface` | `#EAEAE5` | `#1E2023` | Sidebar, notes, hover on rows, cover frame, baseplate |
-| `--surface-2` | `#DCDCD5` | `#2A2D31` | Quiet buttons, current nav item, segmented track, quiet tags |
-| `--line` | `#CFCFC7` | `#34373C` | 1px rules and panel borders. Decorative (1.6:1 and 1.4:1 on paper) |
-| `--edge` | `#85857D` | `#767A80` | Borders that mark a control: inputs, checkboxes, switch, outlined tags. **New in the app.** |
-| `--ink` | `#121212` | `#EFEFEA` | All running text, headings, 2px rules, dashed outlines, checked boxes |
-| `--muted` | `#4D4D48` | `#ABAEB2` | Secondary lines, hints, placeholders. Never body copy |
-| `--field` | `#17191C` | `#0B0C0D` | Page head, phone tab bar, toasts, sign-in panel. Dark in both themes |
-| `--field-2` | `#26292E` | `#1C1E21` | Quiet buttons and the current tab on a field |
-| `--field-line` | `#3A3E44` | `#2C2F33` | Rules on a field, hover of a quiet button on a field |
-| `--field-ink` | `#F5F5F2` | `#EFEFEA` | Text on a field. Fill of the primary button on a field |
-| `--field-muted` | `#B8BBBF` | `#ABAEB2` | Secondary text on a field |
-| `--btn` / `--btn-ink` | `#121212` / `#F5F5F2` | `#EFEFEA` / `#121212` | Primary button |
+| `--ground` | `#F5F5F2` | `#2A2B29` | Page background |
+| `--paper` | `#FFFFFF` | `#343532` | Lists, tables, panels, inputs, menus, dialogs. **New in the app.** |
+| `--surface` | `#EAEAE5` | `#20211F` | Sidebar, notes, hover on rows, cover frame, baseplate |
+| `--surface-2` | `#DCDCD5` | `#444641` | Quiet buttons, current nav item, segmented track, quiet tags |
+| `--line` | `#CFCFC7` | `#4D4F4A` | 1px rules and panel borders. Decorative (1.6:1 and 1.5:1 on paper) |
+| `--edge` | `#85857D` | `#92948D` | Borders that mark a control: inputs, checkboxes, switch, outlined tags. **New in the app.** |
+| `--ink` | `#121212` | `#F2F2ED` | All running text, headings, 2px rules, dashed outlines, checked boxes |
+| `--muted` | `#4D4D48` | `#B9BBB4` | Secondary lines, hints, placeholders. Never body copy |
+| `--field` | `#17191C` | `#0F1012` | Page head, phone tab bar, toasts, sign-in panel. Dark in both themes |
+| `--field-2` | `#26292E` | `#202327` | Quiet buttons and the current tab on a field |
+| `--field-line` | `#3A3E44` | `#34383D` | Rules on a field, hover of a quiet button on a field |
+| `--field-ink` | `#F5F5F2` | `#F5F5F2` | Text on a field. Fill of the primary button on a field |
+| `--field-muted` | `#B8BBBF` | `#B8BBBF` | Secondary text on a field |
+| `--btn` / `--btn-ink` | `#121212` / `#F5F5F2` | `#F2F2ED` / `#121212` | Primary button |
 | `--btn-hover` | `#34342F` | `#FFFFFF` | Primary button, hover |
 | `--focus` | `#0B5FC4` | `#7CC0FF` | Focus ring |
 | `--focus-field` | `#7CC0FF` | `#7CC0FF` | Focus ring on a field |
 | `--danger` | `#B3261E` | `#FF9A8D` | Destructive text and fill, error text, error borders. **New in the app.** |
 | `--danger-hover` | `#8F1D17` | `#FFB4AB` | Danger button, hover |
 | `--danger-ink` | `#FFFFFF` | `#121212` | Text on a danger fill |
-| `--danger-bg` | `#FBEAE7` | `#3A1A17` | Error banner, hover of a danger text button |
+| `--danger-bg` | `#FBEAE7` | `#4A231F` | Error banner, hover of a danger text button |
 | `--danger-text` | `#7A1711` | `#FFB4AB` | Text on `--danger-bg` |
-| `--dot` | `rgb(18 18 18 / .13)` | `rgb(239 239 234 / .12)` | Baseplate dots |
+| `--dot` | `rgb(18 18 18 / .13)` | `rgb(242 242 237 / .12)` | Baseplate dots |
 | `--scrim` | `rgb(18 18 18 / .55)` | `rgb(0 0 0 / .66)` | Behind dialogs and sheets |
 
 ## 2. Color: the bricks (never change with the theme)
@@ -61,21 +61,21 @@ tokens.
 
 | Text pair | Light | Dark |
 | --- | --- | --- |
-| Ink on paper / ground / surface / surface-2 | 18.7 / 17.2 / 15.5 / 13.6 | 15.0 / 15.8 / 14.2 / 12.0 |
-| Muted on paper / ground / surface / surface-2 | 8.5 / 7.8 / 7.0 / 6.2 | 7.8 / 8.2 / 7.3 / 6.2 |
-| Field ink on field / field-2 | 16.1 / 13.4 | 17.0 / 14.5 |
-| Field muted on field / field-2 | 9.1 / 7.6 | 8.8 / 7.5 |
-| Primary button text on its fill | 17.2 | 15.8 |
+| Ink on paper / ground / surface / surface-2 | 18.7 / 17.2 / 15.5 / 13.6 | 11.0 / 12.7 / 14.4 / 8.5 |
+| Muted on paper / ground / surface / surface-2 | 8.5 / 7.8 / 7.0 / 6.2 | 6.4 / 7.3 / 8.3 / 4.9 |
+| Field ink on field / field-2 | 16.1 / 13.4 | 17.4 / 14.4 |
+| Field muted on field / field-2 | 9.1 / 7.6 | 9.9 / 8.2 |
+| Primary button text on its fill | 17.2 | 16.7 |
 | Brick ink on the six bricks | 7.5 to 10.2 | same |
-| Danger on paper / ground / surface | 6.5 / 6.0 / 5.4 | 8.4 / 8.9 / 8.0 |
+| Danger on paper / ground / surface | 6.5 / 6.0 / 5.4 | 6.0 / 7.0 / 7.9 |
 | Danger ink on danger (button) | 6.5 | 9.2 |
-| Danger text on danger-bg (banner) | 9.2 | 9.2 |
+| Danger text on danger-bg (banner) | 9.2 | 8.0 |
 
 | Non-text pair (3:1 needed) | Light | Dark |
 | --- | --- | --- |
-| Edge on paper / ground / surface | 3.7 / 3.4 / 3.1 | 4.0 / 4.2 / 3.8 |
-| Focus ring on paper / ground / surface | 6.1 / 5.6 / 5.0 | 8.9 / 9.4 / 8+ |
-| Focus ring on field | 9.1 | 10.1 |
+| Edge on paper / ground / surface | 3.7 / 3.4 / 3.1 | 4.0 / 4.6 / 5.3 |
+| Focus ring on paper / ground / surface | 6.1 / 5.6 / 5.0 | 6.4 / 7.3 / 8.3 |
+| Focus ring on field | 9.1 | 9.8 |
 
 Two things to keep in mind:
 
