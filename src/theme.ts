@@ -49,22 +49,26 @@ const LIGHT = {
   scrim: 'rgb(18 18 18 / 0.55)',
 } as const;
 
-/** The room, dark. The bricks do not change; the room darkens. */
+/**
+ * The room, dark. The bricks do not change; the room darkens to a warm charcoal, well clear of
+ * black, so the cool black field still reads as a slab. Paper sits above the ground and surface
+ * below it, as in light.
+ */
 const DARK: Record<keyof typeof LIGHT, string> = {
-  ground: '#141517',
-  paper: '#191b1e',
-  surface: '#1e2023',
-  'surface-2': '#2a2d31',
-  line: '#34373c',
-  edge: '#767a80',
-  ink: '#efefea',
-  muted: '#abaeb2',
-  field: '#0b0c0d',
-  'field-2': '#1c1e21',
-  'field-line': '#2c2f33',
-  'field-ink': '#efefea',
-  'field-muted': '#abaeb2',
-  btn: '#efefea',
+  ground: '#2a2b29',
+  paper: '#343532',
+  surface: '#20211f',
+  'surface-2': '#444641',
+  line: '#4d4f4a',
+  edge: '#92948d',
+  ink: '#f2f2ed',
+  muted: '#b9bbb4',
+  field: '#0f1012',
+  'field-2': '#202327',
+  'field-line': '#34383d',
+  'field-ink': '#f5f5f2',
+  'field-muted': '#b8bbbf',
+  btn: '#f2f2ed',
   'btn-ink': '#121212',
   'btn-hover': '#ffffff',
   focus: '#7cc0ff',
@@ -72,9 +76,9 @@ const DARK: Record<keyof typeof LIGHT, string> = {
   danger: '#ff9a8d',
   'danger-hover': '#ffb4ab',
   'danger-ink': '#121212',
-  'danger-bg': '#3a1a17',
+  'danger-bg': '#4a231f',
   'danger-text': '#ffb4ab',
-  dot: 'rgb(239 239 234 / 0.12)',
+  dot: 'rgb(242 242 237 / 0.12)',
   scrim: 'rgb(0 0 0 / 0.66)',
 };
 
